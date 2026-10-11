@@ -47,8 +47,8 @@ export default {
 
   distinguish: `<div class="tbl-wrap"><table class="cmp">
   <tr><th></th><th>PROMOTER</th><th>Codon mở đầu AUG</th></tr>
-  <tr><td>Nằm trên</td><td><b>DNA</b> (mạch kép)</td><td><b>mRNA</b> (trên DNA mạch mã hóa là ATG, mạch khuôn là TAC)</td></tr>
-  <tr><td>Ai nhận ra</td><td>RNA polymerase (σ ở nhân sơ; TBP/TFIID… ở nhân thực)</td><td>Ribosome cùng tRNA khởi đầu (anticodon UAC)</td></tr>
+  <tr><td>Nằm trên</td><td><b>DNA</b> (mạch kép)</td><td><b>mRNA</b> (trên DNA mạch mã hóa là 5′-ATG-3′, mạch khuôn là 3′-TAC-5′)</td></tr>
+  <tr><td>Ai nhận ra</td><td>RNA polymerase (σ ở nhân sơ; TBP/TFIID… ở nhân thực)</td><td>Ribosome cùng tRNA khởi đầu (anticodon 3′-UAC-5′, tức 5′-CAU-3′)</td></tr>
   <tr><td>Mở đầu quá trình</td><td><b>Phiên mã</b></td><td><b>Dịch mã</b></td></tr>
   <tr><td>Vị trí</td><td>Trước +1 (số âm)</td><td>Sau +1, sau 5′UTR</td></tr>
   <tr><td>Có trong mRNA?</td><td><b>Không</b></td><td><b>Có</b></td></tr>

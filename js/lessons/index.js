@@ -14,7 +14,7 @@ export const LESSONS = [
   L(2, 'nucleic', 1, 'Cấu trúc DNA & RNA', 'Nucleotide, liên kết, chiều 5′→3′, rãnh lớn/nhỏ, A/B/Z.'),
   L(3, 'macro', 1, 'Protein, lipid (raft), carbohydrate', '4 bậc cấu trúc, liên kết peptide, màng & lipid raft, đường.'),
   L(4, 'denature', 1, 'Biến tính & hồi tính DNA (Tm)', 'Nhiệt độ, %GC, hiệu ứng tăng sắc 260 nm.'),
-  L(5, 'meselson', 2, 'Thí nghiệm Meselson–Stahl', 'Vì sao nhân đôi là bán bảo tồn: ¹⁵N/¹⁴N.'),
+  L(5, 'meselson', 2, 'Thí nghiệm Meselson–Stahl', 'Vì sao nhân đôi là bán bảo toàn: ¹⁵N/¹⁴N.'),
   L(6, 'fork', 2, 'Chạc ba sao chép & sửa lỗi đọc', 'Helicase, primase, Pol III/Pol I, ligase, mạch chậm Okazaki.'),
   L(7, 'initiation', 2, 'Khởi đầu sao chép · RecBCD · nhân sơ vs nhân thực', 'Ori (λ), nhiều ori, telomere, RecBCD-Chi.'),
   L(8, 'repair', 2, 'Sửa chữa DNA: BER · HR · SSA · NHEJ', 'Base bị hỏng, đứt gãy mạch đôi: chọn đường nào?'),
