@@ -320,7 +320,7 @@ export default {
     };
 
     const applyLabels = () => {
-      const s = cur, keys = (s === 6 || s === 7) ? ['tpl'] : ['cod', 'tpl', 'm35', 'm10', 'plus1'];
+      const s = cur, keys = (s === 6 || s === 7) ? ['tpl'] : (s === 2 ? ['tpl', 'm35', 'm10', 'plus1'] : ['cod', 'tpl', 'm35', 'm10', 'plus1']);
       if (s === 0) keys.push('sp', 'atg', 'rut', 'term', 'trap');
       if (s === 2) keys.push('sp');
       if (noSig && s >= 1 && s <= 5) keys.push(s >= 2 ? 'noSig' : null);
