@@ -1,314 +1,635 @@
-// Bài 11: Operon lac & trp, CAP–cAMP. Nhân sơ bật/tắt cả một cụm gene bằng một công tắc chung.
-import { labels } from './_kit.js';
+// Bài 11: Operon lac & trp, CAP–cAMP, attenuation (mở rộng). Nhân sơ bật/tắt cả một cụm gene bằng một công tắc chung.
+import { labels, clamp, lerp } from './_kit.js';
 
-// Chỉ số đoạn DNA (sơ đồ rút gọn, không đúng tỉ lệ). Promoter có −35 TTTACA và −10 TATGTT cách nhau 17 nt.
+// Đoạn DNA (sơ đồ rút gọn, không đúng tỉ lệ). Trình tự CAP, promoter, operator O1 và đầu lacZ lấy theo operon lac thật:
+// −35 TTTACA, khoảng cách 18 nt, −10 TATGTT. Đầu lacI dùng codon khởi đầu GTG (đúng như gene thật).
 const SEG = {
-  lacI: 'ATGAAACGCA',
-  sp1: 'GGTCTA',
-  cap: 'TGTGAGTTAGCTCA',
-  sp2: 'TG',
-  prom: 'TTTACA' + 'CTGGCGAAAGGGGGATG' + 'TATGTT',
+  lacI: 'GTGAAACCAGTA',
+  sp1: 'ACGT',
+  cap: 'AATGTGAGTTAGCTCA',
+  sp2: 'CT',
+  prom: 'TTTACA' + 'CTTTATGCTTCCGGCTCG' + 'TATGTT',
   op: 'AATTGTGAGCGGATAACAATT',
-  genes: 'ATGACCATGATTACGGATTC',
+  Z: 'ATGACCATGATTACGGATTCAC',
+  Y: 'ATGTACTATTTAAAAA',
+  A: 'ATGAACATGCCA',
 };
-const ORDER = ['lacI', 'sp1', 'cap', 'sp2', 'prom', 'op', 'genes'];
+const ORDER = ['lacI', 'sp1', 'cap', 'sp2', 'prom', 'op', 'Z', 'Y', 'A'];
 const START = {};
 let _acc = 0;
 for (const k of ORDER) { START[k] = _acc; _acc += SEG[k].length; }
 const SEQ = ORDER.map(k => SEG[k]).join('');
-const span = (k) => [START[k], START[k] + SEG[k].length - 1];
+const NBP = SEQ.length;
 const mid = (k) => START[k] + (SEG[k].length - 1) / 2;
+const GENE0 = START.Z, GENE1 = NBP - 1;
+
+// Đoạn leader trpL dùng cho bước attenuation: 4 vùng bắt cặp 1-2-3-4, rồi chuỗi U.
+const ATT = [['5', 3], ['1', 6], ['l12', 2], ['2', 6], ['l23', 2], ['3', 6], ['l34', 2], ['4', 6], ['U', 6]];
+const ATT_COL = { '5': 0xf2994a, '1': 0xf5c542, l12: 0xf2994a, '2': 0x5dade2, l23: 0xf2994a, '3': 0x58d68d, l34: 0xf2994a, '4': 0xc39bd3, U: 0xff8c42 };
 
 export default {
-  title: 'Operon lac & trp: công tắc chung cho cả cụm gene',
-  sub: 'Vi khuẩn không bật tắt từng gene một. Nhiều gene liên quan nằm cạnh nhau, dùng chung một promoter và một công tắc, rồi được phiên mã thành một mRNA. Bài này cho thấy công tắc lac đọc 2 tín hiệu (lactose và glucose) như thế nào.',
-  legend: '<span><i style="background:#9b6dd6"></i>repressor LacI / TrpR</span><span><i style="background:#2bb3a3"></i>RNA polymerase</span><span><i style="background:#66d9ef"></i>CAP–cAMP</span><span><i style="background:#f5a623"></i>allolactose / tryptophan</span><span><i style="background:#f2994a"></i>mRNA đa cistron</span><span>· sơ đồ rút gọn, không đúng tỉ lệ</span>',
+  title: 'Operon trp, lac & CAP–cAMP: công tắc chung cho cả cụm gene',
+  sub: 'Vi khuẩn không bật tắt từng gene một. Các gene cùng một việc nằm cạnh nhau, dùng chung một promoter và một công tắc (operator), rồi được phiên mã thành một mRNA. Bài này cho thấy công tắc lac đọc 2 tín hiệu (lactose và glucose), và công tắc trp đọc tín hiệu tryptophan.',
+  legend: '<span><i style="background:#9b6dd6"></i>repressor LacI / TrpR</span><span><i style="background:#2bb3a3"></i>RNA polymerase</span><span><i style="background:#66d9ef"></i>CAP</span><span><i style="background:#d4e157"></i>cAMP</span><span><i style="background:#f5a623"></i>allolactose / Trp</span><span><i style="background:#f2994a"></i>mRNA</span><span><i style="background:#7fb3d5"></i>ribosome</span><span>· sơ đồ rút gọn, không đúng tỉ lệ</span>',
 
-  why: `<p>Một operon là <b>một cụm gene cấu trúc</b> cùng chức năng (ví dụ 3 gene để phân giải lactose), <b>dùng chung một promoter và một công tắc</b>, được phiên mã thành <b>một mRNA đa cistron</b>. Lợi ích: một tín hiệu bật cả cụm, nên tế bào làm đủ các enzyme cùng lúc, không tốn năng lượng cho enzyme không cần.</p>
-  <p>Operon lac cho E. coli biết <b>khi nào nên đầu tư</b> vào việc tiêu hóa lactose. Nó đọc <b>2 câu hỏi</b>: (1) Có lactose để ăn không? (2) Có glucose không? Glucose là đường tốt nhất, nên vi khuẩn chỉ bật mạnh khi <b>có lactose</b> và <b>hết glucose</b>.</p>`,
+  why: `<p><b>Operon</b> là <b>một cụm gene cấu trúc</b> cùng phục vụ một việc (ví dụ 3 gene để dùng lactose), <b>dùng chung một promoter và một operator</b>, được phiên mã thành <b>một mRNA đa cistron</b> (polycistronic). Lợi ích: một tín hiệu bật cả cụm, nên tế bào có đủ các enzyme của cả con đường cùng lúc, và không tốn năng lượng làm enzyme khi chưa cần.</p>
+  <p><b>Operon lac</b> cho E. coli biết <b>khi nào nên đầu tư</b> vào việc dùng lactose. Nó trả lời <b>2 câu hỏi</b>: (1) Có lactose không? (2) Còn glucose không? Glucose là đường "dễ ăn" nhất, nên vi khuẩn chỉ bật mạnh khi <b>có lactose</b> và <b>hết glucose</b>.</p>
+  <p><b>Operon trp</b> thì ngược lại: nó làm enzyme <b>tổng hợp</b> tryptophan (Trp), nên khi <b>đã đủ Trp</b> thì phải <b>tắt</b> để khỏi phí.</p>`,
 
   without: `<ul>
-  <li><b>Mất repressor LacI</b> (lacI⁻): operon bật liên tục, kể cả khi không có lactose. Tế bào tốn năng lượng làm enzyme không dùng tới, và cạnh tranh tài nguyên với các hoạt động khác.</li>
-  <li><b>Operator không bám được (Oᶜ)</b>: repressor có mặt nhưng không gắn vào, nên operon luôn bật. Giống lacI⁻ về kết quả.</li>
-  <li><b>Mất CAP (CAP⁻)</b>: khi hết glucose vẫn không có lực kích hoạt, nên operon lac chỉ bật yếu (mức "một ít") ngay cả khi có lactose. Vi khuẩn không chuyển nhanh sang lactose khi glucose cạn.</li>
-  <li><b>Mất khả năng đáp ứng với lactose</b> (đột biến ở LacI làm nó không nhả ra): operon bị kẹt tắt, vi khuẩn chết đói giữa đống lactose.</li></ul>
-  <div class="box info">👉 Bật <b>💥 lacI⁻</b>, <b>💥 Oᶜ</b> và <b>💥 CAP⁻</b> rồi đổi tổ hợp Glucose/Lactose. Quan sát ô <b>Biểu hiện</b> (none / low / HIGH) và lý do đi kèm.</div>`,
+  <li><b>Mất repressor LacI</b> (lacI⁻): operon bật liên tục (constitutive), kể cả khi không có lactose. Tế bào tốn năng lượng và nguyên liệu làm enzyme không dùng tới.</li>
+  <li><b>Operator hỏng (Oᶜ, operator constitutive)</b>: repressor vẫn có nhưng không bám được, nên operon cũng bật liên tục. Kết quả giống lacI⁻.</li>
+  <li><b>Repressor không nhận allolactose</b> (lacIˢ, "siêu ức chế"): repressor bám operator mãi, operon kẹt ở trạng thái TẮT. Vi khuẩn không dùng được lactose dù xung quanh đầy lactose.</li>
+  <li><b>Mất CAP hoặc mất cAMP</b> (CAP⁻ / cya⁻): khi hết glucose vẫn không có lực kích hoạt, nên có lactose cũng chỉ bật "một ít". Vi khuẩn chuyển sang dùng lactose rất chậm.</li>
+  <li><b>Mất repressor TrpR</b> (trpR⁻): đủ Trp rồi vẫn tiếp tục làm enzyme tổng hợp Trp. Phí, nhưng không tối đa, vì cơ chế attenuation (bước 10) vẫn cắt bớt phiên mã.</li></ul>
+  <div class="box info">👉 Ở <b>bước 8</b> có 4 công tắc 💥 (<b>lacI⁻, Oᶜ, lacIˢ, CAP⁻</b>). Bật từng cái rồi đổi Glucose/Lactose, xem nhãn <b>Biểu hiện</b> (none / low / HIGH) và lý do trong khung chữ. Ở <b>bước 9</b> có 💥 <b>trpR⁻</b>.</div>`,
 
   foundation: [
-    { q: 'Gene, promoter và operator khác nhau thế nào?', a: '<b>Gene</b> là đoạn DNA mã hóa một sản phẩm (protein hoặc RNA). <b>Promoter</b> là đoạn DNA RNA polymerase bám vào để bắt đầu phiên mã. <b>Operator</b> là đoạn DNA ngay cạnh promoter mà <b>repressor</b> bám vào, để chặn RNA polymerase. Operator không mã hóa gì; nó chỉ là "công tắc" nằm trên DNA.' },
-    { q: 'Operon là gì?', a: 'Operon là <b>một đơn vị điều hòa</b> gồm: promoter + operator + nhiều gene cấu trúc nằm liền nhau (ví dụ <b>lacZ, lacY, lacA</b>). Cả cụm được phiên mã thành <b>một mRNA đa cistron</b>, sau đó dịch thành nhiều protein. Operon chỉ gặp ở <b>nhân sơ</b> và virus; ở nhân thực mỗi gene có promoter riêng.' },
-    { q: 'Repressor và activator khác nhau thế nào?', a: '<b>Repressor</b> (chất ức chế) bám vào <b>operator</b> và <b>chặn</b> RNA polymerase, làm gene TẮT. <b>Activator</b> (chất hoạt hóa) bám gần <b>promoter</b> và <b>giúp</b> RNA polymerase bám mạnh hơn, làm gene BẬT mạnh hơn. Hai kiểu này đối lập nhau về hướng, nên hay bị nhầm.' },
-    { q: 'Chất cảm ứng (inducer) và chất đồng ức chế (corepressor) là gì?', a: '<b>Chất cảm ứng</b> bám vào repressor và làm repressor <b>BẤT HOẠT</b>, khiến repressor rời operator và gene BẬT. Ví dụ: <b>allolactose</b> với operon lac. <b>Chất đồng ức chế</b> thì ngược lại: nó bám vào repressor và <b>KÍCH HOẠT</b> repressor, để repressor bám operator và gene TẮT. Ví dụ: <b>tryptophan</b> với operon trp.' },
-    { q: 'Lactose biến thành allolactose như thế nào?', a: 'Một lượng nhỏ <b>β-galactosidase</b> (sản phẩm gene lacZ) biến một phần lactose thành <b>allolactose</b>, một đồng phân của lactose. Allolactose là thứ thật sự gỡ repressor. Lúc đầu vẫn chỉ có một ít β-galactosidase, nên operon phải có sẵn một lượng nhỏ lactose trước khi bật mạnh.' },
-    { q: 'Ba gene lacZ, lacY, lacA làm gì?', a: '<b>lacZ</b>: β-galactosidase, cắt lactose thành glucose và galactose (đồng thời tạo allolactose). <b>lacY</b>: permease, một kênh màng đưa lactose vào tế bào. <b>lacA</b>: transacetylase, chức năng phụ, ít quan trọng trong bài này. Cả 3 cùng nằm trong một mRNA, nên bật cùng lúc.' },
-    { q: 'Cyclic AMP (cAMP) và CAP là gì?', a: '<b>cAMP</b> là một tín hiệu nội bào. Khi <b>glucose thấp</b> thì <b>cAMP cao</b>, và ngược lại (hai đại lượng đối nghịch). <b>CAP</b> (catabolite activator protein, còn gọi là CRP) khi bám cAMP sẽ có hoạt tính và bám vào vùng gần promoter để <b>kích hoạt</b> RNA polymerase. CAP là một activator, không phải repressor.' },
-    { q: 'Vì sao vi khuẩn cần cả 2 tín hiệu để bật lac mạnh?', a: 'Glucose là nguồn năng lượng rẻ nhất, nên vi khuẩn <b>ưu tiên</b> dùng nó. Chỉ khi <b>hết glucose</b> (cAMP cao, CAP hoạt động) và <b>có lactose</b> (gỡ repressor) thì mới đáng tổng hợp mạnh enzyme phân giải lactose. Đây là hai "chìa khóa": repressor cần lactose để gỡ ra, CAP cần glucose thấp để kích hoạt.' },
+    { q: 'Gene, promoter và operator khác nhau thế nào?', a: '<b>Gene</b> là đoạn DNA mã hóa một sản phẩm (protein hoặc RNA). <b>Promoter</b> là đoạn DNA mà <b>RNA polymerase</b> bám vào để bắt đầu phiên mã. <b>Operator</b> là đoạn DNA nằm sát (thường chồng lên) promoter, nơi <b>repressor</b> bám vào để chặn RNA polymerase. Operator không mã hóa gì; nó chỉ là "công tắc" trên DNA. (Promoter không phải codon AUG: xem bài 1.)' },
+    { q: 'Operon là gì? Gồm những phần nào?', a: 'Operon là <b>một đơn vị phiên mã có điều hòa</b> gồm: <b>promoter + operator + nhiều gene cấu trúc nằm liền nhau</b> (ví dụ lacZ, lacY, lacA). Cả cụm được phiên mã thành <b>một mRNA đa cistron</b>, rồi dịch thành nhiều protein riêng. <b>Gene điều hòa</b> (lacI, trpR) tạo ra repressor; nó có promoter riêng và không thuộc phần được phiên mã chung. Operon gặp chủ yếu ở <b>nhân sơ</b> và virus của chúng; ở nhân thực mỗi gene thường có promoter riêng.' },
+    { q: 'Điều hòa âm và điều hòa dương khác nhau thế nào?', a: '<b>Điều hòa âm</b> (negative): một protein <b>repressor</b> bám DNA thì gene <b>TẮT</b>. Ví dụ LacI, TrpR. <b>Điều hòa dương</b> (positive): một protein <b>activator</b> bám DNA thì gene <b>BẬT mạnh hơn</b>. Ví dụ CAP. Operon lac có <b>cả hai</b>: LacI (âm) và CAP (dương).' },
+    { q: 'Chất cảm ứng (inducer) và chất đồng ức chế (corepressor) là gì?', a: 'Cả hai đều là phân tử nhỏ gắn vào repressor và làm nó <b>đổi hình dạng</b> (điều hòa dị lập thể, allosteric). <b>Chất cảm ứng</b> làm repressor <b>mất khả năng bám</b> operator, nên gene BẬT. Ví dụ <b>allolactose</b> với LacI. <b>Chất đồng ức chế</b> thì ngược lại: nó làm repressor <b>bám được</b> operator, nên gene TẮT. Ví dụ <b>tryptophan</b> với TrpR.' },
+    { q: 'Lactose trở thành allolactose như thế nào, khi operon còn đang tắt?', a: 'Repressor không chặn tuyệt đối: thỉnh thoảng nó rời operator một chút, nên mỗi tế bào vẫn có <b>vài phân tử</b> permease và β-galactosidase (mức nền, basal). Nhờ vài permease đó, một ít lactose vào được tế bào; vài β-galactosidase đổi một phần lactose thành <b>allolactose</b>. Allolactose mới là thứ thật sự gỡ repressor. Khi operon bật, có thêm permease, lactose vào nhiều hơn, nên tín hiệu tự khuếch đại.' },
+    { q: 'Ba gene lacZ, lacY, lacA làm gì?', a: '<b>lacZ</b>: <b>β-galactosidase</b>, cắt lactose thành glucose + galactose (và tạo một ít allolactose). <b>lacY</b>: <b>permease</b>, protein màng đưa lactose vào tế bào. <b>lacA</b>: <b>transacetylase</b>, vai trò phụ (không cần để dùng lactose). Cả 3 nằm trên cùng một mRNA nên được làm cùng lúc.' },
+    { q: 'cAMP và CAP là gì?', a: '<b>cAMP</b> (AMP vòng) là một phân tử tín hiệu trong tế bào. <b>Glucose thấp thì cAMP cao</b>, glucose cao thì cAMP thấp (ngược chiều). <b>CAP</b> (catabolite activator protein, còn gọi là CRP) là một dimer. Khi gắn cAMP, CAP bám vào <b>vị trí CAP</b> ngay trước promoter, uốn cong DNA và tiếp xúc trực tiếp với RNA polymerase, giúp nó bám promoter tốt hơn. CAP là <b>activator</b>, không phải repressor.' },
+    { q: 'Vì sao operon lac cần cả 2 tín hiệu mới bật mạnh?', a: 'Glucose là nguồn năng lượng rẻ nhất, nên vi khuẩn <b>ưu tiên</b> nó. Chỉ khi <b>có lactose</b> (gỡ repressor) <b>và hết glucose</b> (cAMP cao, CAP hoạt động) thì mới đáng làm nhiều enzyme cho lactose. Hai "chìa khóa": chìa 1 (lactose) là <b>bắt buộc</b> để bật; chìa 2 (hết glucose) để bật <b>mạnh</b>.' },
+    { q: 'Vì sao ở vi khuẩn, ribosome dịch mã được mRNA khi mRNA còn đang được phiên mã?', a: 'Vi khuẩn <b>không có màng nhân</b>, nên DNA, RNA polymerase và ribosome ở chung một khoang. Đầu 5′ của mRNA vừa ló ra khỏi RNA polymerase là ribosome bám vào dịch ngay (<b>phiên mã và dịch mã đồng thời</b>, coupled). Điều này là nền tảng của cơ chế attenuation ở operon trp. Nhân thực không làm được vì mRNA phải xử lý xong và ra khỏi nhân rồi mới dịch.' },
+    { q: 'Kẹp tóc RNA (hairpin) và terminator không cần ρ là gì?', a: 'Một đoạn RNA có hai vùng <b>bổ sung</b> nhau có thể gập lại, tự bắt cặp thành <b>thân</b> và <b>vòng</b>, giống cái kẹp tóc. Nếu một kẹp tóc giàu GC nằm ngay trước một chuỗi <b>U</b>, nó là <b>terminator không cần ρ</b> (ρ-independent): kẹp tóc làm RNA polymerase khựng lại, cặp U–A yếu bung ra, RNA rời khỏi khuôn và phiên mã dừng.' },
   ],
 
   steps: [
-    { title: 'Toàn cảnh: một operon và công tắc của nó', text: 'Nhìn từ trái sang phải. <b>lacI</b> là gene tạo repressor (màu tím, nằm xa). Tiếp theo là vùng <b>CAP</b> (xanh lam), <b>promoter</b> (vùng bám RNA polymerase), <b>operator O</b> (công tắc, vùng nền sáng nhất), và cuối cùng là <b>lacZ, lacY, lacA</b>. Operator nằm ngay sau promoter nên repressor bám vào đó sẽ chặn trực tiếp RNA polymerase.' },
-    { title: 'Gene lacI tạo repressor', text: 'Gene <b>lacI</b> luôn được phiên mã nhẹ, tạo ra repressor LacI (protein tím). Repressor là một <b>tetramer</b> nên có nhiều chỗ bám. Lúc này không có lactose nên repressor chưa bị gỡ. Nó trôi xuống phía operator, đúng chỗ nó sẽ bám.' },
-    { title: 'Repressor bám operator và chặn RNA polymerase', text: 'Repressor bám vào <b>operator O</b> và đứng ngay trên promoter. RNA polymerase (xanh ngọc) tới được promoter nhưng <b>không mở được DNA để phiên mã</b> vì repressor đã chắn lối. Kết quả: <b>KHÔNG có mRNA</b>, biểu hiện <b>none</b>. Đây là trạng thái mặc định khi không có lactose.' },
-    { title: 'Lactose đến: allolactose gỡ repressor', text: 'Khi có lactose, một lượng nhỏ được biến thành <b>allolactose</b> (cam). Allolactose bám vào repressor và làm nó đổi hình dạng, <b>nhả khỏi operator</b>. Repressor bay lơ lửng ra xa. Lúc này <b>operator đã trống</b>, RNA polymerase có thể bắt đầu phiên mã. Chú ý: allolactose là chất <b>cảm ứng</b>, không phải chất đồng ức chế.' },
-    { title: 'Hết glucose: cAMP cao, CAP bám và kích hoạt', text: 'Khi glucose thấp, <b>cAMP tăng</b>. cAMP gắn vào CAP và CAP (xanh lơ) bám vào <b>vùng CAP</b> gần promoter. CAP-cAMP tạo ra một chỗ tiếp xúc để RNA polymerase bám mạnh hơn. Đây là <b>điều hòa dương tính</b>. Kết hợp với lactose đã gỡ repressor, operon bật <b>HIGH</b>: nhiều mRNA được tạo, các chấm đỏ chạy nhanh.' },
-    { title: 'Có glucose: CAP rời đi, biểu hiện chỉ "một ít"', text: 'Glucose quay lại, cAMP giảm, CAP không còn hoạt động và rời khỏi DNA. Lactose vẫn còn nên repressor vẫn được gỡ, RNA polymerase vẫn phiên mã, nhưng <b>chậm</b> (mức <b>low</b>, "một ít"). Đây là trường hợp <b>glucose cao, lactose có</b>: vi khuẩn chọn glucose trước.' },
-    { title: 'Bảng 4 tổ hợp: đọc ra logic đầy đủ', text: 'Đây là bảng sự thật của operon lac. <b>Glucose −, Lactose +</b> cho HIGH vì cả 2 chìa khóa đều có. <b>Glucose +, Lactose +</b> cho low. <b>Lactose −</b> thì repressor bám operator và cho none, bất kể glucose. Mẹo nhớ: lactose là điều kiện <b>bắt buộc</b> để bật, glucose thấp là điều kiện để bật <b>mạnh</b>.' },
-    { title: 'Đột biến: lacI⁻, Oᶜ, CAP⁻', text: 'Bật các công tắc 💥 để thấy đột biến. <b>lacI⁻</b>: không còn repressor nên operon bật liên tục. <b>Oᶜ</b>: repressor còn nhưng không bám được operator, kết quả giống lacI⁻. <b>CAP⁻</b>: CAP không bám được nên khi hết glucose cũng chỉ bật "một ít". Đổi tổ hợp Glucose/Lactose để so sánh.' },
+    { title: 'Toàn cảnh: operon lac nằm trên DNA', text: 'Đọc từ trái sang phải. <b>lacI</b> là gene điều hòa, tạo repressor. Tiếp theo là <b>vị trí CAP</b>, <b>promoter</b> (có −35 TTTACA và −10 TATGTT), <b>operator O</b> và 3 gene <b>lacZ · lacY · lacA</b>. Operator chồng lên đầu vùng được phiên mã, nên repressor bám ở đó sẽ chặn RNA polymerase. Các vùng có ống màu bao quanh để dễ nhìn.' },
+    { title: 'lacI luôn tạo repressor (một tetramer)', text: 'Gene <b>lacI</b> có promoter riêng và được phiên mã <b>liên tục ở mức thấp</b> (constitutive), nên tế bào lúc nào cũng có khoảng chục phân tử repressor. Quan sát khối tím hiện ra ở lacI: repressor LacI là <b>tetramer</b> (4 tiểu đơn vị). Mỗi tiểu đơn vị có một chỗ gắn allolactose.' },
+    { title: 'Không có lactose: repressor bám operator → TẮT', text: 'Mặc định: <b>có glucose, không có lactose</b>. Repressor ôm lấy <b>operator</b>. RNA polymerase (xanh ngọc) vẫn bám được promoter nhưng <b>không đi vào gene được</b> vì repressor chắn đường. Kết quả: không có mRNA, biểu hiện <b>none</b>. Thử bật công tắc <b>Lactose</b> để xem điều gì xảy ra.' },
+    { title: 'Có lactose: allolactose gỡ repressor → "một ít"', text: 'Lactose vào nhờ vài permease có sẵn và được đổi thành <b>allolactose</b> (chấm cam). Các chấm cam gắn vào repressor, làm nó <b>đổi hình dạng</b> và <b>nhả operator</b>. RNA polymerase chạy vào gene, kéo theo sợi mRNA cam. Nhưng <b>glucose vẫn còn</b> (lục giác trắng), cAMP thấp nên CAP lơ lửng không bám. Vì vậy chỉ có <b>low</b>: một RNA polymerase chạy chậm.' },
+    { title: 'Hết glucose: cAMP tăng, CAP–cAMP bám → HIGH', text: 'Glucose cạn, <b>cAMP tăng</b> (nhiều chấm vàng-xanh). Hai cAMP gắn vào CAP, CAP bám <b>vị trí CAP</b>, uốn cong DNA và tiếp xúc với RNA polymerase, kéo nó bám promoter mạnh hơn nhiều. Lactose đã gỡ repressor, nên cả 2 chìa khóa đều có: nhiều RNA polymerase nối đuôi nhau, biểu hiện <b>HIGH</b>. Đây là <b>điều hòa dương</b>.' },
+    { title: 'Một mRNA, ba protein', text: 'Nhìn xuống dưới: <b>một mRNA đa cistron</b> chứa 3 vùng mã hóa. Mỗi vùng có trình tự Shine–Dalgarno và AUG riêng, nên <b>ribosome</b> (xanh nhạt) dịch từng vùng độc lập, cho ra <b>β-galactosidase</b>, <b>permease LacY</b> và <b>transacetylase LacA</b>. Ribosome bám mRNA ngay khi mRNA còn đang được phiên mã, vì vi khuẩn không có màng nhân.' },
+    { title: 'Bảng 4 tổ hợp (tự chạy)', text: 'Cảnh tự đổi qua <b>4 tổ hợp</b>, mỗi tổ hợp khoảng 3 giây. Đọc nhãn xanh trên cùng và nhãn Biểu hiện. Quy luật: <b>Lactose −</b> → <b>none</b>, bất kể glucose (repressor bám). <b>Lactose +, Glucose +</b> → <b>low</b>. <b>Lactose +, Glucose −</b> → <b>HIGH</b>. Mẹo: lactose quyết định <b>có bật hay không</b>, glucose quyết định <b>bật mạnh hay yếu</b>.' },
+    { title: 'Đột biến: lacI⁻, Oᶜ, lacIˢ, CAP⁻', text: 'Dùng 4 công tắc 💥 cùng Glucose/Lactose. <b>lacI⁻</b>: không có repressor → bật liên tục. <b>Oᶜ</b>: operator hỏng, repressor không bám → bật liên tục. <b>lacIˢ</b>: repressor không nhận allolactose → kẹt TẮT dù có lactose. <b>CAP⁻</b>: hết glucose cũng chỉ "low". Thử: lacI⁻ + glucose có + không lactose → low (không bị chặn nhưng không có CAP).' },
+    { title: 'Operon trp: Trp là chất đồng ức chế', text: 'Cùng khung DNA nhưng giờ là <b>operon trp</b> (trpE D C B A, làm enzyme <b>tổng hợp</b> Trp). Repressor <b>TrpR</b> (dimer) tự nó <b>không bám</b> operator. Khi <b>có Trp</b> (chấm cam), Trp gắn vào TrpR, TrpR mới bám operator → <b>TẮT</b>. Tắt công tắc <b>Tryptophan</b> → TrpR rời, phiên mã <b>HIGH</b>. Gene trpR thật ra nằm <b>xa</b> operon trên nhiễm sắc thể. Operon trp không có vị trí CAP.' },
+    { title: 'Mở rộng: attenuation của operon trp', text: '<i>Kiến thức mở rộng, slide không nói đến.</i> Đoạn đầu mRNA (leader trpL) có 4 vùng <b>1–2–3–4</b>; vùng 1 chứa <b>2 codon Trp</b> liền nhau. Ribosome dịch leader ngay khi RNA polymerase còn đang phiên mã. <b>Đủ Trp</b>: ribosome chạy qua vùng 1 tới codon stop và <b>che vùng 2</b>, nên <b>3:4</b> gập thành kẹp tóc + chuỗi U = <b>terminator</b> → RNA polymerase rời, dừng sớm. <b>Thiếu Trp</b>: ribosome <b>kẹt</b> ở 2 codon Trp, vùng 2 tự do bắt cặp với 3 (<b>2:3</b>, chống kết thúc), nên 3:4 không hình thành → phiên mã tiếp vào trpE. Bật/tắt <b>Tryptophan</b> để xem lại.' },
   ],
 
   application: `<ul>
-  <li><b>Sản xuất protein tái tổ hợp trong E. coli:</b> nhiều vector biểu hiện dùng promoter lac (hoặc lac biến thể như T7-lac). Thêm <b>IPTG</b> (chất cảm ứng tổng hợp giống allolactose, không bị phân giải) để gỡ repressor và bật gene đích. Đây là cách sản xuất insulin và nhiều enzyme trong công nghiệp.</li>
-  <li><b>Sàng lọc khuẩn lạc xanh–trắng:</b> gene lacZ (đoạn α) được dùng làm báo cáo. Khi có X-gal, khuẩn lạc có β-galactosidase hoạt động sẽ <b>xanh</b>, khuẩn lạc đứt gene sẽ <b>trắng</b>. Đây là kỹ thuật cơ bản khi nhân dòng gene trong phòng thí nghiệm.</li>
-  <li><b>Chứng minh kinh điển (Jacob & Monod, 1961):</b> các đột biến lacI⁻ và Oᶜ được tìm thấy nhờ quan sát lac tự bật liên tục. Từ đó mô hình repressor–operator được xác nhận.</li>
-  <li><b>Điều hòa nhân sơ nói chung:</b> ngoài lac và trp, E. coli còn nhiều operon (ara, gal…) cũng dùng cùng logic: chất cảm ứng gỡ repressor, CAP kích hoạt khi thiếu glucose. Nhớ logic này là hiểu được nhiều operon khác.</li></ul>`,
+  <li><b>Sản xuất protein tái tổ hợp trong E. coli:</b> nhiều vector biểu hiện đặt gene đích sau promoter lac hoặc biến thể của nó (lacUV5, tac, hệ pET dùng T7 + lac operator). Thêm <b>IPTG</b>, chất cảm ứng nhân tạo giống allolactose nhưng <b>không bị β-galactosidase phân giải</b>, để gỡ LacI và bật gene đích đúng lúc mong muốn. Insulin người tái tổ hợp đầu tiên (1979) được biểu hiện dưới dạng protein dung hợp với β-galactosidase, nằm sau promoter lac.</li>
+  <li><b>Sàng lọc khuẩn lạc xanh–trắng:</b> vector mang đoạn <b>lacZα</b> có vị trí cắt nối gene. Trên đĩa có <b>X-gal</b> và IPTG, khuẩn lạc có β-galactosidase hoạt động biến X-gal thành màu <b>xanh</b>. Nếu gene lạ đã chèn vào giữa lacZα, β-galactosidase không hoạt động và khuẩn lạc <b>trắng</b>, tức là đã nhân dòng thành công.</li>
+  <li><b>Thí nghiệm kinh điển của Jacob & Monod (1961, Nobel 1965):</b> các đột biến lacI⁻, Oᶜ, lacIˢ và phép lai "lưỡng bội một phần" (merodiploid) chứng minh repressor là protein khuếch tán được, còn operator là đoạn DNA chỉ tác động lên gene nằm cùng phân tử.</li>
+  <li><b>Hiệu ứng "tăng trưởng hai pha" (diauxie):</b> nuôi E. coli trong môi trường có cả glucose và lactose, vi khuẩn dùng hết glucose trước, tạm dừng một lúc để bật operon lac, rồi mới dùng lactose. Đường cong tăng trưởng có 2 bậc.</li>
+  <li><b>Sinh học tổng hợp:</b> LacI/IPTG, TetR/tetracycline và AraC/arabinose là các "công tắc" chuẩn để bật tắt gene trong mạch di truyền nhân tạo.</li></ul>`,
 
   distinguish: `<div class="tbl-wrap"><table class="cmp">
   <tr><th></th><th>Operon <b>lac</b> (cảm ứng được)</th><th>Operon <b>trp</b> (ức chế được)</th></tr>
-  <tr><td>Loại con đường</td><td>Phân giải (dùng lactose)</td><td>Tổng hợp (làm tryptophan)</td></tr>
-  <tr><td>Phân tử gỡ / gắn repressor</td><td><b>Allolactose</b>: chất <b>cảm ứng</b>, GỠ repressor</td><td><b>Tryptophan</b>: chất <b>đồng ức chế</b>, KÍCH HOẠT repressor</td></tr>
-  <tr><td>Lúc nào gene BẬT?</td><td>Khi <b>CÓ</b> lactose (cơ chất)</td><td>Khi <b>KHÔNG CÓ</b> tryptophan</td></tr>
-  <tr><td>Lúc nào gene TẮT?</td><td>Khi không có lactose</td><td>Khi có tryptophan (sản phẩm cuối đã đủ)</td></tr>
-  <tr><td>Điều hòa dương (CAP)</td><td><b>Có</b>: cAMP–CAP tăng hoạt tính khi glucose thấp</td><td><b>Không</b> (trp không có CAP)</td></tr>
-  <tr><td>Tên cơ chế</td><td>Inducible (cảm ứng)</td><td>Repressible (ức chế)</td></tr>
+  <tr><td>Loại con đường</td><td><b>Phân giải</b> (dùng lactose)</td><td><b>Tổng hợp</b> (làm tryptophan)</td></tr>
+  <tr><td>Gene cấu trúc</td><td>lacZ, lacY, lacA</td><td>trpE, trpD, trpC, trpB, trpA</td></tr>
+  <tr><td>Repressor</td><td>LacI (tetramer), gene lacI nằm ngay cạnh operon</td><td>TrpR (dimer), gene trpR nằm xa operon</td></tr>
+  <tr><td>Phân tử nhỏ</td><td><b>Allolactose</b> = chất <b>cảm ứng</b>, làm repressor RỜI operator</td><td><b>Tryptophan</b> = chất <b>đồng ức chế</b>, làm repressor BÁM operator</td></tr>
+  <tr><td>Repressor tự nó (chưa gắn gì)</td><td><b>Đang hoạt động</b>: bám operator</td><td><b>Không hoạt động</b>: không bám</td></tr>
+  <tr><td>Gene BẬT khi</td><td><b>CÓ</b> lactose (cơ chất)</td><td><b>KHÔNG CÓ</b> tryptophan (sản phẩm)</td></tr>
+  <tr><td>Điều hòa dương (CAP)</td><td><b>Có</b>: cAMP–CAP khi glucose thấp</td><td><b>Không</b></td></tr>
+  <tr><td>Attenuation (mở rộng)</td><td>Không</td><td><b>Có</b>: leader trpL, kẹp tóc 2:3 / 3:4</td></tr>
   </table></div>
   <div class="tbl-wrap"><table class="cmp">
-  <tr><th>Glucose</th><th>Lactose</th><th>CAP bám?</th><th>Repressor bám operator?</th><th>Biểu hiện</th></tr>
-  <tr><td>+ (có)</td><td>−</td><td>Không</td><td>Có</td><td><b>none</b></td></tr>
-  <tr><td>+ (có)</td><td>+</td><td>Không</td><td>Không</td><td><b>low</b> (một ít)</td></tr>
-  <tr><td>− (thấp)</td><td>−</td><td>Có</td><td>Có</td><td><b>none</b></td></tr>
-  <tr><td>− (thấp)</td><td>+</td><td>Có</td><td>Không</td><td><b>HIGH</b> (mạnh nhất)</td></tr>
+  <tr><th>Glucose</th><th>Lactose</th><th>cAMP</th><th>CAP bám?</th><th>Repressor bám operator?</th><th>Biểu hiện lac</th></tr>
+  <tr><td>+ (có)</td><td>−</td><td>thấp</td><td>Không</td><td>Có</td><td><b>none</b></td></tr>
+  <tr><td>+ (có)</td><td>+</td><td>thấp</td><td>Không</td><td>Không</td><td><b>low</b> (một ít)</td></tr>
+  <tr><td>− (hết)</td><td>−</td><td>cao</td><td>Có</td><td>Có</td><td><b>none</b> (CAP có bám cũng vô ích)</td></tr>
+  <tr><td>− (hết)</td><td>+</td><td>cao</td><td>Có</td><td>Không</td><td><b>HIGH</b></td></tr>
+  </table></div>
+  <div class="tbl-wrap"><table class="cmp">
+  <tr><th>Đột biến</th><th>Không lactose</th><th>Có lactose, hết glucose</th><th>Tác động</th></tr>
+  <tr><td>Bình thường</td><td>none</td><td>HIGH</td><td></td></tr>
+  <tr><td><b>lacI⁻</b> (mất repressor)</td><td>bật (constitutive)</td><td>HIGH</td><td>Lặn; sửa được bằng lacI⁺ trên DNA khác (<b>trans</b>)</td></tr>
+  <tr><td><b>Oᶜ</b> (operator hỏng)</td><td>bật (constitutive)</td><td>HIGH</td><td>Chỉ ảnh hưởng gene cùng DNA (<b>cis</b>)</td></tr>
+  <tr><td><b>lacIˢ</b> (không nhận allolactose)</td><td>none</td><td>none</td><td>Trội: repressor hỏng vẫn bám mọi operator</td></tr>
+  <tr><td><b>CAP⁻</b> / cya⁻</td><td>none</td><td>low</td><td>Mất điều hòa dương</td></tr>
   </table></div>
   <div class="tbl-wrap"><table class="cmp">
   <tr><th>Cặp dễ lẫn</th><th>Cái thứ 1</th><th>Cái thứ 2</th></tr>
-  <tr><td>Operator vs promoter</td><td>Operator: DNA <b>repressor bám</b>, chặn polymerase</td><td>Promoter: DNA <b>RNA polymerase bám</b>, bắt đầu phiên mã</td></tr>
-  <tr><td>Chất cảm ứng vs chất đồng ức chế</td><td>Cảm ứng (allolactose): <b>gỡ</b> repressor, BẬT gene</td><td>Đồng ức chế (Trp): <b>kích hoạt</b> repressor, TẮT gene</td></tr>
-  <tr><td>Repressor vs activator (CAP)</td><td>Repressor: bám <b>operator</b>, TẮT</td><td>CAP: bám vùng gần <b>promoter</b>, BẬT mạnh hơn</td></tr>
-  <tr><td>Repressor (protein) vs repression (hiện tượng)</td><td>Repressor: protein LacI</td><td>Repression: repressor đang bám, gene tắt</td></tr>
-  </table></div>`,
+  <tr><td>Operator vs promoter</td><td>Operator: DNA cho <b>repressor bám</b></td><td>Promoter: DNA cho <b>RNA polymerase bám</b></td></tr>
+  <tr><td>Repressor vs activator</td><td>Repressor (LacI, TrpR): bám operator → TẮT</td><td>Activator (CAP): bám vị trí CAP → BẬT mạnh hơn</td></tr>
+  <tr><td>Repression vs attenuation (trp)</td><td>Repression: TrpR + Trp chặn <b>khởi đầu</b> phiên mã</td><td>Attenuation: phiên mã đã bắt đầu nhưng <b>dừng sớm</b> ở leader</td></tr>
+  </table></div>
+  <div class="box warn">⚠️ Về slide: (1) slide viết "cAMP–CAP bám promoter"; chính xác hơn là CAP bám <b>vị trí CAP</b> ngay trước promoter (ở lac, tâm tại khoảng −61) rồi chạm vào RNA polymerase. (2) Định nghĩa "induction" trên slide khá rối: hiểu là <b>chất cảm ứng gắn repressor, làm repressor rời operator, gene BẬT</b>.</div>
+  <div class="box info">Mở rộng: ngoài cAMP–CAP, glucose còn ức chế lac theo cách thứ hai. Khi glucose đang được vận chuyển vào tế bào, protein EIIA<sup>Glc</sup> của hệ PTS (dạng không phosphoryl hóa) bám và ức chế permease LacY, nên ít lactose vào được (<b>loại trừ chất cảm ứng</b>, inducer exclusion).</div>`,
 
   traps: [
-    { trap: '"Lactose là chất đồng ức chế của operon lac."', truth: 'Lactose (cụ thể là <b>allolactose</b>) là <b>chất cảm ứng</b>: nó gỡ repressor và BẬT gene. Chất đồng ức chế là Trp ở operon trp, làm repressor bám và TẮT gene.' },
-    { trap: '"Tryptophan là chất cảm ứng của operon trp."', truth: 'Trp là <b>chất đồng ức chế</b>. Repressor trp không hoạt động cho tới khi gắn Trp. Có Trp thì repressor bám operator và tắt gene tổng hợp Trp.' },
-    { trap: '"Có glucose thì operon lac luôn tắt."', truth: 'Glucose không tắt operon lac trực tiếp. Nó chỉ làm <b>cAMP thấp</b> để CAP không hoạt động. Nếu có lactose và repressor đã được gỡ, operon vẫn bật ở mức <b>low</b>.' },
-    { trap: '"cAMP cao khi glucose cao."', truth: 'Ngược lại. <b>Glucose thấp → cAMP cao → CAP hoạt động</b>. Glucose cao khiến cAMP thấp.' },
-    { trap: '"Có lactose là đủ để operon lac bật mạnh."', truth: 'Lactose chỉ <b>gỡ repressor</b> (bắt buộc). Để bật <b>mạnh</b> (HIGH) còn cần <b>CAP–cAMP</b>, tức glucose phải thấp. Có lactose + glucose cao thì chỉ "low".' },
-    { trap: '"CAP là repressor của operon lac."', truth: 'CAP là <b>activator</b> (điều hòa dương tính). Nó tăng phiên mã khi cAMP cao. Repressor của lac là <b>LacI</b>, bám operator.' },
-    { trap: '"Đột biến lacI⁻ làm giảm biểu hiện gene."', truth: 'Ngược lại: lacI⁻ không có repressor nên gene <b>bật liên tục</b> (constitutive), biểu hiện <b>cao</b> cả khi không có lactose. Đột biến mất chức năng ở repressor làm <b>tăng</b> biểu hiện.' },
-    { trap: '"Operon và promoter là một thứ."', truth: 'Operon là cả <b>cụm</b> gồm promoter + operator + các gene cấu trúc. Promoter chỉ là một phần, nơi RNA polymerase bám.' },
-    { trap: '"Repressor bám vào promoter."', truth: 'Repressor bám vào <b>operator</b>, nằm sát và chồng lên promoter, nên chặn được polymerase. Polymerase mới bám promoter. Hai chỗ khác nhau dù gần nhau.' },
+    { trap: '"Lactose/allolactose là chất đồng ức chế của operon lac."', truth: 'Allolactose là <b>chất cảm ứng</b>: nó làm repressor rời operator, gene BẬT. Chất đồng ức chế là <b>Trp</b> ở operon trp: nó giúp repressor bám, gene TẮT.' },
+    { trap: '"Tryptophan là chất cảm ứng của operon trp."', truth: 'Trp là <b>chất đồng ức chế</b>. TrpR tự nó không bám operator; phải gắn Trp mới bám. Có Trp → TẮT gene tổng hợp Trp.' },
+    { trap: '"Có glucose thì operon lac luôn tắt."', truth: 'Glucose không trực tiếp tắt lac; nó làm <b>cAMP thấp</b> nên CAP không giúp. Nếu có lactose thì repressor vẫn rời và operon vẫn chạy ở mức <b>low</b>.' },
+    { trap: '"cAMP cao khi glucose cao."', truth: 'Ngược lại: <b>glucose thấp → cAMP cao → CAP–cAMP hoạt động</b>.' },
+    { trap: '"Hết glucose (CAP bám) là operon lac bật, dù không có lactose."', truth: 'Không. Không có lactose thì <b>repressor vẫn bám operator</b> và chặn hẳn. CAP chỉ tăng cường khi đường đã thông. Lactose là điều kiện <b>bắt buộc</b>.' },
+    { trap: '"CAP là repressor của operon lac."', truth: 'CAP là <b>activator</b> (điều hòa dương). Repressor của lac là <b>LacI</b>.' },
+    { trap: '"Đột biến lacI⁻ làm giảm biểu hiện gene lac."', truth: 'Ngược lại: không có repressor thì gene <b>bật liên tục</b> (constitutive). Mất chức năng của một chất <b>ức chế</b> thì làm <b>tăng</b> biểu hiện.' },
+    { trap: '"Oᶜ sửa được bằng cách thêm một bản operator bình thường trên plasmid."', truth: 'Không. Operator chỉ là đoạn DNA, chỉ điều khiển gene nằm <b>cùng phân tử DNA</b> với nó (<b>cis</b>). Operator hỏng vẫn để gene bên cạnh nó bật liên tục. Ngược lại, lacI⁻ sửa được bằng lacI⁺ ở nơi khác (<b>trans</b>), vì repressor là protein khuếch tán được.' },
+    { trap: '"Repressor bám vào promoter."', truth: 'Repressor bám <b>operator</b>; RNA polymerase bám <b>promoter</b>. Hai đoạn nằm sát và có thể chồng một phần lên nhau, nên repressor chặn được polymerase, nhưng chúng là hai vị trí khác nhau.' },
+    { trap: '"Promoter (hộp −10) chính là điểm bắt đầu dịch mã AUG."', truth: 'Promoter là chỗ <b>RNA polymerase</b> bám để bắt đầu <b>phiên mã</b>, nằm <b>trước</b> điểm +1. AUG là codon bắt đầu <b>dịch mã</b> trên mRNA, nằm sau Shine–Dalgarno. Một operon có 1 promoter nhưng nhiều AUG (mỗi gene một AUG). Xem lại bài 1.' },
   ],
 
   quiz: [
-    { q: 'Trong môi trường có lactose và không có glucose, operon lac biểu hiện ra sao?', ops: ['none (repressor bám)', 'low (một ít)', 'HIGH (mạnh nhất)', 'Không tính được'], a: 2, e: 'Lactose gỡ repressor (điều kiện bắt buộc), glucose thấp làm cAMP cao để CAP kích hoạt. Cả hai chìa khóa cùng có nên bật HIGH. "low" là đáp án bẫy khi glucose còn cao.' },
-    { q: 'Một đột biến làm operator Oᶜ không bám được repressor. Điều gì xảy ra khi không có lactose?', ops: ['none: repressor vẫn chặn', 'low: chỉ CAP bật', 'Operon bật liên tục (constitutive)', 'Repressor bị đẩy ra khỏi tế bào'], a: 2, e: 'Repressor không bám được operator nên không còn gì chặn polymerase, operon bật liên tục. Đáp án "none" là bẫy: nó nhầm Oᶜ với việc repressor còn nguyên chức năng.' },
-    { q: 'Chất nào làm repressor LacI RỜI operator?', ops: ['Glucose', 'cAMP', 'Allolactose (chất cảm ứng)', 'Tryptophan'], a: 2, e: 'Allolactose bám repressor và làm nó nhả operator. Glucose và cAMP không tác động trực tiếp lên repressor. Tryptophan là chất đồng ức chế của operon trp, không liên quan đến lac.' },
-    { q: 'Operon trp được TẮT khi nào?', ops: ['Khi không có tryptophan', 'Khi có tryptophan (corepressor kích hoạt repressor)', 'Khi có lactose', 'Khi glucose thấp'], a: 1, e: 'Trp là chất đồng ức chế: khi có Trp, repressor trp hoạt động, bám operator và tắt gene tổng hợp Trp. Đáp án "không có Trp" là ngược logic.' },
-    { q: 'Vì sao đột biến CAP⁻ chỉ làm giảm biểu hiện ở mức "low" dù có lactose và glucose thấp?', ops: ['Vì repressor vẫn bám', 'Vì CAP không kích hoạt được RNA polymerase, nên mất lực bật mạnh', 'Vì lactose bị mất', 'Vì mRNA không được dịch'], a: 1, e: 'Lactose đã gỡ repressor nên phiên mã vẫn xảy ra, chỉ thiếu CAP để tăng cường. Đáp án "repressor vẫn bám" là sai vì lactose đã gỡ nó.' },
-    { q: 'Ghép đúng: Operon nhân sơ khác nhân thực ở điểm nào?', ops: ['Có promoter riêng cho từng gene', 'Nhiều gene cấu trúc nằm cạnh nhau, dùng chung promoter và được phiên mã thành một mRNA', 'Không có RNA polymerase', 'Gene nằm trong nhân'], a: 1, e: 'Operon là cụm gene dùng chung promoter, tạo một mRNA đa cistron, đặc trưng của nhân sơ. Nhân thực mỗi gene thường có promoter riêng.' },
-    { q: 'Một đột biến làm lacI⁻ (không có repressor) và đồng thời CAP⁻, glucose cao, lactose không có. Biểu hiện?', ops: ['none', 'low', 'HIGH', 'Không biểu hiện'], a: 1, e: 'Không có repressor nên không bị chặn (không phải none). CAP⁻ và glucose cao nên không có HIGH. Kết quả là low. Đáp án "none" là bẫy vì nhầm với trạng thái bình thường khi có repressor.' },
+    { q: 'Môi trường có lactose và KHÔNG có glucose. Operon lac biểu hiện thế nào?', ops: ['none (repressor bám)', 'low (một ít)', 'HIGH (mạnh nhất)', 'Chỉ lacZ được phiên mã'], a: 2, e: 'Lactose gỡ repressor (điều kiện bắt buộc); hết glucose nên cAMP cao, CAP–cAMP kích hoạt. Đủ 2 chìa khóa → HIGH. "low" là đáp án bẫy: đó là trường hợp còn glucose. "Chỉ lacZ" sai vì cả operon nằm trên một mRNA.' },
+    { q: 'Operator bị đột biến Oᶜ (repressor không bám được). Khi KHÔNG có lactose và có glucose, operon lac sẽ:', ops: ['Phiên mã ở mức thấp (constitutive, không có CAP)', 'Hoàn toàn tắt vì repressor vẫn còn', 'Phiên mã HIGH', 'Repressor bị phân hủy'], a: 0, e: 'Repressor không bám được nên không có gì chặn: operon bật liên tục. Nhưng còn glucose nên CAP không giúp → mức low. "Hoàn toàn tắt" là bẫy: nhầm rằng repressor còn là đủ, trong khi chỗ bám của nó đã hỏng.' },
+    { q: 'Phân tử nào làm repressor LacI RỜI khỏi operator?', ops: ['Glucose', 'cAMP', 'Tryptophan', 'Allolactose'], a: 3, e: 'Allolactose gắn vào LacI, đổi hình dạng của nó (dị lập thể) nên LacI nhả operator. cAMP tác động lên CAP chứ không lên LacI. Trp là chất đồng ức chế của operon trp.' },
+    { q: 'Operon trp bị TẮT khi nào?', ops: ['Khi không có tryptophan', 'Khi có tryptophan, vì Trp giúp TrpR bám operator', 'Khi có lactose', 'Khi glucose thấp'], a: 1, e: 'Trp là chất đồng ức chế: Trp gắn TrpR thì TrpR mới bám operator và tắt các gene tổng hợp Trp. "Khi không có Trp" ngược logic: lúc đó tế bào cần Trp nên gene phải BẬT.' },
+    { q: 'Tế bào có lacI⁺ trên NST nhưng mang Oᶜ ở chính operon lac của NST đó; thêm plasmid mang lacI⁺ O⁺. Không có lactose, các gene lac trên NST sẽ:', ops: ['Bị tắt nhờ repressor từ plasmid', 'Tắt vì có 2 bản lacI', 'Vẫn bật, vì Oᶜ tác động cis: repressor nào cũng không bám được operator hỏng', 'Chỉ bật khi glucose cao'], a: 2, e: 'Operator là đoạn DNA, chỉ điều khiển gene nằm cùng phân tử với nó (cis). Thêm repressor từ plasmid cũng không bám được Oᶜ, nên gene trên NST vẫn bật. Đáp án "tắt nhờ repressor plasmid" là bẫy: cách đó chỉ sửa được lacI⁻ (trans).' },
+    { q: 'Đột biến làm CAP không bám được DNA. Có lactose, hết glucose. Kết quả?', ops: ['none, vì repressor vẫn bám', 'low, vì mất lực kích hoạt của CAP', 'HIGH như bình thường', 'Operon bật cả khi không có lactose'], a: 1, e: 'Lactose đã gỡ repressor nên phiên mã vẫn có, nhưng thiếu CAP để tăng cường → low. "none" sai vì repressor đã rời. "HIGH" sai vì HIGH cần cả CAP–cAMP.' },
+    { q: '(Mở rộng) Ở operon trp, khi tế bào THIẾU Trp, ribosome dừng ở 2 codon Trp của leader. Điều gì xảy ra tiếp?', ops: ['Vùng 3:4 gập thành terminator, phiên mã dừng', 'Vùng 2:3 gập thành kẹp tóc chống kết thúc, phiên mã đi tiếp vào trpE', 'TrpR bám operator', 'mRNA bị cắt bởi RNase'], a: 1, e: 'Ribosome kẹt ở vùng 1 nên vùng 2 tự do, bắt cặp với vùng 3 (2:3). Vùng 3 đã bận nên 3:4 (terminator) không hình thành → RNA polymerase đi tiếp. 3:4 chỉ hình thành khi đủ Trp (ribosome chạy tới stop và che vùng 2).' },
   ],
 
   recall: [
-    'Vẽ DNA nằm ngang: lacI (xa) → CAP → promoter → operator → lacZYA. Đánh dấu chỗ repressor bám, chỗ RNA polymerase bám, và chỗ CAP–cAMP bám.',
-    'Lập bảng 4 dòng (Glucose, Lactose, CAP bám, Repressor bám) và ghi mức biểu hiện cho từng dòng, không nhìn sách.',
-    'Viết 2 câu: chất cảm ứng và chất đồng ức chế khác nhau thế nào, và vì sao allolactose gỡ repressor còn Trp thì kích hoạt nó.',
+    'Vẽ tay lại operon lac nằm ngang: lacI (có promoter riêng) → vị trí CAP → promoter → operator → lacZ, lacY, lacA. Đánh dấu chỗ repressor bám, chỗ RNA polymerase bám, chỗ CAP–cAMP bám, và vẽ 1 mRNA đa cistron cho ra 3 protein.',
+    'Không nhìn sách, lập bảng 4 dòng (Glucose, Lactose, cAMP, CAP bám, Repressor bám, Biểu hiện). Sau đó dự đoán cho lacI⁻, Oᶜ, lacIˢ, CAP⁻.',
+    'Vẽ tay operon trp ở 2 trạng thái: có Trp (TrpR + Trp bám operator) và không có Trp. Viết 2 câu so sánh chất cảm ứng với chất đồng ức chế.',
   ],
 
   scene(api) {
     const { THREE, C } = api;
     const L = labels(api);
-    const v = new THREE.Vector3();
-    const rise = 0.3, bpt = 10.5;
+    const V = (x, y, z) => new THREE.Vector3(x, y, z);
+    const tmp = new THREE.Vector3(), tmp2 = new THREE.Vector3();
+    const dnaY = 1.0, rise = 0.2;
 
-    // ---- DNA ----
-    const dnaG = api.group(); dnaG.position.y = 0.6;
-    const dna = api.dna({ seq: SEQ, rise, radius: 0.85, turn: bpt, openR: 1.1, parent: dnaG });
+    // ---------- DNA ----------
+    const dnaG = api.group(); dnaG.position.y = dnaY;
+    const dna = api.dna({ seq: SEQ, rise, radius: 0.7, turn: 10.5, openR: 0.8, parent: dnaG });
     const X = (i) => dna.xOf(i);
-    const regG = api.group(); regG.position.y = 0.6;
-    const shells = {};
-    const shell = (key, k0, color) => {
-      const [a, b] = span(k0);
+    const regG = api.group(); regG.position.y = dnaY;
+    const shellOf = (a, b, color) => {
       const len = (b - a + 1) * rise;
-      const m = api.cylinder(1.25, 1.25, len, color, regG, { opacity: 0.12, depthWrite: false, side: THREE.DoubleSide });
-      m.rotation.z = Math.PI / 2; m.position.x = (X(a) + X(b)) / 2;
-      shells[key] = m;
+      const m = api.cylinder(1.08, 1.08, len, color, regG, { opacity: 0.12, depthWrite: false, side: THREE.DoubleSide });
+      m.rotation.z = Math.PI / 2; m.position.x = (X(a) + X(b)) / 2; return m;
     };
-    shell('lacI', 'lacI', 0x9b9b9b);
-    shell('cap', 'cap', 0x66d9ef);
-    shell('prom', 'prom', 0x2bb3a3);
-    shell('op', 'op', 0xf5a623);
-    shell('genes', 'genes', 0x4a90e2);
+    const sh = {
+      reg: shellOf(START.lacI, START.lacI + SEG.lacI.length - 1, 0x9b6dd6),
+      cap: shellOf(START.cap, START.cap + SEG.cap.length - 1, 0x66d9ef),
+      prom: shellOf(START.prom, START.prom + SEG.prom.length - 1, 0x2bb3a3),
+      op: shellOf(START.op, START.op + SEG.op.length - 1, 0xf5a623),
+      Z: shellOf(START.Z, START.Z + SEG.Z.length - 1, 0x4a90e2),
+      Y: shellOf(START.Y, START.Y + SEG.Y.length - 1, 0x5b9ff0),
+      A: shellOf(START.A, START.A + SEG.A.length - 1, 0x7ab0f5),
+      // operon trp dùng lại vùng gene: leader trpL + 5 gene
+      tL: shellOf(GENE0, GENE0 + 9, 0xf5c542),
+      tG: shellOf(GENE0 + 10, GENE1, 0x4a90e2),
+    };
+    const xm = (k) => X(mid(k));
+    // nhãn vùng (so le cao thấp để không đè nhau)
+    L.add('reg', 'lacI', [xm('lacI'), 2.0, 0], regG, 'dim');
+    L.add('cap', 'vị trí CAP', [xm('cap'), -2.3, 0], regG, 'dim');
+    L.add('prom', 'PROMOTER', [xm('prom'), 2.0, 0], regG, 'big');
+    L.add('op', 'OPERATOR', [xm('op'), -2.0, 0], regG, 'warn');
+    L.add('Z', 'lacZ', [xm('Z'), 2.0, 0], regG, 'good');
+    L.add('Y', 'lacY', [xm('Y'), 3.4, 0], regG, 'good');
+    L.add('A', 'lacA', [xm('A'), 2.0, 0], regG, 'good');
+    L.add('tL', 'trpL (leader)', [X(GENE0 + 5), 3.4, 0], regG, 'dim');
+    L.add('tG', 'trpE D C B A', [X((GENE0 + 10 + GENE1) / 2), 2.0, 0], regG, 'good');
+    L.add('m35', '−35', [X(START.prom + 2.5), -1.4, 0], regG, 'plain');
+    L.add('m10', '−10', [X(START.prom + 26.5), -1.4, 0], regG, 'plain');
+    L.add('meter', '', [xm('op') - 2.9, 5.0, 0], regG, 'warn');
+    L.add('blocked', '🚫 bị chặn', [xm('prom') - 1.4, -2.6, 1.2], regG, 'warn');
+    L.add('lacIBad', '✕ lacI⁻: không có repressor', [xm('lacI') + 2.4, -3.5, 0], regG, 'warn');
+    L.add('combo', '', [0, 6.2, 0], regG, 'big');
+    const p0 = dna.pairs[0], pz = dna.pairs[NBP - 1];
+    L.add('e5', '5′', [X(0) - 0.6, p0.half1.position.y + 0.2, p0.half1.position.z], dnaG, 'plain');
+    L.add('e3', '3′', [X(NBP - 1) + 0.6, pz.half1.position.y + 0.2, pz.half1.position.z], dnaG, 'plain');
 
-    // labels (managed by visibility per step)
-    L.add('lacI', 'gene lacI (repressor)', [X(mid('lacI')), 2.6, 0], regG, 'dim');
-    L.add('cap', 'vùng CAP', [X(mid('cap')), 2.6, 0], regG, 'dim');
-    L.add('prom', 'PROMOTER', [X(mid('prom')), 2.9, 0], regG, 'big');
-    L.add('op', 'OPERATOR O', [X(mid('op')), -2.1, 0], regG, 'warn');
-    L.add('genes', 'lacZ · lacY · lacA', [X(mid('genes')), 2.6, 0], regG, 'good');
-    L.add('mRNAname', 'mRNA đa cistron', [X(mid('genes')), -3.4, 0], regG, 'dim');
-    L.add('blockedMsg', '🚫 repressor chặn RNA polymerase', [X(mid('prom')) - 0.3, 4.6, 0], regG, 'warn');
-    L.add('capMsg', '✅ CAP–cAMP kích hoạt', [X(mid('cap')) + 0.6, 4.5, 0], regG, 'good');
-    L.add('capBad', '❌ CAP⁻: không bám', [X(mid('cap')), 4.3, 0], regG, 'warn');
-    L.add('lacIBad', '❌ lacI⁻: không có repressor', [X(mid('lacI')), 4.3, 0], regG, 'warn');
-    L.add('ocBad', '❌ Oᶜ: repressor không bám', [X(mid('op')), 4.3, 0], regG, 'warn');
-    // 5′/3′ ends
-    const p0 = dna.pairs[0], pz = dna.pairs[dna.pairs.length - 1];
-    api.label('5′', [X(0) - 0.8, p0.half1.position.y + 0.2, p0.half1.position.z], dnaG, 'plain');
-    api.label('3′', [X(SEQ.length - 1) + 0.8, pz.half1.position.y + 0.2, pz.half1.position.z], dnaG, 'plain');
+    // ---------- repressor (LacI tetramer / TrpR dimer) ----------
+    const rep = api.group();
+    const SUB = [[-0.42, 0.28, 0], [0.42, 0.28, 0], [-0.42, -0.3, 0.12], [0.42, -0.3, 0.12]];
+    const subs = SUB.map((p, k) => { const b = api.blob(0.42, C.protein, rep, { seed: 3 + k }); b.position.set(...p); return b; });
+    const SITE = SUB.map(p => V(p[0] * 1.35, p[1] + 0.32, 0.42));
+    L.add('repL', 'repressor LacI', [0, 1.25, 0], rep, '');
+    rep.scale.setScalar(0.01);
 
-    // ---- actors ----
-    const repressor = api.blob(0.8, C.protein, null, { mat: { opacity: 0.95 }, seed: 3 });
-    const rep2 = api.blob(0.45, C.protein, repressor, { mat: { opacity: 0.95 }, seed: 6 });
-    rep2.position.set(0.75, 0.4, 0.2);
-    const allo = api.sphere(0.22, 0xf5a623, null, { mat: { opacity: 1 } });
-    const cap = api.blob(0.7, 0x66d9ef, null, { mat: { opacity: 0.95 }, seed: 9 });
-    const rnap = api.blob(0.95, C.enzyme, null, { mat: { opacity: 0.9 }, seed: 2, scale: [1.2, 1, 1] });
-    const rnapIcon = api.label('RNA polymerase', [0, -1.6, 0], rnap, 'dim');
-    const capMod = api.label('CAP', [0, 1.1, 0], cap, 'dim');
-    const beads = [];
-    for (let k = 0; k < 6; k++) { const b = api.box(0.36, 0.36, 0.36, C.rna, null); b.visible = false; beads.push(b); }
+    // ---------- CAP dimer + cAMP ----------
+    const capG = api.group();
+    for (const sx of [-0.36, 0.36]) { const b = api.blob(0.4, 0x66d9ef, capG, { seed: sx > 0 ? 9 : 11 }); b.position.set(sx, 0, 0); }
+    const CAP_SITE = [V(-0.36, 0.42, 0.3), V(0.36, 0.42, 0.3)];
+    L.add('capL', 'CAP', [0, 1.05, 0], capG, '');
+    capG.scale.setScalar(0.01);
 
-    // ---- state ----
-    let mode = 'lac';        // 'lac' | 'trp'
-    let glu = true, lac = false, tryp = false, lacIBad = false, oc = false, capBad = false;
-    let cur = 0;
+    // ---------- small-molecule pools ----------
+    const ligG = new THREE.IcosahedronGeometry(0.15, 1);
+    const ligs = []; for (let k = 0; k < 6; k++) { const m = new THREE.Mesh(ligG, api.mat(0xf5a623, { emissive: 0x442200 })); api.add(m); m.scale.setScalar(0.01); ligs.push(m); }
+    const campG = new THREE.SphereGeometry(0.11, 12, 8);
+    const camps = []; for (let k = 0; k < 8; k++) { const m = new THREE.Mesh(campG, api.mat(0xd4e157, { emissive: 0x223300 })); api.add(m); m.scale.setScalar(0.01); camps.push(m); }
+    const gluGeo = new THREE.CylinderGeometry(0.24, 0.24, 0.1, 6);
+    const glus = []; for (let k = 0; k < 5; k++) { const m = new THREE.Mesh(gluGeo, api.mat(0xf4f7fb)); m.rotation.x = Math.PI / 2; api.add(m); m.scale.setScalar(0.01); glus.push(m); }
+    const LIG_C = V(xm('op') + 3.2, dnaY + 4.0, 0.8), CAMP_C = V(xm('cap') + 2.2, dnaY + 4.5, 0.6), GLU_C = V(xm('cap') - 3.0, dnaY + 4.3, 0.6);
+    L.add('ligL', 'allolactose', LIG_C.clone().add(V(0.6, 1.1, 0)), null, 'dim');
+    L.add('campL', 'cAMP', CAMP_C.clone().add(V(0, 1.1, 0)), null, 'dim');
+    L.add('gluL', 'glucose', GLU_C.clone().add(V(0, 1.1, 0)), null, 'dim');
+
+    // ---------- RNA polymerases (pool) with nascent mRNA tails ----------
+    const rnaps = [], tails = [];
+    const beadG = new THREE.SphereGeometry(0.12, 10, 8), beadM = api.mat(C.rna);
+    for (let k = 0; k < 3; k++) {
+      const r = api.blob(0.6, C.enzyme, null, { seed: 2 + k, scale: [1.25, 1, 1], mat: { opacity: 0.92 } });
+      r.scale.multiplyScalar(0.01); rnaps.push(r);
+      const tl = []; for (let j = 0; j < 12; j++) { const b = new THREE.Mesh(beadG, beadM); api.add(b); b.visible = false; tl.push(b); }
+      tails.push(tl);
+    }
+    L.add('rnapL', 'RNA polymerase', [0, -1.05, 0.5], rnaps[0], 'dim');
+    const RNAP_S = new THREE.Vector3(1.25, 1, 1);
+
+    // ---------- product layer: polycistronic mRNA → 3 proteins ----------
+    const prodG = api.group(); prodG.visible = false;
+    const mY = dnaY - 4.0;
+    const segX = (k) => [X(START[k]), X(START[k] + SEG[k].length - 1)];
+    const cist = ['Z', 'Y', 'A'];
+    api.tube([V(X(START.op) - 0.2, mY, 0.4), V(segX('Z')[0], mY, 0.4)], 0.13, C.rna, prodG);
+    const CIST_COL = { Z: 0xf2994a, Y: 0xf5b26b, A: 0xf8c88f };
+    for (const k of cist) {
+      const [a, b] = segX(k);
+      api.tube([V(a, mY, 0.4), V((a + b) / 2, mY + 0.12, 0.4), V(b, mY, 0.4)], 0.16, CIST_COL[k], prodG);
+      const sd = api.box(0.22, 0.34, 0.34, 0xff3b30, prodG); sd.position.set(a - 0.15, mY, 0.4);
+    }
+    const ribos = cist.map((k, i) => {
+      const g = api.group(prodG);
+      const big = api.blob(0.42, C.ribosome, g, { seed: 20 + i }); big.position.y = 0.32;
+      const small = api.blob(0.3, 0xa9cce3, g, { seed: 30 + i }); small.position.y = -0.3;
+      const pep = api.blob(0.3, C.protein, g, { seed: 40 + i }); pep.position.set(0, 0.95, 0); pep.scale.setScalar(0.01);
+      g.userData = { k, pep };
+      return g;
+    });
+    const PROT = {
+      Z: (() => { const g = api.group(prodG); for (let k = 0; k < 4; k++) { const b = api.blob(0.32, C.protein, g, { seed: 50 + k }); b.position.set((k % 2 - 0.5) * 0.6, (k > 1 ? -0.5 : 0) * 0.9 + 0.2, 0); } return g; })(),
+      Y: (() => { const g = api.group(prodG); const c = api.cylinder(0.32, 0.32, 1.1, 0xb48ae0, g); c.rotation.z = 0.15; return g; })(),
+      A: (() => { const g = api.group(prodG); api.blob(0.34, 0x8a5cc9, g, { seed: 61 }); return g; })(),
+    };
+    const protY = mY - 1.9;
+    for (const k of cist) PROT[k].position.set((segX(k)[0] + segX(k)[1]) / 2, protY, 0.4);
+    L.add('mrnaL', 'mRNA đa cistron (1 mRNA → 3 protein)', [X(START.op) - 0.6, mY - 0.75, 0.4], null, 'dim');
+    L.add('pZ', 'β-galactosidase', [PROT.Z.position.x, protY - 1.05, 0.4], null, 'good');
+    L.add('pY', 'permease', [PROT.Y.position.x, protY + 1.0, 0.4], null, 'good');
+    L.add('pA', 'transacetylase', [PROT.A.position.x + 0.4, protY - 1.05, 0.4], null, 'good');
+
+    // ---------- attenuation stage (step 10) ----------
+    const attG = api.group(); attG.position.set(0, dnaY - 2.2, 2.6); attG.visible = false;
+    const AS = 0.42, AX0 = -8.4;
+    const rod = api.cylinder(0.14, 0.14, 19, 0x8fa3bf, attG, { opacity: 0.7 }); rod.rotation.z = Math.PI / 2; rod.position.set(0.8, 1.9, -0.4);
+    const attBeads = [], attInfo = [];
+    const segStart = {};
+    { let n = 0; for (const [k, c] of ATT) { segStart[k] = n; for (let j = 0; j < c; j++) { attInfo.push({ k, j }); n++; } } }
+    const NB = attInfo.length;
+    const attBeadG = new THREE.SphereGeometry(0.17, 14, 10);
+    attInfo.forEach(({ k, j }) => {
+      const trpCodon = k === '1' && (j === 2 || j === 3);
+      const m = new THREE.Mesh(attBeadG, api.mat(trpCodon ? 0xe74c3c : ATT_COL[k], trpCodon ? { emissive: 0x551111 } : {}));
+      attG.add(m); m.position.set(AX0 + attBeads.length * AS, 0, 0); attBeads.push(m);
+    });
+    const attLinks = []; for (let i = 0; i < NB - 1; i++) attLinks.push(api.stick(V(0, 0, 0), V(1, 0, 0), 0.05, C.rna, attG));
+    const rungs = []; for (let i = 0; i < 6; i++) { const r = api.stick(V(0, 0, 0), V(1, 0, 0), 0.05, 0xffffff, attG, { opacity: 0.85 }); r.visible = false; rungs.push(r); }
+    const attRibo = api.group(attG);
+    { const b = api.blob(0.62, C.ribosome, attRibo, { seed: 70 }); b.position.y = 0.48; const s = api.blob(0.44, 0xa9cce3, attRibo, { seed: 71 }); s.position.y = -0.42; }
+    const attRnap = api.blob(0.62, C.enzyme, attG, { seed: 72, scale: [1.25, 1, 1], mat: { opacity: 0.92 } });
+    const regLab = (k, txt) => { const i = segStart[k] + 1; return L.add('a' + k, txt, [0, 0.55, 0], attBeads[i], 'plain'); };
+    regLab('1', '1 (UGG UGG = 2 codon Trp)'); regLab('2', '2'); regLab('3', '3'); regLab('4', '4');
+    L.add('aU', 'UUUUUU', [0, -0.5, 0], attBeads[segStart.U + 3], 'plain');
+    L.add('aRibo', 'ribosome', [0, 1.4, 0], attRibo, 'dim');
+    L.add('aRnap', 'RNA pol', [0, 0.95, 0], attRnap, 'dim');
+    L.add('aHp', '', [0, 0, 0], attG, 'good');
+    L.add('aMsg', '', [0.5, 3.6, 0], attG, 'big');
+
+    // ---------- state ----------
+    let cur = 0, tStep = 0;
+    let glu = true, lac = false, tryp = true;
+    let kIs = false, kOc = false, kIsup = false, kCap = false, kTrpR = false;
+    let combo = -1;
+    const COMBOS = [[true, false], [true, true], [false, false], [false, true]];
+    const isTrp = () => cur >= 8;
+    const eff = () => (cur === 6 && combo >= 0) ? { glu: COMBOS[combo][0], lac: COMBOS[combo][1] } : { glu, lac };
     const derive = () => {
-      if (mode === 'trp') {
-        const repBound = tryp && !lacIBad && !oc;
-        return { repExists: !lacIBad, repBound, capOn: false, level: repBound ? 0 : 2 };
+      if (isTrp()) {
+        const repExists = !kTrpR;
+        const repBound = repExists && tryp;
+        return { repExists, repBound, capOn: false, induced: false, level: repBound ? 0 : (tryp ? 1 : 2) };
       }
-      const repExists = !lacIBad;
-      const repBound = repExists && !oc && !lac;
-      const capOn = !glu && !capBad;
-      return { repExists, repBound, capOn, level: repBound ? 0 : (capOn ? 2 : 1) };
+      const e = eff();
+      const repExists = !kIs;
+      const induced = repExists && e.lac && !kIsup;
+      const repBound = repExists && !kOc && !induced;
+      const capOn = !e.glu && !kCap;
+      return { repExists, repBound, capOn, induced, level: repBound ? 0 : (capOn ? 2 : 1), glu: e.glu, lac: e.lac };
     };
-    const levelName = ['none', 'low', 'HIGH'];
+    const LV = ['none', 'low', 'HIGH'], LVC = ['warn', '', 'good'];
+
     const readout = () => {
-      const d = derive(); const lv = levelName[d.level];
+      const d = derive();
+      if (cur === 9) {
+        api.readout(tryp
+          ? '<b>Đủ Trp</b>: có nhiều tRNA mang Trp, ribosome chạy qua 2 codon Trp tới codon stop, <b>che vùng 2</b>. Vùng 3 bắt cặp với 4 thành <b>kẹp tóc 3:4</b>, theo sau là chuỗi U → <b>terminator</b>: RNA polymerase rời DNA, phiên mã dừng ngay sau leader.'
+          : '<b>Thiếu Trp</b>: ít tRNA mang Trp, ribosome <b>kẹt</b> ở 2 codon Trp trong vùng 1. Vùng 2 tự do nên bắt cặp với vùng 3 (<b>kẹp tóc 2:3, chống kết thúc</b>). Vùng 3 đã bận, 3:4 không hình thành → RNA polymerase <b>đi tiếp</b> vào trpE D C B A.');
+        return;
+      }
       let why;
-      if (mode === 'trp') {
-        why = d.repBound
-          ? 'Có Trp là <b>chất đồng ức chế</b>: repressor TrpR bám operator, chặn RNA polymerase.'
-          : (!tryp ? 'Không có Trp: repressor không hoạt động, RNA polymerase đi qua.' : 'Operator Oᶜ hoặc repressor mất chức năng nên không chặn được.');
+      if (isTrp()) {
+        why = d.repBound ? 'Có Trp: Trp gắn TrpR (chất <b>đồng ức chế</b>), TrpR bám operator, RNA polymerase bị chặn. Tế bào đã đủ Trp nên tắt.'
+          : (!tryp ? 'Không có Trp: TrpR không gắn Trp nên <b>không bám</b> operator. Phiên mã mạnh để tổng hợp Trp.'
+            : '<b>trpR⁻</b>: không có repressor nên operator luôn thông. Nhưng đủ Trp nên <b>attenuation</b> vẫn cắt sớm phần lớn mRNA (bước 10) → chỉ còn mức thấp.');
+      } else if (!d.repExists) {
+        why = '<b>lacI⁻</b>: không có repressor nên không gì chặn operator.';
+      } else if (kOc && !d.induced) {
+        why = '<b>Oᶜ</b>: repressor có mặt nhưng không bám được operator hỏng.';
       } else if (d.repBound) {
-        why = '<b>Repressor bám operator</b>, RNA polymerase bị chặn. ' + (lac ? '' : 'Không có lactose để gỡ repressor.');
-      } else if (lacIBad && !lac) {
-        why = 'Không có repressor (lacI⁻) nên không bị chặn.' + (d.capOn ? ' CAP–cAMP bật thêm.' : ' Không có CAP nên không bật mạnh.');
-      } else if (oc && !lac) {
-        why = 'Repressor không bám được operator (Oᶜ) nên không bị chặn.' + (d.capOn ? ' CAP–cAMP bật thêm.' : ' Không có CAP nên không bật mạnh.');
+        why = kIsup && d.lac ? '<b>lacIˢ</b>: repressor không nhận allolactose nên vẫn bám operator dù có lactose.' : 'Không có lactose: <b>repressor bám operator</b>, RNA polymerase bị chặn.';
+        if (d.capOn) why += ' CAP–cAMP có bám cũng vô ích.';
       } else {
-        why = lac ? 'Lactose gỡ repressor (điều kiện bắt buộc).' : '';
-        why += d.capOn ? ' Glucose thấp, cAMP cao, CAP–cAMP kích hoạt RNA polymerase → mạnh.' : (glu ? ' Glucose còn cao nên CAP không hoạt động → chỉ một ít.' : (capBad ? ' CAP⁻ nên không tăng được dù glucose thấp.' : ''));
+        why = 'Lactose → allolactose gỡ repressor (chìa khóa bắt buộc).';
       }
-      api.readout(`<b>Biểu hiện: ${lv}</b>. ${why}`);
+      if (!isTrp() && !d.repBound) {
+        why += d.capOn ? ' Hết glucose: cAMP cao, <b>CAP–cAMP</b> bám và kéo RNA polymerase → mạnh.'
+          : (d.glu ? ' Còn glucose: cAMP thấp, CAP không bám → chỉ một ít.' : ' <b>CAP⁻</b>: hết glucose cũng không có CAP giúp → chỉ một ít.');
+      }
+      api.readout(`<b>Biểu hiện: ${LV[d.level]}</b>. ${why}`);
     };
 
-    // ---- toggles ----
-    api.toggle('Mode trp (thay vì lac)', false, (x) => { mode = x ? 'trp' : 'lac'; applyMode(); ctl.setStep(cur); readout(); });
-    api.toggle('Glucose có mặt', true, (x) => { glu = x; ctl.setStep(cur); readout(); });
-    api.toggle('Lactose có mặt', false, (x) => { lac = x; ctl.setStep(cur); readout(); });
-    api.toggle('Tryptophan có mặt (chế độ trp)', false, (x) => { tryp = x; ctl.setStep(cur); readout(); });
-    api.toggle('💥 lacI⁻ (không có repressor)', false, (x) => { lacIBad = x; ctl.setStep(cur); readout(); });
-    api.toggle('💥 Oᶜ (operator không bám)', false, (x) => { oc = x; ctl.setStep(cur); readout(); });
-    api.toggle('💥 CAP⁻ (không bám được CAP)', false, (x) => { capBad = x; ctl.setStep(cur); readout(); });
+    // ---------- toggles (hiện/ẩn theo bước) ----------
+    const T = {};
+    const rerender = () => render(cur, false);
+    T.glu = api.toggle('Glucose có mặt', true, (x) => { glu = x; rerender(); });
+    T.lac = api.toggle('Lactose có mặt', false, (x) => { lac = x; rerender(); });
+    T.kIs = api.toggle('💥 lacI⁻ (mất repressor)', false, (x) => { kIs = x; rerender(); });
+    T.kOc = api.toggle('💥 Oᶜ (operator hỏng)', false, (x) => { kOc = x; rerender(); });
+    T.kIsup = api.toggle('💥 lacIˢ (không nhận allolactose)', false, (x) => { kIsup = x; rerender(); });
+    T.kCap = api.toggle('💥 CAP⁻ (CAP không bám DNA)', false, (x) => { kCap = x; rerender(); });
+    T.tryp = api.toggle('Tryptophan có mặt', true, (x) => { tryp = x; render(cur, cur === 9); });
+    T.kTrpR = api.toggle('💥 trpR⁻ (mất TrpR)', false, (x) => { kTrpR = x; rerender(); });
+    const SHOW = {
+      glu: [0, 1, 2, 3, 4, 5, 7], lac: [0, 1, 2, 3, 4, 5, 7],
+      kIs: [7], kOc: [7], kIsup: [7], kCap: [7], tryp: [8, 9], kTrpR: [8],
+    };
+    const showToggles = (s) => { for (const k in T) if (T[k]?.el) T[k].el.style.display = SHOW[k].includes(s) ? '' : 'none'; };
+    // trạng thái đặt sẵn khi vào mỗi bước: [glucose, lactose]
+    const PRESET = [[1, 0], [1, 0], [1, 0], [1, 1], [0, 1], [0, 1], [1, 0], [1, 0], [1, 0], [1, 0]];
+    const setT = (k, v) => { T[k]?.set?.(v); };
 
-    const applyMode = () => {
-      if (mode === 'trp') {
-        L.set('lacI', 'gene trpR (repressor trp)');
-        L.set('cap', 'không dùng CAP');
-        L.set('prom', 'PROMOTER trp');
-        L.set('op', 'OPERATOR trp');
-        L.set('genes', 'trpE · trpD · trpC · trpB · trpA');
-        L.set('mRNAname', 'mRNA đa cistron (trp)');
-        L.set('lacIBad', '❌ trpR⁻: không có repressor');
-        L.set('blockedMsg', '🚫 TrpR + Trp chặn polymerase');
-      } else {
-        L.set('lacI', 'gene lacI (repressor)');
-        L.set('cap', 'vùng CAP');
-        L.set('prom', 'PROMOTER');
-        L.set('op', 'OPERATOR O');
-        L.set('genes', 'lacZ · lacY · lacA');
-        L.set('mRNAname', 'mRNA đa cistron');
-        L.set('lacIBad', '❌ lacI⁻: không có repressor');
-        L.set('blockedMsg', '🚫 repressor chặn RNA polymerase');
+    const applyLabels = (s, d) => {
+      const trp = isTrp();
+      L.set('reg', trp ? 'trpR (thật ra ở xa)' : 'lacI');
+      L.set('prom', trp ? 'PROMOTER trp' : 'PROMOTER');
+      L.set('op', trp ? 'OPERATOR trp' : (kOc ? 'OPERATOR Oᶜ ✕' : 'OPERATOR'));
+      L.set('repL', trp ? (d.repBound ? 'TrpR + Trp' : 'TrpR (chưa gắn Trp)') : (kIsup ? 'LacIˢ (không nhận allolactose)' : (d.induced ? 'LacI + allolactose' : 'repressor LacI')));
+      L.set('ligL', trp ? 'tryptophan' : 'allolactose');
+      L.set('capL', kCap ? 'CAP⁻ ✕ không bám' : (d.capOn ? 'CAP–cAMP' : 'CAP (thiếu cAMP)'));
+      const m = L.get('meter'); m.element.className = 'lbl ' + LVC[d.level]; L.set('meter', `Biểu hiện: <b>${LV[d.level]}</b>`);
+      const keys = [];
+      if (s === 9) {
+        keys.push('a1', 'a2', 'a3', 'a4', 'aU', 'aRibo', 'aRnap', 'aMsg');
+        return keys;
       }
+      keys.push('reg', 'prom', 'op', 'e5', 'e3');
+      if (trp) keys.push('tL', 'tG'); else keys.push('cap', 'Z', 'Y', 'A');
+      if (s === 0) keys.push('m35', 'm10');
+      if (s >= 2) keys.push('meter');
+      if (s >= 1 && d.repExists) keys.push('repL');
+      if (!d.repExists && s >= 1 && !trp) keys.push('lacIBad');
+      if (s >= 2 && d.level === 0) keys.push('blocked');
+      if (s === 2 || s === 3) keys.push('rnapL');
+      const showLig = trp ? tryp : (d.lac && s >= 3);
+      if (showLig && (s === 3 || s === 8)) keys.push('ligL');
+      if (!trp && s >= 3 && s <= 7) keys.push('capL');
+      if (!trp && (s === 4 || s === 6)) { keys.push('campL'); if (d.glu) keys.push('gluL'); }
+      if (!trp && s === 3 && d.glu) keys.push('gluL');
+      if (s === 6) keys.push('combo');
+      if (!trp && d.level > 0 && (s === 4 || s === 5)) keys.push('mrnaL');
+      if (!trp && d.level > 0 && s === 5) keys.push('pZ', 'pY', 'pA');
+      return keys;
     };
 
-    // ---- camera per step ----
     const CAMS = [
-      [[0, 1.5, 30], [0, 0.5, 0]],
-      [[-9, 4, 13], [-10.5, 2, 0]],
-      [[-2, 4, 12], [-4, 1.2, 0]],
-      [[-2, 4, 12], [-3, 1.2, 0]],
-      [[0, 3, 13], [1, 1.2, 0]],
-      [[-1, 3, 13], [1, 1.2, 0]],
-      [[0, 0, 26], [0, 0, 0]],
-      [[0, 1.5, 22], [0, 0.4, 0]],
+      [[0, 1.5, 32], [0, 0.8, 0]],
+      [[-8, 3.5, 14], [-9, 2.4, 0]],
+      [[-1.5, 2.5, 16], [-2, 1.4, 0]],
+      [[-3, 3, 21], [-3.5, 2.2, 0]],
+      [[-1.5, 2, 23], [-1.5, 1.2, 0]],
+      [[4.5, -0.8, 19], [4.5, -2, 0]],
+      [[0, 1.5, 27], [0, 1.4, 0]],
+      [[0, 1.5, 27], [0, 1.2, 0]],
+      [[0, 2, 27], [0, 1.4, 0]],
+      [[0, -1.2, 21], [0, -1.8, 2.6]],
     ];
+
+    // attenuation state
+    const att = { rp: 0, fold: 0, gone: 0 };
+    // đủ Trp: ribosome tới codon stop và đè lên vùng 2; thiếu Trp: kẹt ở 2 codon Trp của vùng 1
+    const attTargetIdx = () => tryp ? segStart['2'] + 1.5 : segStart['1'] + 2.5;
+
+    function render(s, resetAtt = true) {
+      const d = derive();
+      // shells
+      const trp = isTrp();
+      const hi = { reg: s === 1, cap: s === 4 && !trp, prom: s >= 2 && s !== 9, op: s === 2 || s === 3 || s === 8 };
+      for (const k in sh) {
+        const m = sh[k];
+        const visible = s !== 9 && (trp ? !['cap', 'Z', 'Y', 'A'].includes(k) : !['tL', 'tG'].includes(k));
+        m.visible = visible;
+        m.material.opacity = hi[k] ? 0.3 : 0.12;
+      }
+      api.fadeTo(dnaG, s === 9 ? 0.12 : 1, 4);
+      // repressor
+      const nSub = trp ? 2 : 4;
+      subs.forEach((b, k) => { b.visible = k < nSub; });
+      const repShow = s >= 1 && s !== 9 && d.repExists;
+      const repOn = V(xm('op'), dnaY + 1.15, 0.15);
+      const repOff = V(xm('op') + 1.8, dnaY + 3.6, 0.9);
+      let repTo = d.repBound ? repOn : repOff;
+      if (s === 1) { repTo = V(xm('lacI') + 0.4, dnaY + 2.6, 0.6); if (resetAtt) { rep.position.set(xm('lacI'), dnaY + 0.6, 0.4); rep.scale.setScalar(0.01); } }
+      if (trp && !d.repBound && s >= 8) repTo = V(xm('op') + 1.6, dnaY + 3.4, 0.9);
+      api.moveTo(rep, repTo, 2.5);
+      api.scaleTo(rep, repShow ? 1 : 0.01, 4);
+      api.rotateTo(rep, 'z', d.induced ? 0.45 : (trp && !d.repBound ? -0.35 : 0), 3);
+      // CAP
+      const capShow = !trp && s >= 3 && s <= 7;
+      api.scaleTo(capG, capShow ? 1 : 0.01, 4);
+      api.moveTo(capG, d.capOn ? V(xm('cap'), dnaY + 1.1, 0.2) : V(xm('cap'), dnaY + 3.0, 0.9), 2.5);
+      // product layer
+      prodG.visible = !trp && d.level > 0 && s >= 4 && s <= 7;
+      // attenuation stage
+      attG.visible = s === 9;
+      if (s === 9 && resetAtt) { att.rp = 0; att.fold = 0; att.gone = 0; attRnap.position.set(AX0 + (NB - 1) * AS + 0.55, 1.15, 0); attRnap.scale.set(1.25, 1, 1); }
+      if (s === 9 && !resetAtt) { att.fold = 0; att.gone = 0; }
+      L.only(applyLabels(s, d));
+      api.showLabel(L.get('blocked'), s >= 2 && s !== 9 && d.level === 0);
+      readout();
+    }
 
     const ctl = {
       setStep(s) {
-        cur = s;
-        const d = derive();
-        // shells
-        for (const k in shells) {
-          const hi = (k === 'op' && (s === 2 || s === 3)) || (k === 'prom' && s >= 2) || (k === 'cap' && s === 4);
-          shells[k].material.opacity = hi ? 0.32 : 0.12;
-        }
-        // repressor visibility/position
-        const repShow = d.repExists && s >= 1;
-        api.fadeTo(repressor, repShow ? 1 : 0, 3);
-        const repTarget = d.repBound ? new THREE.Vector3(X(mid('op')), 2.0, 0) : new THREE.Vector3(X(mid('op')) + 2.6, 4.6, 0);
-        if (s === 1) api.moveTo(repressor, new THREE.Vector3(X(mid('lacI')), 4.0, 0), 2.5);
-        else api.moveTo(repressor, repTarget, 2.5);
-        // allolactose: follows lactose, bound to repressor when it is released
-        const allowAllo = mode === 'lac' && lac && s >= 3 && d.repExists;
-        api.fadeTo(allo, allowAllo ? 1 : 0, 3);
-        api.moveTo(allo, new THREE.Vector3(repressor.position.x + 0.6, repressor.position.y + 1.2, 0), 3);
-        // CAP
-        const capShow = mode === 'lac' && d.capOn && s >= 4;
-        api.fadeTo(cap, capShow ? 1 : 0, 3);
-        api.moveTo(cap, new THREE.Vector3(X(mid('cap')), 2.1, 0), 3);
-        // RNA polymerase
-        const rnapShow = s >= 2;
-        api.fadeTo(rnap, rnapShow ? 1 : 0, 3);
-        api.moveTo(rnap, d.level === 0 ? new THREE.Vector3(X(mid('prom')) - 2.6, 2.2, 0) : new THREE.Vector3(X(mid('prom')), 2.1, 0), 3);
-        // labels
-        const keys = ['lacI', 'cap', 'prom', 'op', 'genes'];
-        if (s >= 2 && d.level === 0) keys.push('blockedMsg');
-        if (mode === 'lac' && d.capOn && s >= 4) keys.push('capMsg');
-        if (mode === 'lac' && capBad && s >= 4 && !glu) keys.push('capBad');
-        if (lacIBad && s >= 1) keys.push('lacIBad');
-        if (oc && s >= 2) keys.push('ocBad');
-        L.only(keys);
-        L.show('mRNAname', d.level > 0 && s >= 4);
-        L.show('cap', mode === 'lac');
-        api.showLabel(rnapIcon, rnapShow); api.showLabel(capMod, capShow);
+        cur = s; tStep = 0; combo = s === 6 ? 0 : -1;
+        const p = PRESET[s];
+        glu = !!p[0]; lac = !!p[1]; tryp = true;
+        kIs = kOc = kIsup = kCap = kTrpR = false;
+        setT('glu', glu); setT('lac', lac); setT('tryp', tryp);
+        for (const k of ['kIs', 'kOc', 'kIsup', 'kCap', 'kTrpR']) setT(k, false);
+        showToggles(s);
+        if (s === 6) L.set('combo', comboText(0));
+        render(s, true);
         api.camera(...CAMS[s]);
-        readout();
       },
       update(dt, t) {
+        tStep += dt;
+        // step 7: auto-cycle the 4 combinations
+        if (cur === 6) {
+          const c = Math.floor(tStep / 3.2) % 4;
+          if (c !== combo) { combo = c; L.set('combo', comboText(c)); render(6, false); }
+        }
         const d = derive();
-        // mRNA beads: count and speed follow the level
-        const count = d.level === 0 ? 0 : (d.level === 1 ? 2 : 6);
-        const speed = d.level === 2 ? 2.4 : 0.8;
-        const show = cur >= 4 ? count : 0;
-        const x0 = X(START.genes), x1 = X(START.genes + SEG.genes.length - 1);
-        beads.forEach((b, k) => {
-          const on = k < show;
-          b.visible = on;
-          if (!on) return;
-          const span2 = x1 - x0;
-          const phase = ((t * speed + k * (span2 / 3)) % span2 + span2) % span2;
-          v.set(x0 + phase, -2.2 + Math.sin(k * 1.3) * 0.2 + 0.6, 0);
-          b.position.lerp(v, 1 - Math.exp(-dt * 6));
+        const trp = isTrp();
+        const showRNAP = cur >= 2 && cur !== 9;
+        // ---- RNA polymerases & DNA bubbles ----
+        const xA = xm('prom'), xB = X(GENE1) + 0.9, xTSS = X(START.op);
+        const n = d.level === 0 ? 1 : (d.level === 1 ? 1 : 3);
+        const speed = d.level === 2 ? 2.6 : 1.1;
+        const runX = [];
+        rnaps.forEach((r, k) => {
+          let on = showRNAP && k < n, x = xA, sc = 0.01;
+          if (on && d.level === 0) { x = xm('prom') - 0.4; sc = 1; }
+          else if (on) {
+            const len = xB - xA, u = ((t * speed / len) + k / n) % 1;
+            x = xA + u * len; sc = clamp(Math.min(u / 0.06, (1 - u) / 0.06));
+            if (x > xTSS) runX.push(x);
+          }
+          tmp.set(x, dnaY + (d.level === 0 ? 0.05 : 0), 0.55);
+          r.position.lerp(tmp, d.level === 0 ? 1 - Math.exp(-dt * 4) : 1);
+          tmp2.copy(RNAP_S).multiplyScalar(Math.max(0.01, sc));
+          r.scale.lerp(tmp2, 1 - Math.exp(-dt * 10));
+          // nascent mRNA tail
+          tails[k].forEach((b, j) => {
+            const bx = r.position.x - 0.35 - j * 0.3;
+            const vis = on && d.level > 0 && bx > xTSS && sc > 0.2;
+            b.visible = vis;
+            if (vis) b.position.set(bx, dnaY - 0.95 - j * 0.16, 0.7 + Math.sin(j * 0.9 + t * 2.5) * 0.18);
+          });
         });
-        // gentle breathing on the repressor
-        repressor.scale.setScalar(1 + Math.sin(t * 2) * 0.03);
-        cap.rotation.y += dt * 0.4;
+        for (const p of dna.pairs) {
+          const x = X(p.i); let o = 0;
+          for (const rx of runX) if (Math.abs(x - rx) < 0.75) { o = 0.55; break; }
+          p.target = cur === 9 ? 0 : o;
+        }
+        // ---- ligands (allolactose / Trp) ----
+        const ligN = cur === 9 ? 0 : (trp ? (tryp ? 4 : 0) : ((d.lac && cur >= 3) ? 6 : 0));
+        const bindN = trp ? (d.repBound ? 2 : 0) : (d.induced ? 4 : 0);
+        ligs.forEach((m, k) => {
+          const on = k < ligN;
+          if (k < bindN) { tmp.copy(SITE[k]).applyEuler(rep.rotation).multiplyScalar(rep.scale.x).add(rep.position); }
+          else tmp.set(LIG_C.x + Math.cos(t * 0.7 + k * 1.7) * 1.1, LIG_C.y + Math.sin(t * 0.9 + k * 2.3) * 0.6, LIG_C.z + Math.sin(t * 0.5 + k) * 0.5);
+          m.position.lerp(tmp, 1 - Math.exp(-dt * 3));
+          const s = on ? 1 : 0.01; m.scale.setScalar(lerp(m.scale.x, s, 1 - Math.exp(-dt * 6)));
+          m.rotation.y += dt;
+        });
+        // ---- cAMP & glucose clouds ----
+        const lacScene = !trp && cur >= 3 && cur <= 7;
+        const campN = lacScene ? (d.glu ? 1 : 8) : 0;
+        const capHasCamp = lacScene && !d.glu;
+        camps.forEach((m, k) => {
+          const on = k < campN;
+          if (capHasCamp && k < 2) tmp.copy(CAP_SITE[k]).multiplyScalar(capG.scale.x).add(capG.position);
+          else tmp.set(CAMP_C.x + Math.cos(t * 0.8 + k * 1.3) * 1.0, CAMP_C.y + Math.sin(t * 1.1 + k * 2.1) * 0.5, CAMP_C.z + Math.cos(t * 0.6 + k) * 0.4);
+          m.position.lerp(tmp, 1 - Math.exp(-dt * 3));
+          m.scale.setScalar(lerp(m.scale.x, on ? 1 : 0.01, 1 - Math.exp(-dt * 6)));
+        });
+        const gluN = lacScene && d.glu ? 5 : 0;
+        glus.forEach((m, k) => {
+          tmp.set(GLU_C.x + Math.cos(t * 0.5 + k * 1.26) * 1.1, GLU_C.y + Math.sin(t * 0.7 + k * 1.9) * 0.5, GLU_C.z);
+          m.position.lerp(tmp, 1 - Math.exp(-dt * 3));
+          m.scale.setScalar(lerp(m.scale.x, k < gluN ? 1 : 0.01, 1 - Math.exp(-dt * 6)));
+          m.rotation.z += dt * 0.6;
+        });
+        // ---- product layer: ribosomes walk along each cistron, release protein ----
+        if (prodG.visible) {
+          const rs = d.level === 2 ? 0.45 : 0.18;
+          ribos.forEach((g, i) => {
+            const [a, b] = segX(g.userData.k);
+            const u = (t * rs + i * 0.33) % 1;
+            g.position.set(lerp(a, b, u), mY, 0.4);
+            g.userData.pep.scale.setScalar(Math.max(0.01, u));
+          });
+          const pOn = cur === 5 ? 1 : 0.01;
+          for (const k of cist) { const P = PROT[k]; P.scale.setScalar(lerp(P.scale.x, pOn, 1 - Math.exp(-dt * 4))); P.rotation.y += dt * 0.5; }
+        }
+        // ---- attenuation stage ----
+        if (cur === 9) updateAtt(dt, t);
+        // breathing
+        capG.rotation.y = Math.sin(t * 0.8) * 0.25;
       },
     };
-    applyMode();
+
+    function comboText(c) {
+      const [g, l] = COMBOS[c];
+      const lv = l ? (g ? 'low' : 'HIGH') : 'none';
+      return `Glucose ${g ? '+' : '−'} · Lactose ${l ? '+' : '−'} → <b>${lv}</b>`;
+    }
+
+    // bead layout for the leader: hairpin (A with B) folds downward
+    const attPos = attBeads.map(() => new THREE.Vector3());
+    function layoutAtt(pairA, pairB, loopK, fold) {
+      let cx = AX0;
+      const out = attPos;
+      for (let i = 0; i < NB; i++) out[i].set(AX0 + i * AS, 0, 0); // linear
+      if (!pairA || fold <= 0) return { cx: 0 };
+      const hp = [];
+      let x = AX0;
+      for (const [k, c] of ATT) {
+        const i0 = segStart[k];
+        if (k === pairA) {
+          for (let j = 0; j < c; j++) hp[i0 + j] = V(x, -(j + 0.7) * 0.42, 0);
+          cx = x;
+        } else if (k === loopK) {
+          const yb = -(6 + 0.7) * 0.42 - 0.15;
+          for (let j = 0; j < c; j++) { const a = Math.PI + (j + 1) / (c + 1) * Math.PI; hp[i0 + j] = V(cx + 0.36 + Math.cos(a) * 0.36, yb + Math.sin(a) * 0.36, 0); }
+        } else if (k === pairB) {
+          for (let j = 0; j < c; j++) hp[i0 + j] = V(cx + 0.72, -(c - 1 - j + 0.7) * 0.42, 0);
+          x = cx + 0.72 + AS;
+        } else {
+          for (let j = 0; j < c; j++) { hp[i0 + j] = V(x, 0, 0); x += AS; }
+        }
+      }
+      for (let i = 0; i < NB; i++) out[i].lerp(hp[i], fold);
+      return { cx };
+    }
+
+    function updateAtt(dt, t) {
+      const target = attTargetIdx();
+      // ribosome walks along the leader
+      att.rp = Math.min(target, att.rp + dt * 3.2);
+      const arrived = att.rp >= target - 0.01;
+      if (arrived) att.fold = Math.min(1, att.fold + dt * 0.7);
+      const pairA = tryp ? '3' : '2', pairB = tryp ? '4' : '3', loopK = tryp ? 'l34' : 'l23';
+      const { cx } = layoutAtt(pairA, pairB, loopK, att.fold);
+      attBeads.forEach((b, i) => b.position.lerp(attPos[i], 1 - Math.exp(-dt * 8)));
+      for (let i = 0; i < NB - 1; i++) api.setStick(attLinks[i], attBeads[i].position, attBeads[i + 1].position);
+      // H-bond rungs in the hairpin
+      const iA = segStart[pairA], iB = segStart[pairB];
+      rungs.forEach((r, j) => {
+        const on = att.fold > 0.75;
+        r.visible = on;
+        if (on) api.setStick(r, attBeads[iA + j].position, attBeads[iB + 5 - j].position);
+      });
+      // ribosome sits on the bead it has reached
+      const i0 = Math.floor(att.rp), f = att.rp - i0;
+      tmp.copy(attBeads[Math.min(NB - 1, i0)].position).lerp(attBeads[Math.min(NB - 1, i0 + 1)].position, f);
+      attRibo.position.set(tmp.x, 0.05, 0.1);
+      attRibo.rotation.z = arrived && !tryp ? Math.sin(t * 9) * 0.04 : 0; // stalled ribosome jitters
+      // RNA polymerase rides the DNA rod just ahead of the 3′ end
+      const last = attBeads[NB - 1].position;
+      if (att.fold > 0.9) att.gone = Math.min(1, att.gone + dt * 0.6);
+      if (tryp) {
+        tmp.set(last.x + 0.55 + att.gone * 1.2, 1.15 + att.gone * 2.2, att.gone * 0.6);
+        attRnap.scale.setScalar(1).multiplyScalar(Math.max(0.01, 1 - att.gone * 0.85)); attRnap.scale.x *= 1.25;
+      } else {
+        tmp.set(last.x + 0.55 + att.gone * 2.5, 1.15, 0);
+        attRnap.scale.set(1.25, 1, 1);
+      }
+      attRnap.position.lerp(tmp, 1 - Math.exp(-dt * 6));
+      // labels
+      const hp = L.get('aHp');
+      const showHp = att.fold > 0.7;
+      api.showLabel(hp, showHp);
+      if (showHp) { hp.position.set(cx + 0.36, -3.6, 0.2); L.set('aHp', tryp ? 'kẹp tóc 3:4 = terminator' : 'kẹp tóc 2:3 = chống kết thúc'); hp.element.className = 'lbl ' + (tryp ? 'warn' : 'good'); }
+      L.set('aMsg', !arrived ? (tryp ? 'Đủ Trp: ribosome chạy nhanh qua vùng 1…' : 'Thiếu Trp: ribosome chạy tới 2 codon Trp…')
+        : (tryp ? (att.gone > 0.3 ? '⛔ Dừng sớm: RNA pol rời DNA' : 'Ribosome dừng ở codon stop, che vùng 2')
+          : (att.gone > 0.3 ? '✅ Phiên mã tiếp → trpE D C B A' : 'Ribosome kẹt ở UGG UGG (thiếu Trp-tRNA)')));
+    }
+
     ctl.setStep(0);
     return ctl;
   },
