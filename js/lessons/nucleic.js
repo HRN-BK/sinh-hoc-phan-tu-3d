@@ -56,7 +56,7 @@ export default {
   <tr><td>Base</td><td>A, T, G, C</td><td>A, U, G, C</td></tr>
   <tr><td>Số mạch</td><td>Kép, xoắn</td><td>Đơn, tự gập (hairpin, pseudoknot)</td></tr>
   <tr><td>Độ dài</td><td>Rất dài</td><td>Ngắn</td></tr>
-  <tr><td>Vị trí</td><td>Nhân, ti thể (lục lạp)</td><td>Nhân và tế bào chất</td></tr>
+  <tr><td>Vị trí</td><td>Nhân, ty thể (lục lạp)</td><td>Nhân và tế bào chất</td></tr>
   <tr><td>Độ bền</td><td>Bền</td><td>Kém bền (2′-OH, RNase)</td></tr>
   <tr><td>Vai trò</td><td>Lưu trữ thông tin</td><td>Truyền tin, chở aa, xúc tác, điều hòa</td></tr></table></div>
   <div class="tbl-wrap"><table class="cmp">

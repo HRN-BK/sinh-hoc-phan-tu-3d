@@ -78,7 +78,7 @@ function renderHome(main) {
       <div class="card"><b>1 · Đọc để hiểu "tại sao"</b>Đừng học thuộc tên. Mỗi bài bắt đầu bằng "để làm gì" và "thiếu thì sao". Hiểu lý do thì nhớ lâu.</div>
       <div class="card"><b>2 · Xem 3D từng bước</b>Bấm ▶ hoặc phím ← →. Xoay mô hình bằng chuột hay ngón tay. Bật tắt các công tắc để thấy "nếu… thì…".</div>
       <div class="card"><b>3 · Gấp lại, tự nhớ</b>Cuối bài có ô "Tự nhớ lại". Viết ra không nhìn, rồi mới mở đáp án. Đây là cách nhớ mạnh nhất.</div>
-      <div class="card"><b>4 · Tự vẽ tay sơ đồ</b>Chạc ba sao chép, operon lac, miRNA, nhập ti thể, mTORC1: vẽ lại bằng tay đúng như 3D. Vẽ được thì hiểu thật.</div>
+      <div class="card"><b>4 · Tự vẽ tay sơ đồ</b>Chạc ba sao chép, operon lac, miRNA, nhập ty thể, mTORC1: vẽ lại bằng tay đúng như 3D. Vẽ được thì hiểu thật.</div>
     </div>
   </div>
 

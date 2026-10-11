@@ -27,6 +27,6 @@ export const LESSONS = [
   L(15, 'epiprok', 4, 'Epigenetic nhân sơ', 'Hệ R-M, methyl hóa Dam, công tắc pha.'),
   L(16, 'translation', 5, 'Dịch mã: ribosome & tRNA', 'Vị trí A/P/E, khởi đầu, kéo dài, kết thúc; nhân sơ vs nhân thực.'),
   L(17, 'ptm', 6, 'Biến đổi sau dịch mã & kiểm soát chất lượng ở ER', 'Glycan, PDI, BiP, calnexin, ubiquitin–proteasome.'),
-  L(18, 'mito', 6, 'Nhập protein vào ti thể', 'Tom20/22 → Tom40 → Tim23/17 → mtHsp70 → MPP.'),
+  L(18, 'mito', 6, 'Nhập protein vào ty thể', 'Tom20/22 → Tom40 → Tim23/17 → mtHsp70 → MPP.'),
   L(19, 'mtor', 6, 'mTORC1: cảm biến dinh dưỡng', 'Amino acid, Rag, Rheb-GTP, TSC; kích hoạt tổng hợp protein.'),
 ];
