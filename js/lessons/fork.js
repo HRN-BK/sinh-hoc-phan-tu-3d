@@ -22,7 +22,7 @@ export default {
   <li><b>Không có primase</b>: polymerase không có đầu 3′-OH để bắt đầu, không tổng hợp được gì.</li>
   <li><b>Không có Pol I (hoặc RNase H/FEN1 ở nhân thực)</b>: mồi RNA còn nằm lại trong DNA.</li>
   <li><b>Không có ligase</b>: mạch chậm là hàng nghìn mảnh rời, nhiễm sắc thể đứt gãy khi tế bào phân chia.</li>
-  <li><b>Không có đọc sửa 3′→5′</b>: tỷ lệ sai tăng ~100 lần (đột biến tăng vọt, như chủng <i>mutD</i> hỏng tiểu phần ε của Pol III).</li></ul>`,
+  <li><b>Không có đọc sửa 3′→5′</b>: riêng mất đọc sửa làm tỷ lệ sai tăng ~100 lần. Ở chủng <i>mutD</i> (hỏng tiểu phần ε của Pol III), số lỗi nhiều tới mức hệ sửa bắt cặp sai (MMR) bị quá tải, nên đột biến tăng tới hàng nghìn lần.</li></ul>`,
 
   foundation: [
     { q: 'Đầu 5′ và đầu 3′ là gì? Vì sao chỉ nối được vào 3′?', a: 'Mỗi nucleotide có đường deoxyribose. Carbon số <b>5′</b> mang nhóm phosphate, carbon số <b>3′</b> mang nhóm <b>–OH</b>. Trong một mạch, đầu có phosphate tự do là đầu 5′, đầu có OH tự do là đầu 3′.<br>Polymerase dùng <b>3′-OH</b> của mạch đang kéo dài để "tấn công" phosphate α của nucleotide mới đến (dNTP). Vì vậy nucleotide mới luôn được gắn vào đầu 3′, và mạch dài ra theo chiều <b>5′→3′</b>.' },
@@ -172,7 +172,7 @@ export default {
     lb.add('k_p1', 'Pol I gỡ mồi', [0, 0, 0], forkG, '');
     lb.add('k_lig', 'Ligase nối nick', [0, 0, 0], forkG, 'good');
     lb.add('k_lead', 'MẠCH DẪN: liên tục (5′ → 3′)', [-5.6, YT + 0.6, 0], forkG, 'good');
-    lb.add('k_lag', 'MẠCH CHẬM: từng đoạn Okazaki (3′ ← 5′)', [-6.2, -YT - 1.35, 0], forkG, 'good');
+    lb.add('k_lag', 'MẠCH CHẬM: từng đoạn Okazaki (3′ ← 5′)', [-6.2, -YT - 1.6, 0], forkG, 'good');
     lb.add('k_primer', 'mồi RNA', [0, 0, 0], forkG, 'plain');
     lb.add('k_nick', 'nick', [0, 0, 0], forkG, 'warn');
     lb.add('k_t3', '3′', [-8.6, YT + 0.45, 0], forkG, 'plain'); lb.add('k_b5', '5′', [-8.6, -YT - 0.45, 0], forkG, 'plain');
@@ -180,7 +180,7 @@ export default {
     lb.add('k_l5', '5′ (…mồi ở ori)', [-8.2, YT - GAP - 0.4, 0], forkG, 'dim');
     lb.add('k_l3', '3′', [0, YT - GAP - 0.35, 0], forkG, 'plain');
     lb.add('k_sc', '⚠️ siêu xoắn dương tích tụ, chạc chậm dần rồi dừng', [FORKX + 3.4, -2.3, 0], forkG, 'warn');
-    lb.add('k_hp', '⚠️ mạch đơn tự bắt cặp, rối như kẹp tóc, polymerase kẹt', [0.2, -3.0, 0], forkG, 'warn');
+    lb.add('k_hp', '⚠️ mạch đơn tự bắt cặp, rối như kẹp tóc, polymerase kẹt', [0.2, -3.45, 0], forkG, 'warn');
     lb.add('k_new', 'DNA mẹ', [7.6, -1.75, 0], forkG, 'dim');
 
     // ---- simulation state ----
@@ -296,8 +296,8 @@ export default {
       // Pol I / ligase work at the junction of a finished fragment and the previous one
       let p1 = null, lg = null;
       frags.forEach((f, i) => { const prev = frags[i - 1]; if (f.st === 'done' && prev && (f.wait || 0) >= 1.2) { if (prev.rep < 3) p1 = prev; else if (!prev.lig) lg = prev; } });
-      pol1.visible = !!p1; if (p1) { pol1.position.set(xOf(p1.p - Math.floor(p1.rep)) + 0.15, -YT + GAP / 2, 0.25); lb.get('k_p1').position.set(pol1.position.x, -YT - 0.9, 0); }
-      lig.visible = !!lg; if (lg) { lig.position.set(xOf(lg.p - 2.5), -YT + GAP / 2 - 0.05, 0.3); lig.scale.setScalar(1 + 0.15 * Math.sin(t * 12)); lb.get('k_lig').position.set(lig.position.x, -YT - 0.9, 0); }
+      pol1.visible = !!p1; if (p1) { pol1.position.set(xOf(p1.p - Math.floor(p1.rep)) + 0.15, -YT + GAP / 2, 0.25); lb.get('k_p1').position.set(pol1.position.x, 0.25, 0); }
+      lig.visible = !!lg; if (lg) { lig.position.set(xOf(lg.p - 2.5), -YT + GAP / 2 - 0.05, 0.3); lig.scale.setScalar(1 + 0.15 * Math.sin(t * 12)); lb.get('k_lig').position.set(lig.position.x, -0.3, 0); }
       lb.show('k_p1', !!p1 && SHOW.has('k_p1')); lb.show('k_lig', !!lg && SHOW.has('k_lig'));
       // a visible primer and an unsealed nick to point at
       const pf = frags.slice().reverse().find(f => f.st !== 'prim' && f.rep < 1);

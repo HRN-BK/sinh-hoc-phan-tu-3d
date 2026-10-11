@@ -222,7 +222,7 @@ export default {
       grid.push({ g, a, b });
     }
     lb.add('gr_t', '', [3.4, 2.4, 0], tubeG, 'big');
-    lb.add('gr_n', 'xanh = 2 mạch ¹⁵N gốc: không mất, luôn nằm trong 2 phân tử lai', [3.4, -1.9, 0], tubeG, 'dim');
+    lb.add('gr_n', 'xanh = 2 mạch ¹⁵N gốc: luôn nằm trong 2 phân tử lai', [3.1, -1.9, 0], tubeG, 'dim');
 
     // ================= state & controls =================
     let cur = 0, heat = false, gen = 2;

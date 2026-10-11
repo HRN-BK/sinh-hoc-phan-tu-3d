@@ -172,7 +172,7 @@ export default {
     const fill = api.cylinder(0.14, 0.14, 1, HOT, thG);
     [20, 40, 60, 80, 100].forEach(T => { api.box(0.22, 0.03, 0.03, 0xffffff, thG).position.set(0.33, tY(T), 0); });
     const tmTick = api.box(0.4, 0.06, 0.06, 0xffd60a, thG);
-    lb.add('th_T', '37 °C', [0, 2.3, 0], thG, 'big');
+    lb.add('th_T', '37 °C', [0, 2.7, 0], thG, 'big');
     lb.add('th_tm', 'Tm', [-0.62, tY(TM0), 0], thG, 'plain');
     lb.add('th_100', '100', [-0.62, tY(100), 0], thG, 'plain');
     lb.add('th_20', '20', [-0.55, tY(20), 0], thG, 'plain');
@@ -185,8 +185,8 @@ export default {
     // UV photons (step 2)
     const photons = [];
     for (let j = 0; j < 26; j++) { const ph = api.sphere(0.075, UV, dG, { emissive: UV, emissiveIntensity: 0.9 }); photons.push({ m: ph, k: (j * 7) % SEQ.length, off: j * 0.53 }); }
-    lb.add('u_uv', 'tia UV 260 nm ↓', [-2.6, 3.35, 0], dG, 'dim');
-    lb.add('u_hyp', 'base lộ ra → hấp thụ nhiều hơn ~40%', [2.0, 3.35, 0], dG, 'warn');
+    lb.add('u_uv', 'tia UV 260 nm ↓', [-3.1, 3.35, 0], dG, 'dim');
+    lb.add('u_hyp', 'base lộ ra → hấp thụ nhiều hơn ~40%', [2.5, 3.35, 0], dG, 'warn');
 
     lb.add('r_nuc', 'điểm mầm → kéo khóa (zipper)', [-2.2, 2.9, 0], dG, 'good');
     lb.add('r_fast', 'không kịp tìm đúng bạn → phần lớn vẫn là mạch đơn', [0, 3.45, 0], dG, 'warn');
@@ -221,7 +221,7 @@ export default {
     const gcG = api.group();
     const mkSeq = (k) => { let s = ''; for (let i = 0; i < 16; i++) { const gc = Math.floor((i + 1) * k / 16) > Math.floor(i * k / 16); s += gc ? (i % 2 ? 'C' : 'G') : (i % 2 ? 'T' : 'A'); } return s; };
     const GCS = [5, 8, 11].map((k, j) => {
-      const pct = k / 16 * 100, Tm = 69.3 + 0.41 * pct, seq = mkSeq(k);
+      const pct = k / 16 * 100, Tm = 69.3 + 0.41 * Math.round(pct), seq = mkSeq(k);
       const hg = api.group(gcG); hg.position.set(-3.4, 2.35 - j * 2.45, 0);
       const d = api.dna({ seq, rise: 0.3, radius: 0.5, turn: 10, splitY: 0.55, openR: 0.05, parent: hg });
       lb.add('g_l' + j, `${Math.round(pct)}% GC · Tm ≈ ${Math.round(Tm)} °C`, [0, 1.15, 0], hg, j === 0 ? 'warn' : j === 1 ? '' : 'good');
@@ -234,7 +234,7 @@ export default {
     api.stick(V(bx(0), by(69.3), 0), V(bx(100), by(110.3), 0), 0.04, 0xf2994a, bG);
     const dots = GCS.map(g => { const m = api.sphere(0.15, C.good, bG); m.position.set(bx(g.pct), by(g.Tm), 0.05); return m; });
     const tLine = api.box(BW, 0.045, 0.045, 0xff9f43, bG);
-    lb.add('bg_y', 'Tm (°C)', [-0.15, BH + 0.4, 0], bG, 'plain'); lb.add('bg_x', '% G·C', [BW + 0.15, -0.45, 0], bG, 'plain');
+    lb.add('bg_y', 'Tm (°C)', [-0.15, BH + 0.4, 0], bG, 'plain'); lb.add('bg_x', '% G·C', [BW + 0.75, 0.05, 0], bG, 'plain');
     lb.add('bg_0', '0', [0, -0.3, 0], bG, 'plain'); lb.add('bg_50', '50', [bx(50), -0.3, 0], bG, 'plain'); lb.add('bg_100', '100', [bx(100), -0.3, 0], bG, 'plain');
     lb.add('bg_70', '70', [-0.35, by(70), 0], bG, 'plain'); lb.add('bg_90', '90', [-0.35, by(90), 0], bG, 'plain'); lb.add('bg_110', '110', [-0.4, by(110), 0], bG, 'plain');
     lb.add('bg_T', 'nhiệt độ hiện tại', [BW - 0.6, 0, 0], bG, 'dim');

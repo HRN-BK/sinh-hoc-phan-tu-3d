@@ -196,10 +196,10 @@ export default {
       return { g, top, bot, topN, botN, fl, fr, sl };
     });
     lb.add('c_early', 'ori sớm', [-2.6, -1.3, 0], euG, 'good');
-    lb.add('c_late', 'ori muộn (late origin)', [-0.7, -1.3, 0], euG, '');
+    lb.add('c_late', 'ori muộn (late origin)', [2.7, -1.3, 0], euG, '');
     lb.add('c_bub', 'bóng sao chép', [0, 1.0, 0], euG, '');
     lb.add('c_t', '', [0, 2.1, 0], euG, 'big');
-    lb.add('c_l', 'NST thẳng = 1 phân tử DNA rất dài', [3.6, -1.35, 0], euG, 'dim');
+    lb.add('c_l', 'NST thẳng = 1 phân tử DNA rất dài', [-1.0, -2.0, 0], euG, 'dim');
 
     // ===================== D) licensing (step 5) =====================
     const liG = api.group();
@@ -250,7 +250,7 @@ export default {
     // ===================== F) RecBCD–Chi (step 7) =====================
     const reG = api.group();
     const CHI_I = 16;
-    let rseq = 'ATTCGATCAGTACGAT' + 'GGTGGTCG' + 'ATCGTAGCTAGCTAACGTA';
+    let rseq = 'ATTCGATCAGTACGAT' + 'GGTGGTCG' + 'ATCGTAGCTAGC';
     const rd = api.dna({ seq: rseq, rise: 0.36, radius: 0.55, turn: 10.5, parent: reG, splitY: 1.25, openR: 0.2 });
     const NR = rseq.length;
     const chiBox = api.box(8 * 0.36, 1.5, 1.5, CHI, reG, { opacity: 0.16, depthWrite: false }); chiBox.position.x = (rd.xOf(CHI_I) + rd.xOf(CHI_I + 7)) / 2;
@@ -268,7 +268,7 @@ export default {
     lb.add('f_t3', '3′', [rd.xOf(0) - 0.5, 0.75, 0], reG, 'plain'); lb.add('f_b5', '5′', [rd.xOf(0) - 0.5, -0.75, 0], reG, 'plain');
     lb.add('f_end', 'đầu đứt mạch đôi', [rd.xOf(0) - 0.4, 1.6, 0], reG, 'dim');
     lb.add('f_msg', '', [0, 3.9, 0], reG, 'big');
-    lb.add('f_recA', 'RecA phủ đuôi 3′ → tìm đoạn tương đồng (bài 8)', [3.2, -2.9, 0], reG, 'good');
+    lb.add('f_recA', 'RecA phủ đuôi 3′ → tìm đoạn tương đồng (bài 8)', [-0.5, -3.1, 0], reG, 'good');
 
     // ===================== controls =====================
     let cur = 0, seqAoff = false, oneOri = false, telo = false, nDiv = 0;
@@ -359,7 +359,7 @@ export default {
           forks.forEach((f, k) => { const a = top + (k ? ph : -ph); f.position.set(Math.cos(a) * RC, Math.sin(a) * RC, 0); f.visible = ph < Math.PI * 0.995; });
           lb.get('b_f1').position.set(Math.cos(top - ph) * (RC + 0.9), Math.sin(top - ph) * (RC + 0.9), 0);
           lb.get('b_f2').position.set(Math.cos(top + ph) * (RC + 0.9), Math.sin(top + ph) * (RC + 0.9), 0);
-          lb.show('b_f1', ph < Math.PI * 0.97); lb.show('b_f2', ph < Math.PI * 0.97);
+          lb.show('b_f1', ph < Math.PI * 0.82); lb.show('b_f2', ph < Math.PI * 0.82);
           const seqOn = !seqAoff && ph > 0.25;
           seqA.forEach((m, k) => { m.visible = seqOn; m.position.set(0.25, RC + (k ? -0.32 : 0.32), 0.25); });
           lb.show('b_seqA', seqOn);
@@ -461,7 +461,7 @@ export default {
             else if (p.i >= CHI_I && passed) { p.half2.visible = false; if (p.bb2) p.bb2.visible = false; }
           });
           rbcd.position.set(rd.xOf(Math.max(0, pos - 1)) + 0.35, 0, 0);
-          lb.get('f_B').position.set(rbcd.position.x, 2.4, 0); lb.get('f_D').position.set(rbcd.position.x, -2.3, 0); lb.get('f_C').position.set(rbcd.position.x + 0.9, -1.2, 0);
+          lb.get('f_B').position.set(rbcd.position.x, 2.4, 0); lb.get('f_D').position.set(rbcd.position.x, -2.3, 0); lb.get('f_C').position.set(rbcd.position.x + 1.4, 0.6, 0);
           nuc.position.set(-0.45, passed ? -1.1 : 1.1, 0.3);
           // debris from nuclease
           if (pos > 1 && pos < NR && Math.random() < dt * 8) {

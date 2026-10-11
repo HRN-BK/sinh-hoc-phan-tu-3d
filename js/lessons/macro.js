@@ -168,8 +168,8 @@ export default {
     for (const a of [aa1, aa2]) for (const [u, v] of BONDS) pSticks.push({ m: api.stick(V(0, 0, 0), V(0, 1, 0), u === 'C' && v === 'Od' ? 0.09 : 0.06, 0xdddddd, pepG), a: a[u], b: a[v], key: (a === aa1 ? '1' : '2') + u + v });
     const waterBond = api.stick(V(0, 0, 0), V(0, 1, 0), 0.06, 0xdddddd, pepG);
     const pepBond = api.stick(V(0, 0, 0), V(0, 1, 0), 0.1, C.good, pepG);
-    lb.add('p_r', 'gốc R: 20 loại aa khác nhau ở đây', [-2.4, 2.35, 0], null, 'dim');
-    lb.add('p_nh2', '–NH₂ (amin)', [-2.6, -1.1, 0]);
+    lb.add('p_r', 'gốc R: 20 loại aa khác nhau ở đây', [-2.9, 2.5, 0], null, 'dim');
+    lb.add('p_nh2', '–NH₂ (amin)', [-2.9, -1.2, 0]);
     lb.add('p_cooh', '–COOH (carboxyl)', [0.25, 1.95, 0]);
     lb.add('p_h2o', 'H₂O tách ra (ngưng tụ)', [2.1, -2.2, 0], null, 'warn');
     lb.add('p_bond', 'liên kết peptide –CO–NH–', [0.05, -0.75, 0.3], null, 'good');
@@ -313,7 +313,7 @@ export default {
     lb.add('r_raft', 'lipid raft', [0, 2.9, 0], null, 'big');
     lb.add('r_desc', 'cholesterol + sphingolipid → dày, kém lỏng', [0, 1.4, 2.6]);
     lb.add('r_rec', 'thụ thể tín hiệu tụ lại', [2.2, 2.6, 0.6], null, 'good');
-    lb.add('r_norm', 'màng thường: lỏng hơn', [-3.0, 1.3, 2.6], null, 'dim');
+    lb.add('r_norm', 'màng thường: lỏng hơn', [-3.9, 2.3, -0.5], null, 'dim');
     lb.add('r_gone', '💥 raft tan, thụ thể tản ra', [0, 2.9, 0], null, 'warn');
 
     // ================= 7) Carbohydrates =================
@@ -332,7 +332,7 @@ export default {
     poly.forEach(p => p.scale.setScalar(0.85));
     const PLINK = []; for (let i = 0; i < 8; i++) PLINK.push([i, i + 1]); PLINK.push([4, 9], [9, 10], [10, 11]);
     const plSt = PLINK.map(() => api.stick(V(0, 0, 0), V(0, 1, 0), 0.05, 0xdddddd, carbG));
-    lb.add('k_glc', 'Glucose<br>aldose (–CHO)', [-3.4, 1.25, 0]);
+    lb.add('k_glc', 'Glucose<br>aldose (–CHO)', [-3.6, 1.25, 0]);
     lb.add('k_fru', 'Fructose<br>ketose (C=O)', [-1.6, 1.25, 0]);
     lb.add('k_suc', 'Sucrose = Glc + Fru', [2.05, 1.4, 0]);
     lb.add('k_gly', 'liên kết glycoside –O–', [2.05, 2.95, 0], null, 'good');
@@ -363,15 +363,15 @@ export default {
     const abM = 0xdfe6ee;
     api.stick(V(0, 0, 0), V(0, -0.7, 0), 0.07, abM, abG); api.stick(V(0, 0, 0), V(-0.4, 0.45, 0), 0.07, abM, abG); api.stick(V(0, 0, 0), V(0.4, 0.45, 0), 0.07, abM, abG);
     api.sphere(0.1, abM, abG).position.set(-0.4, 0.45, 0); api.sphere(0.1, abM, abG).position.set(0.4, 0.45, 0);
-    lb.add('g_ab', 'kháng thể anti-B', [0, -1.05, 0], abG, 'dim');
+    lb.add('g_ab', 'kháng thể anti-B', [1.0, 0.35, 0], abG, 'dim');
     let bloodType = 'A';
     lb.add('g_n', 'N-glycan gắn Asn', [-2.0, 3.3, 0], null, 'dim');
     lb.add('g_prot', 'glycoprotein', [-3.4, 0.05, 0.4]);
     lb.add('g_lip', 'glycolipid', [0.55, -0.35, 0.4]);
-    lb.add('g_H', 'Fuc: kháng nguyên H', [3.0, 1.4, 0], null, 'dim');
+    lb.add('g_H', 'Fuc: kháng nguyên H', [3.2, 1.0, 0], null, 'dim');
     lb.add('g_term', '', [-0.2, 2.35, 0], null, 'big');
-    lb.add('g_bind', 'anti-B bám → ngưng kết ✗', [3.1, 2.45, 0], null, 'warn');
-    lb.add('g_free', 'không có đích → không bám ✓', [3.0, 3.5, 0], null, 'good');
+    lb.add('g_bind', 'anti-B bám → ngưng kết ✗', [3.3, 3.45, 0], null, 'warn');
+    lb.add('g_free', 'không có đích → không bám ✓', [2.6, 4.05, 0], null, 'good');
 
     // ================= 9) Electrophoresis =================
     const gelG = api.group();
