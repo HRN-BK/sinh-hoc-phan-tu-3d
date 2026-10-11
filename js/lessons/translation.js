@@ -41,8 +41,8 @@ export default {
   ],
 
   application: `<ul>
-  <li><b>Kháng sinh nhắm ribosome vi khuẩn:</b> <b>tetracycline</b> (30S, chặn aminoacyl-tRNA vào vị trí A), <b>streptomycin</b> (30S, làm đọc sai và cản khởi đầu), <b>chloramphenicol</b> (50S, ức chế peptidyl transferase), <b>erythromycin</b>/macrolide (50S, bịt đường hầm thoát). Chọn lọc vì ribosome 70S khác 80S. Tuy vậy, ribosome <b>ti thể</b> giống 70S, nên một số thuốc có độc tính phụ (ví dụ chloramphenicol gây ức chế tủy xương).</li>
-  <li><b>Độc tố:</b> độc tố bạch hầu và exotoxin A của <i>Pseudomonas</i> ADP-ribosyl hóa <b>eEF2</b>. Ricin cắt rRNA 28S. <b>Cycloheximide</b> ức chế chuyển vị ở nhân thực (dùng trong phòng thí nghiệm).</li>
+  <li><b>Kháng sinh nhắm ribosome vi khuẩn:</b> <b>tetracycline</b> (30S, chặn aminoacyl-tRNA vào vị trí A), <b>streptomycin</b> (30S, làm đọc sai và cản khởi đầu), <b>chloramphenicol</b> (50S, ức chế peptidyl transferase), <b>erythromycin</b>/macrolide (50S, bịt đường hầm thoát). Chọn lọc vì ribosome 70S khác 80S. Tuy vậy, ribosome <b>ty thể</b> giống 70S, nên một số thuốc có độc tính phụ (ví dụ chloramphenicol gây ức chế tủy xương).</li>
+  <li><b>Độc tố:</b> độc tố bạch hầu và exotoxin A của <i>Pseudomonas</i> ADP-ribosyl hóa <b>eEF2</b>. <b>Ricin</b> là một N-glycosidase: gỡ một base adenine (A4324) ở vòng sarcin–ricin của rRNA 28S, làm ribosome không gắn được yếu tố kéo dài. <b>Cycloheximide</b> ức chế chuyển vị ở nhân thực (dùng trong phòng thí nghiệm).</li>
   <li><b>Vaccine mRNA:</b> mRNA được thiết kế có cap 5′, vùng 5′UTR và Kozak tối ưu, và đuôi poly-A để ribosome người dịch mã hiệu quả ra protein gai của virus.</li>
   <li><b>Sản xuất protein tái tổ hợp:</b> khi biểu hiện gene người trong <i>E. coli</i>, phải đặt trình tự Shine-Dalgarno trước AUG. Trong tế bào nhân thực thì cần Kozak.</li>
   <li><b>Thuốc "đọc xuyên" codon stop</b> (ví dụ ataluren) đang được nghiên cứu cho bệnh do đột biến vô nghĩa.</li></ul>`,
@@ -88,12 +88,12 @@ export default {
 
   quiz: [
     { q: 'Ở giai đoạn KÉO DÀI của dịch mã nhân thực, yếu tố nào đưa aminoacyl-tRNA vào vị trí A?', ops: ['eIF2-GTP', 'eEF1A-GTP', 'eEF2-GTP', 'eRF1'], a: 1, e: 'eEF1A (tương đương EF-Tu) đưa aa-tRNA vào A. eIF2 là yếu tố khởi đầu mang Met-tRNAi; slide xếp nó vào kéo dài là sai. eEF2 làm chuyển vị.' },
-    { q: 'Enzyme tạo liên kết peptide có bản chất là:', ops: ['Protein EF-Tu', 'rRNA của tiểu đơn vị lớn (23S/28S)', 'tRNA', 'Aminoacyl-tRNA synthetase'], a: 1, e: 'Peptidyl transferase là rRNA 23S (28S ở nhân thực), tức ribozyme. Synthetase gắn amino acid lên tRNA, không tạo liên kết peptide.' },
-    { q: 'Trình tự Shine-Dalgarno bắt cặp với:', ops: ['Anticodon của fMet-tRNA', 'Đầu 3′ của rRNA 16S', 'rRNA 18S', 'Cap 5′'], a: 1, e: 'SD (AGGAGG) bắt cặp với đầu 3′ của rRNA 16S trong 30S. rRNA 18S và cap là của nhân thực, nơi không có SD.' },
-    { q: 'Tetracycline ức chế dịch mã vi khuẩn bằng cách:', ops: ['Bịt đường hầm thoát của 50S', 'Ngăn aminoacyl-tRNA vào vị trí A trên 30S', 'Ức chế peptidyl transferase', 'Phân hủy mRNA'], a: 1, e: 'Tetracycline bám 30S và chặn vị trí A. Bịt đường hầm là erythromycin; ức chế peptidyl transferase là chloramphenicol.' },
-    { q: 'Đột biến điểm đổi codon AAA (Lys) thành UAA trong vùng mã hóa. Hậu quả:', ops: ['Thay Lys bằng amino acid khác', 'Protein bị cắt cụt vì gặp codon kết thúc sớm', 'Protein dài hơn', 'Không ảnh hưởng do mã thoái hóa'], a: 1, e: 'UAA là codon stop, nên đây là đột biến vô nghĩa: yếu tố giải phóng vào A sớm, chuỗi bị thả ra khi còn ngắn. "Thay amino acid" là đột biến sai nghĩa (missense).' },
-    { q: 'Thứ tự đúng trong 1 vòng kéo dài:', ops: ['Chuyển vị → tRNA vào A → liên kết peptide', 'tRNA vào A (EF-Tu) → liên kết peptide → chuyển vị (EF-G)', 'Liên kết peptide → tRNA vào P → chuyển vị', 'EF-G đưa tRNA vào A → EF-Tu chuyển vị'], a: 1, e: 'EF-Tu-GTP đưa aa-tRNA vào A, peptidyl transferase tạo liên kết, rồi EF-G-GTP chuyển vị. Phương án cuối đảo vai EF-Tu và EF-G.' },
-    { q: 'Vì sao vi khuẩn có thể dịch mã một mRNA khi nó còn đang được phiên mã?', ops: ['Vì ribosome vi khuẩn ở trong nhân', 'Vì không có màng nhân: mRNA và ribosome cùng ở tế bào chất', 'Vì mRNA vi khuẩn có cap', 'Vì vi khuẩn không có tRNA'], a: 1, e: 'Không có màng nhân, nên đầu 5′ mRNA vừa ló ra đã có ribosome bám (nhờ SD). mRNA vi khuẩn không có cap; vi khuẩn không có nhân.' },
+    { q: 'Enzyme tạo liên kết peptide có bản chất là:', ops: ['rRNA của tiểu đơn vị lớn (23S/28S)', 'Protein EF-Tu', 'tRNA', 'Aminoacyl-tRNA synthetase'], a: 0, e: 'Peptidyl transferase là rRNA 23S (28S ở nhân thực), tức ribozyme. Synthetase gắn amino acid lên tRNA, không tạo liên kết peptide.' },
+    { q: 'Trình tự Shine-Dalgarno bắt cặp với:', ops: ['Anticodon của fMet-tRNA', 'rRNA 18S', 'Đầu 3′ của rRNA 16S', 'Cap 5′'], a: 2, e: 'SD (AGGAGG) bắt cặp với đầu 3′ của rRNA 16S trong 30S. rRNA 18S và cap là của nhân thực, nơi không có SD.' },
+    { q: 'Tetracycline ức chế dịch mã vi khuẩn bằng cách:', ops: ['Bịt đường hầm thoát của 50S', 'Ức chế peptidyl transferase', 'Phân hủy mRNA', 'Ngăn aminoacyl-tRNA vào vị trí A trên 30S'], a: 3, e: 'Tetracycline bám 30S và chặn vị trí A. Bịt đường hầm là erythromycin; ức chế peptidyl transferase là chloramphenicol.' },
+    { q: 'Đột biến điểm đổi codon AAA (Lys) thành UAA trong vùng mã hóa. Hậu quả:', ops: ['Protein bị cắt cụt vì gặp codon kết thúc sớm', 'Thay Lys bằng amino acid khác', 'Protein dài hơn', 'Không ảnh hưởng do mã thoái hóa'], a: 0, e: 'UAA là codon stop, nên đây là đột biến vô nghĩa: yếu tố giải phóng vào A sớm, chuỗi bị thả ra khi còn ngắn. "Thay amino acid" là đột biến sai nghĩa (missense).' },
+    { q: 'Thứ tự đúng trong 1 vòng kéo dài:', ops: ['Chuyển vị → tRNA vào A → liên kết peptide', 'Liên kết peptide → tRNA vào P → chuyển vị', 'tRNA vào A (EF-Tu) → liên kết peptide → chuyển vị (EF-G)', 'EF-G đưa tRNA vào A → EF-Tu chuyển vị'], a: 2, e: 'EF-Tu-GTP đưa aa-tRNA vào A, peptidyl transferase tạo liên kết, rồi EF-G-GTP chuyển vị. Phương án cuối đảo vai EF-Tu và EF-G.' },
+    { q: 'Vì sao vi khuẩn có thể dịch mã một mRNA khi nó còn đang được phiên mã?', ops: ['Vì ribosome vi khuẩn ở trong nhân', 'Vì mRNA vi khuẩn có cap', 'Vì vi khuẩn không có tRNA', 'Vì không có màng nhân: mRNA và ribosome cùng ở tế bào chất'], a: 3, e: 'Không có màng nhân, nên đầu 5′ mRNA vừa ló ra đã có ribosome bám (nhờ SD). mRNA vi khuẩn không có cap; vi khuẩn không có nhân.' },
   ],
 
   recall: [
@@ -128,11 +128,11 @@ export default {
     const seqNow = () => { const o = ORF.slice(); if (nons) o[3] = 'UAA'; return LEAD[euk ? 'e' : 'p'] + o.join('') + TRAIL; };
     const cap = api.sphere(0.4, 0x8e8e93, mG); cap.position.set(-10.95, NT_Y, 0);
     const polyA = []; for (let j = 0; j < 8; j++) { const m = api.sphere(0.19, C.A, mG); m.position.set(10.75 + j * 0.45, NT_Y, 0); polyA.push(m); }
-    for (let c = 0; c < 7; c++) L.add('cod' + c, '', [cX(c), c % 2 ? -4.9 : -4.2, 1], mG, 'dim');
-    L.add('lead', '', [ntX(6.5), -4.3, 1], mG, 'dim');
+    for (let c = 0; c < 7; c++) L.add('cod' + c, '', [cX(c), c % 2 ? -3.2 : -2.4, 1], mG, 'dim');
+    L.add('lead', '', [ntX(6.5), -3.9, 1], mG, 'dim');
     L.add('p5', '5′', [-11.6, -0.6, 0], mG, 'dim'); L.add('p3', '3′', [10.9, -0.6, 0], mG, 'dim');
-    L.add('capL', 'cap 5′', [-11.2, 0.4, 0], mG, 'tag'); L.add('polyL', 'đuôi poly-A', [12.3, -2.6, 0], mG, 'dim');
-    L.add('nonsL', '💥 UAA sớm → protein cụt', [cX(3), -5.7, 1], mG, 'warn');
+    L.add('capL', 'cap 5′', [-11.2, -2.5, 0], mG, 'tag'); L.add('polyL', 'đuôi poly-A', [12.3, -2.6, 0], mG, 'dim');
+    L.add('nonsL', '💥 UAA sớm → protein cụt', [cX(3), -4.0, 1], mG, 'warn');
     // anti-SD: 3′ end of 16S rRNA pairing with the SD
     const antiSD = api.group();
     [...'AGGAGG'].forEach((b, j) => { const m = new THREE.Mesh(ntGeo, api.mat(C[COMP[b]])); m.scale.y = 0.8; m.position.set(ntX(4 + j), -0.85, 0); antiSD.add(m); });
@@ -145,7 +145,7 @@ export default {
     const e4A = api.blob(0.36, 0x7ee0c3, eG, { mat: { opacity: 0.95 }, seed: 63 }); e4A.position.set(-8.9, -0.75, 0.5);
     const pabp = api.blob(0.5, 0x9ad0ff, eG, { mat: { opacity: 0.95 }, seed: 64 }); pabp.position.set(12.3, -0.8, 0.4);
     api.tube([V(-9.7, 0.2, 0.4), V(-6, 4.6, 0.6), V(1.5, 6.0, 0.6), V(9, 4.6, 0.6), V(12.3, -0.3, 0.4)], 0.05, 0xc7a0ff, eG, { opacity: 0.45 });
-    L.add('e4L', 'eIF4E·4G·4A nhận cap', [-9.6, 0.75, 0], eG, 'tag');
+    L.add('e4L', 'eIF4E·4G·4A nhận cap', [-10.2, 1.9, 0], eG, 'tag');
     L.add('pabL', 'PABP', [12.3, 0.0, 0], eG, 'tag');
     L.add('loopL', 'eIF4G–PABP: mRNA khép vòng', [1.5, 6.5, 0], eG, 'dim');
 
@@ -160,24 +160,24 @@ export default {
       api.setOpacity(small, 0.55 * f); api.setOpacity(large, 0.36 * f);
       slots.forEach(s => api.setOpacity(s, 0.1 * f * (1 - sep)));
     };
-    L.add('ss', '', [-0.5, -3.0, 2.0], rG, 'dim');
+    L.add('ss', '', [-5.0, -2.6, 0], rG, 'dim');
     L.add('ls', '', [3.4, 2.6, 0], rG, 'dim');
     L.add('sE', 'E', [-1.5, 3.15, 0], rG, 'tag'); L.add('sP', 'P', [0, 3.15, 0], rG, 'tag'); L.add('sA', 'A', [1.5, 3.15, 0], rG, 'tag');
-    L.add('ptcL', 'peptidyl transferase = rRNA (ribozyme)', [3.6, 1.4, 0], rG, 'good');
-    L.add('scanL', 'quét 5′→3′ tìm AUG →', [0, 1.3, 0], rG, 'big');
+    L.add('ptcL', 'peptidyl transferase = rRNA', [0, 4.3, 0], rG, 'good');
+    L.add('scanL', 'quét 5′→3′ tìm AUG →', [0, 3.3, 0], rG, 'big');
     // initiation factors riding on the small subunit
     const if1 = api.blob(0.38, 0xffb3c7, rG, { mat: { opacity: 0.95 }, seed: 71 }); if1.position.set(1.5, -0.95, 0.6);
     const if3 = api.blob(0.45, 0xa1e3a1, rG, { mat: { opacity: 0.95 }, seed: 72 }); if3.position.set(-2.4, -2.0, 1.2);
     const eif3 = api.blob(0.85, 0xd4a5ff, rG, { mat: { opacity: 0.9 }, seed: 73 }); eif3.position.set(-2.8, -2.7, -0.8);
     const eif1 = api.blob(0.34, 0xffe08a, rG, { mat: { opacity: 0.95 }, seed: 74 }); eif1.position.set(-1.6, -1.15, 0.7);
     L.add('if1L', 'IF1 (chặn A)', [0, 0.55, 0], if1, 'tag'); L.add('if3L', 'IF3', [0, -0.6, 0], if3, 'tag');
-    L.add('eif3L', 'eIF3', [0, -1.0, 0], eif3, 'tag'); L.add('eif1L', 'eIF1', [-0.3, 0.5, 0], eif1, 'tag');
+    L.add('eif3L', 'eIF3', [-0.2, 1.0, 0], eif3, 'tag'); L.add('eif1L', 'eIF1', [-0.3, 0.5, 0], eif1, 'tag');
     // antibiotic binding sites (step 2)
     const pillG = new THREE.CapsuleGeometry(0.16, 0.45, 4, 10);
     const pill = (pos, color, parent) => { const m = new THREE.Mesh(pillG, api.mat(color, { emissive: color, emissiveIntensity: 0.35 })); m.position.set(...pos); m.rotation.z = 0.6; parent.add(m); return m; };
     const abS = pill([-2.2, -2.7, 1.6], 0xff453a, rG), abT = pill([1.5, -1.05, 0.8], 0xffcc00, rG), abC = pill([0.2, 1.5, 0.9], 0xff9f0a, rG), abE = pill([-0.6, 2.6, 0.9], 0xbf5af2, rG);
     L.add('abS', 'streptomycin (30S)', [-1.4, -0.5, 0], abS, 'dim'); L.add('abT', 'tetracycline (A, 30S)', [2.0, -0.2, 0], abT, 'dim');
-    L.add('abC', 'chloramphenicol (PTC, 50S)', [2.2, 0.2, 0], abC, 'dim'); L.add('abE', 'erythromycin (đường hầm 50S)', [-1.8, 0.5, 0], abE, 'dim');
+    L.add('abC', 'chloramphenicol (PTC, 50S)', [2.33, -2.26, 0], abC, 'dim'); // viên thuốc xoay 0.6 rad: offset này ≈ (+3.2, −0.55) theo trục thế giới L.add('abE', 'erythromycin (đường hầm 50S)', [-1.8, 0.5, 0], abE, 'dim');
     L.add('eukAb', 'ribosome 80S: ít bị các thuốc này ức chế → chọn lọc', [0, 4.2, 0], rG, 'good');
 
     // ---------------- tRNAs & amino acids ----------------
@@ -199,19 +199,19 @@ export default {
     // factors
     const ini = api.blob(0.5, 0xffa94d, undefined, { mat: { opacity: 0.95 }, seed: 81 });
     const iniG = api.sphere(0.17, GTP, ini); iniG.position.set(0.4, 0.35, 0.3);
-    L.add('iniL', '', [0.3, 0.75, 0], ini, 'tag');
+    L.add('iniL', '', [0.3, 1.3, 0], ini, 'tag');
     const efTu = api.blob(0.55, EFTU, undefined, { mat: { opacity: 0.95 }, seed: 82 });
     const tuG = api.sphere(0.18, GTP, efTu); tuG.position.set(0.45, 0.35, 0.3);
     L.add('tuL', '', [0.5, 0.8, 0], efTu, 'tag');
     const efG = api.blob(1, EFG, undefined, { mat: { opacity: 0.95 }, scale: [0.6, 1.3, 0.6], seed: 83 });
-    L.add('gL', '', [0.9, 1.0, 0], efG, 'tag');
+    L.add('gL', '', [2.0, -0.6, 0], efG, 'tag'); // efG bị scale (0.6, 1.3): offset thật ≈ (1.2, −0.8)
     const rf = api.group();
     api.stick(V(0, 0.2, 0), V(0, 1.8, 0), 0.22, RFC, rf); api.blob(0.45, RFC, rf, { mat: { opacity: 0.95 }, seed: 84 }).position.set(-0.45, 2.1, 0);
     const eRF3 = api.blob(0.38, 0xffb0b0, rf, { mat: { opacity: 0.95 }, seed: 85 }); eRF3.position.set(0.65, 1.0, 0.5);
-    L.add('rfL', '', [0.9, 2.4, 0], rf, 'warn');
+    L.add('rfL', '', [0.2, 0.9, 0], rf, 'warn');
     const tet = new THREE.Mesh(pillG, api.mat(0xffcc00, { emissive: 0xffcc00, emissiveIntensity: 0.5 })); tet.scale.setScalar(1.4); api.group().add(tet);
-    L.add('tetL', '💥 tetracycline chặn A', [0.4, -0.7, 0.4], tet, 'warn');
-    L.add('relL', 'chuỗi polypeptide được thả ra', [0, 0.7, 0], aaM[0], 'good');
+    L.add('tetL', '💥 tetracycline chặn A', [1.2, 1.0, 0], tet, 'warn');
+    L.add('relL', 'chuỗi polypeptide được thả ra', [-3.8, 1.2, 0], rG, 'good');
 
     // ---------------- step 1 props: synthetase ----------------
     const synth = api.blob(1.5, C.enzyme, undefined, { mat: { opacity: 0.8 }, seed: 91 });
@@ -220,7 +220,7 @@ export default {
     L.add('synL', 'aminoacyl-tRNA synthetase', [0, 1.9, 0], synth, 'tag');
     L.add('atpL', 'ATP → AMP + PPi', [0.9, -0.4, 0], atp, 'dim');
     L.add('acL', 'anticodon (bắt cặp codon)', [0, -0.45, 0.3], tr[1], 'tag');
-    L.add('ccaL', '3′ CCA: nơi gắn aa', [-1.3, 2.75, 0], tr[1], 'tag');
+    L.add('ccaL', '3′ CCA: nơi gắn aa', [0.25, 2.5, 0], tr[1], 'tag');
     L.add('lL', 'tRNA chữ L (~76 nt)', [1.4, 1.2, 0], tr[1], 'dim');
     L.add('aaL', 'amino acid (Gly)', [0, 0.6, 0], aaM[1], 'good');
 
@@ -241,10 +241,10 @@ export default {
     const pCap = api.sphere(0.35, 0x8e8e93, pG); pCap.position.set(-12.7, yAt(-12.5), 0);
     const pPab = api.blob(0.45, 0x9ad0ff, pG, { mat: { opacity: 0.95 }, seed: 96 }); pPab.position.set(12.9, yAt(12.5) + 0.6, 0.3);
     const pArc = api.tube([V(-12.4, 0, 0.3), V(-6, 5.6, 0.3), V(6, 5.6, 0.3), V(12.9, 1.1, 0.3)], 0.05, 0xc7a0ff, pG, { opacity: 0.45 });
-    L.add('polyT', 'polysome: nhiều ribosome / 1 mRNA', [0, 5.2, 0], pG, 'big');
-    L.add('rnapL', 'RNAP: vừa phiên mã vừa dịch mã', [3.2, 1.5, 0], rnap, 'tag');
-    L.add('pLoop', 'cap–eIF4G–PABP khép vòng', [0, 6.2, 0], pG, 'dim');
-    L.add('p5b', '5′', [-12.2, -0.4, 0], pG, 'dim'); L.add('p3b', '3′ (chuỗi dài nhất)', [11, -0.4, 0], pG, 'dim');
+    L.add('polyT', 'polysome: nhiều ribosome / 1 mRNA', [0, 3.8, 0], pG, 'big');
+    L.add('rnapL', 'RNAP (đang phiên mã)', [2.5, -1.9, 0], rnap, 'tag');
+    L.add('pLoop', 'cap–eIF4G–PABP khép vòng', [0, 6.3, 0], pG, 'dim');
+    L.add('p5b', '5′', [-12.2, -0.4, 0], pG, 'dim'); L.add('p3b', '3′ (chuỗi dài nhất)', [9.6, -0.6, 0], pG, 'dim');
 
     // ---------------- chain layout ----------------
     const P = Array.from({ length: 8 }, () => V(0, 0));
@@ -290,7 +290,7 @@ export default {
         const off = blk ? 0 : ez(sg(tau, 0.33, 0.45));
         efTu.visible = true; efTu.position.copy(tin.position).add(tmpC.set(0.95 + 3 * off, 0.8 + 3 * off, 0.6)); api.setOpacity(efTu, 1 - off);
         tuG.material.color.set(!blk && tau > 0.26 ? GDP : GTP);
-        if (off < 0.5) extra.push('tuL');
+        if (off < 0.5 && (blk ? bump(tau) > 0.6 : tau > 0.2)) extra.push('tuL');
       }
       // EF-G
       if (!blk && tau > 0.5) {
@@ -310,7 +310,7 @@ export default {
       const tp = tr[K - 1]; showTR(tp, 1 - dis); tp.position.set(cX(K - 1), AC_Y + 3 * dis, 0);
       rf.visible = true; eRF3.visible = euk; api.setOpacity(rf, 1 - dis);
       rf.position.lerpVectors(tmpB.set(cX(K) + 4.5, 4.5, 2), tmpA.set(cX(K), AC_Y, 0), ez(sg(tau, 0, 0.28))); rf.position.y += 3 * dis;
-      if (tau > 0.15 && dis < 0.5) extra.push('rfL');
+      if (tau > 0.2 && dis < 0.5) extra.push('rfL');
       ptc.material.opacity = 0.9 * bump(sg(tau, 0.3, 0.5));
       if (ptc.material.opacity > 0.3) extra.push('ptcL');
       const rel = ez(sg(tau, 0.42, 0.75));
@@ -334,6 +334,7 @@ export default {
         tipOf(t0, aaM[0].position); aaM[0].visible = true;
         ini.visible = true; ini.position.copy(t0.position).add(tmpC.set(0.85, 0.5, 0.6)); iniG.material.color.set(GTP); extra.push('iniL');
         if (euk && t > 1.6 && t < 4.4) extra.push('scanL');
+        if (euk && t > 4.4) extra.push('capL');
         if (!euk) { antiSD.visible = t > 0.9; antiSD.scale.y = ez(sg(t, 0.9, 1.4)); if (t > 1.2) extra.push('asdL'); }
         glow(euk ? [12, 18] : [4, 9], euk ? t > 4.2 : t > 1.2);
       } else {
@@ -368,17 +369,17 @@ export default {
       if (s >= 4 && s <= 8 && tetra && euk) t = tetMsg + '<br>' + t;
       api.readout(t);
     };
-    api.toggle('Nhân thực (thay vì nhân sơ)', false, (x) => { euk = x; ctl.setStep(cur); });
-    api.toggle('💥 Tetracycline', false, (x) => { tetra = x; ctl.setStep(cur); });
-    api.toggle('💥 Đột biến vô nghĩa (AAA→UAA)', false, (x) => { nons = x; ctl.setStep(cur); });
+    api.toggle('Nhân thực (thay vì nhân sơ)', false, (x) => { euk = x; ctl.setStep(cur, true); });
+    api.toggle('💥 Tetracycline', false, (x) => { tetra = x; ctl.setStep(cur, true); });
+    api.toggle('💥 Đột biến vô nghĩa (AAA→UAA)', false, (x) => { nons = x; ctl.setStep(cur, true); });
 
     const CAMS = [
       [[0.5, 0.8, 10], [0.3, 0.6, 0]], [[0, 1.2, 14], [-2.25, 0.2, 0]], [[-3.5, 0.6, 15], [-4, -0.6, 0]], [[-1, 1, 14], [-2, 0.2, 0]],
-      [[1, 1.2, 13], [-0.8, 0.4, 0]], [[0, 1.6, 11], [-1.2, 0.9, 0]], [[1.2, 1.2, 14], [-0.4, 0.5, 0]], [[0.5, 1.0, 19], [0.5, 0.4, 0]],
-      [[0, 0, 0], [0, 0, 0]], [[0, 1, 24], [0, 1, 0]],
+      [[1, 1.2, 13], [-0.8, 0.4, 0]], [[0, 1.2, 11.5], [-1.2, 0.5, 0]], [[1.2, 1.2, 14], [-0.4, 0.5, 0]], [[0.5, 1.0, 19], [0.5, 0.4, 0]],
+      [[0, 0, 0], [0, 0, 0]], [[-0.8, 1, 26], [-0.8, 1, 0]],
     ];
     const CYC = 3.4, TERM = 4.5, PAUSE = 1.5;
-    let base = [];
+    let base = [], camKey = '';
 
     const frame = (t) => {
       const s = cur; extra.length = 0;
@@ -392,7 +393,8 @@ export default {
         if (x < 1.2) { aaM[1].position.lerpVectors(tmpA.set(6, 4, 0.5), pocket, ez(x / 1.2)); atp.position.lerpVectors(tmpB.set(6.5, -1.5, 0.5), tmpA.set(2.7, 0.8, 1.2), ez(x / 1.2)); atp.scale.setScalar(1); }
         else if (x < 2.2) { aaM[1].position.copy(pocket); atp.position.set(2.7, 0.8, 1.2); atp.scale.setScalar(1 - 0.4 * sg(x, 1.2, 2.2)); ppi.forEach((p, i) => { p.visible = true; p.position.set(2.7 + (i ? 1 : -0.4) * 3 * sg(x, 1.2, 2.2), 0.8 - 2.5 * sg(x, 1.2, 2.2), 1.2); }); }
         else { tipOf(g, tmpB); const m = ez(sg(x, 2.2, 3.4)); aaM[1].position.lerpVectors(pocket, tmpB, m); atp.position.copy(aaM[1].position).add(tmpA.set(0.35, -0.3, 0.2)); atp.scale.setScalar(0.6); }
-        if (x < 3.2) extra.push('atpL');
+        if (x > 0.9 && x < 3.2) extra.push('atpL');
+        if (x > 0.9 && x < 2.2) extra.push('aaL');
       } else if (s === 1) {
         const sep = 1 - ez(sg(tt, 0, 1.5));
         rG.position.x = cX(0); riboBase(sep, 1);
@@ -416,11 +418,13 @@ export default {
         });
         if (!euk) { const ph = (tt * 0.9) % 1; rnap.rotation.z = Math.sin(ph * Math.PI * 2) * 0.05; }
       }
+      // nhãn codon: chỉ các codon quanh ribosome (dải mRNA dài hơn khung hình)
+      if (s >= 1 && s <= 8) for (let c = 0; c < 7; c++) if (Math.abs(cX(c) - rG.position.x - 0.75) <= 3.2) { extra.push('cod' + c); if (c === 3 && nons) extra.push('nonsL'); }
       L.only(base.concat(extra));
     };
 
     const ctl = {
-      setStep(s) {
+      setStep(s, fromToggle) {
         cur = s; tt = 0;
         // static visibility per step
         const ribo = s >= 1 && s <= 8;
@@ -446,8 +450,8 @@ export default {
         L.set('rfL', N('RF1/RF2 (protein)', 'eRF1 + eRF3'));
         // base labels
         const k = [];
-        if (s >= 1 && s <= 8) { k.push('p5', 'p3', 'lead'); for (let c = 0; c < 7; c++) k.push('cod' + c); if (euk) k.push('capL', 'polyL'); if (nons) k.push('nonsL'); }
-        if (s === 0) k.push('synL', 'acL', 'ccaL', 'lL', 'aaL');
+        if (s >= 1 && s <= 8) { if (s <= 3) k.push('p5', 'p3'); if (s === 2 || s === 3) k.push('lead'); if (euk && s === 2) k.push('polyL'); }
+        if (s === 0) k.push('synL', 'acL', 'ccaL', 'lL');
         if (s === 1) { k.push('ss', 'ls', 'sE', 'sP', 'sA'); if (euk) k.push('eukAb'); else k.push('abS', 'abT', 'abC', 'abE'); }
         if (s === 2) { k.push('ss'); if (euk) k.push('e4L', 'pabL', 'loopL', 'eif3L', 'eif1L'); else k.push('if1L', 'if3L'); }
         if (s === 3) k.push('ss', 'ls', 'sE', 'sP', 'sA');
@@ -459,7 +463,10 @@ export default {
         if (s === 2 && euk) cam = [[-3, 0.8, 19], [-3.5, 0.3, 0]];
         if (s === 8) { const rx = cX(stopIdx() - 1); cam = [[rx + 1.5, 1.2, 14], [rx + 0.3, 0.8, 0]]; }
         if (s >= 4 && s <= 8 && blocked()) cam = [[0.5, 1.2, 13], [-1.2, 0.4, 0]];
-        api.camera(...cam);
+        // công tắc chỉ dời camera khi khung nhìn thật sự đổi (giữ góc xoay của người dùng)
+        const ck = JSON.stringify(cam);
+        if (!fromToggle || ck !== camKey) api.camera(...cam);
+        camKey = ck;
         readout();
         frame(0);
       },

@@ -262,7 +262,7 @@ export default {
       const K = S.keys;
       if (s >= 1) S.cap = 1;
       if (s >= 3) { S.stub = 0; S.nA = NPA; }
-      if (s === 0) K.push('e1', 'e2', 'e3', 'intron', 'aaua', 'miLayer');
+      if (s === 0) K.push('e1', 'e2', 'e3', 'intron', 'miLayer');
       else if (s === 1) {
         const lt = tt % 6;
         S.capEnz = lt > 0.2 && lt < 3.2 ? 1 : 0; S.cap = lt > 1.6 ? 1 : 0;
@@ -299,7 +299,7 @@ export default {
         S.preX = lerp(-10.5, -0.2, (lt - 3.2) / 3.4);
         K.push('nuc', 'cyto');
         if (lt < 1.8) K.push('pri'); else K.push('preM');
-        if (S.drosha) K.push('drosha'); if (S.exp5) K.push('exp5');
+        if (S.drosha) K.push('drosha'); else if (S.exp5) K.push('exp5');
       } else if (s === 8 || s === 9) {
         const lt = tt % 11.5;
         S.preX = 0.4; S.flank = 0; S.tgt = 1;
@@ -367,7 +367,7 @@ export default {
       });
       // nhãn động
       const lpos = (k, x, y) => L.get(k).position.set(x, y, 0);
-      lpos('e1', CX('e1'), -1.15); lpos('e2', exons.e2.position.x, -1.15); lpos('e3', exons.e3.position.x - 0.6, -1.15);
+      lpos('e1', CX('e1'), -1.15); lpos('e2', exons.e2.position.x, -1.15); lpos('e3', exons.e3.position.x - 1.4, -1.15);
       lpos('preM', pg.x + 1.5, pg.y - 1.1);
       lpos('exp5', exp5.position.x, exp5.position.y + 1.05);
       lpos('dicer', dicer.position.x, dicer.position.y + 1.2);
@@ -378,6 +378,8 @@ export default {
     const ctl = {
       setStep(s) {
         cur = s; tt = 0; envG.visible = s === 0 || s >= 7;
+        // mỗi cận cảnh chỉ hiện lớp của nó (tránh mép exon lọt vào khung miRNA và ngược lại)
+        mG.visible = s <= 6; rG.visible = s === 0 || s >= 7;
         noGU = false; noDicer = false; variantB = false;
         for (const k in T) T[k].set(false);
         render();

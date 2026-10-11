@@ -174,7 +174,7 @@ export default {
     for (let m = 0; m < 6; m++) { ctd.push(api.sphere(0.11, 0x9aa3b5)); pdot.push(api.sphere(0.09, 0xff3b30, null, { emissive: 0xff3b30, emissiveIntensity: 0.6 })); }
 
     // ---- nhãn ----
-    L.add('enh', 'ENHANCER (xa)', [XA, Y0 - 2.0, 0]);
+    L.add('enh', 'ENHANCER (xa)', [XA - 1.2, Y0 - 2.9, 0]);
     L.add('tata', 'TATA box (−30)', [XT, Y0 - 2.0, 0], null, 'big');
     L.add('plus1', '+1', [XP, Y0 - 2.4, 0], null, 'good');
     L.add('body', 'thân gene (quấn nucleosome)', [X(mid('body')), Y0 + 2.4, 0], null, 'dim');
@@ -188,7 +188,7 @@ export default {
     L.add('tfiih', 'TFIIH', [XP - 2.3, Y0 + 3.3, 0], null, 'dim');
     L.add('pol', 'Pol II', [0, 0, 0], null, 'dim');
     L.add('picMsg', 'PIC đã lắp đủ', [XT + 3.6, Y0 - 3.0, 0], null, 'good');
-    L.add('bub', 'TFIIH mở DNA quanh +1', [XP + 2.3, Y0 - 1.6, 0], null, 'good');
+    L.add('bub', 'TFIIH mở DNA quanh +1', [XP + 2.3, Y0 - 2.5, 0], null, 'good');
     L.add('ctd', 'CTD', [0, 0, 0], null, 'dim');
     L.add('cap', '5′ mũ m⁷G', [0, 0, 0], null, 'dim');
     L.add('rna', 'mRNA 5′→3′', [0, 0, 0], null, 'dim');
@@ -225,7 +225,7 @@ export default {
     };
     const SHOW = { tbp: [1, 2, 8], ama: [4, 8], enh: [6] };
     const CAMS = [
-      [[0, 2.5, 30], [0, 0.8, 0]],
+      [[0, 2.5, 36], [0, 0.8, 0]],
       [[-4.5, 2.6, 12], [-4.5, 1.3, 0]],
       [[-3, 3, 13], [-3, 1.4, 0]],
       [[-1.8, 2.6, 11], [-1.6, 1.0, 0]],

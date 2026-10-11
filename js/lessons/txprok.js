@@ -173,7 +173,7 @@ export default {
     L.add('tpl', '← mạch khuôn 5′', [X(N - 1) - 1.1, -1.75, 0], null, 'dim');
     L.add('m35', '−35 TTGACA', [XM('m35'), -2.0, 0], null, '');
     L.add('m10', '−10 TATAAT (Pribnow)', [XM('m10'), -2.85, 0], null, '');
-    L.add('sp', '17 bp', [XM('sp'), -1.3, 0], null, 'dim');
+    L.add('sp', '17 bp', [XM('sp') + 0.3, -1.15, 0], null, 'dim');
     L.add('plus1', '+1', [X(P1), 2.0, 0], null, 'good');
     L.add('atg', 'ATG → AUG (dịch mã)', [XM('atg') + 0.6, 2.95, 0], null, 'warn');
     L.add('rut', 'rut (giàu C)', [XM('rut'), -2.0, 0], null, 'dim');
@@ -254,8 +254,8 @@ export default {
     L.add('pause', 'RNAP dừng tạm (pause)', [X(START.uu + 3), -3.3, 0], null, 'dim');
     L.add('rutR', 'rut trên RNA', [XM('rut') - 0.3, -2.0, 0], null, 'good');
     L.add('noRho', '❌ không có ρ: RNAP chạy tiếp, đọc lố', [X(START.s2), 5.4, 0], null, 'warn');
-    L.add('cycle', 'σ gắn lõi tự do mới → holoenzyme mới', [-1.2, 6.2, 0], null, 'good');
-    L.add('s32', 'σ³²: bỏ qua promoter σ⁷⁰, chỉ nhận promoter gene sốc nhiệt', [-0.8, 6.2, 0], null, 'warn');
+    L.add('cycle', 'σ gắn lõi tự do mới → holoenzyme mới', [-1.2, 7.0, 0], null, 'good');
+    L.add('s32', 'σ³²: bỏ qua promoter σ⁷⁰, chỉ nhận promoter gene sốc nhiệt', [-0.8, 7.9, 0], null, 'warn');
     L.add('core1', 'lõi đang kéo dài (không cần σ)', [X(START.rut), 4.4, 0], null, 'dim');
 
     // ---- trạng thái ----
@@ -320,7 +320,8 @@ export default {
     };
 
     const applyLabels = () => {
-      const s = cur, keys = (s === 6 || s === 7) ? ['tpl'] : (s === 2 ? ['tpl', 'm35', 'm10', 'plus1'] : ['cod', 'tpl', 'm35', 'm10', 'plus1']);
+      // cận cảnh chỉ giữ nhãn nền nằm trong khung (bước 3–5 camera ở gần, đầu 5′ và −35 ra ngoài)
+      const s = cur, keys = (s === 6 || s === 7) ? ['tpl'] : s === 2 ? ['tpl', 'm35', 'm10', 'plus1'] : (s === 3 || s === 4) ? ['tpl', 'm10', 'plus1'] : s === 5 ? ['plus1'] : s === 8 ? ['cod', 'm35', 'm10', 'plus1'] : s === 1 ? ['cod', 'plus1'] : ['cod', 'tpl', 'm35', 'm10', 'plus1'];
       if (s === 0) keys.push('sp', 'atg', 'rut', 'term', 'trap');
       if (s === 2) keys.push('sp');
       if (noSig && s >= 1 && s <= 5) keys.push(s >= 2 ? 'noSig' : null);
@@ -332,6 +333,7 @@ export default {
       if (s === 6) keys.push(...(brk ? ['thru'] : ['hp', 'uu', 'rel']));
       if (s === 7) keys.push('rutR', 'pause', ...(noRho ? ['noRho'] : []));
       if (s === 8) keys.push(s32 ? 's32' : 'cycle', 'core1');
+      L.get('noSig').position.x = s === 5 ? 0.8 : XM('m10');
       L.only(keys.filter(Boolean));
       L.set('hyb', 'lai RNA–DNA ~8 bp');
       // nhãn gắn trên vật thể
@@ -583,7 +585,9 @@ export default {
       });
       // nhãn động
       if (cur === 6 && !brk) { L.show('hp', S.fold > 0.5 && S.rel < 0.6); L.show('uu', S.n >= K('uu') + 2 && S.rel < 0.3); L.show('rel', S.rel > 0.05); }
-      if (cur === 7) { api.showLabel(rhoLbl, rho.visible); if (rho.visible) rhoLbl.position.copy(rho.position).add(V(0, 1.0, 0)); if (beads[K('rut') + 4].visible) L.get('rutR').position.copy(beads[K('rut') + 3].position).add(V(-0.4, -0.75, 0)); L.show('rutR', S.n > K('rut') + 12 && S.rel < 0.3); }
+      if (cur === 7) { api.showLabel(rhoLbl, rho.visible); if (rho.visible) rhoLbl.position.copy(rho.position).add(V(0, 1.5, 0)); if (beads[K('rut') + 4].visible) L.get('rutR').position.copy(beads[K('rut') + 3].position).add(V(-0.4, -0.95, 0)); L.show('rutR', S.n > K('rut') + 12 && S.rel < 0.3); }
+      if (cur === 1) api.showLabel(sigLbl, S.sig === 'holo');
+      sigLbl.position.set(cur === 1 ? -0.9 : 0, cur === 1 ? 0.5 : 0.75, 0); // bước 1: lệch trái để không đè nhãn α khi lõi xoay
       snap = false;
     }
 
