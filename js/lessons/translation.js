@@ -72,7 +72,7 @@ export default {
   <tr><td>Chloramphenicol</td><td>50S</td><td>Peptidyl transferase</td></tr>
   <tr><td>Erythromycin</td><td>50S (đường hầm)</td><td>Chuỗi không ra được, ngừng kéo dài</td></tr>
   </table></div>
-  <div class="box warn">⚠️ <b>Lỗi trên slide:</b> slide xếp "aminoacyl-tRNA → <b>eIF2</b>" vào giai đoạn <b>kéo dài</b>. Đúng là <b>eIF2</b>-GTP mang <b>Met-tRNA khởi đầu</b> vào 40S ở giai đoạn <b>khởi đầu</b>. Trong kéo dài, <b>eEF1A</b>-GTP (tương đương EF-Tu) mới đưa aminoacyl-tRNA vào vị trí A. Chữ "i" = initiation, "e" trong eEF = elongation.</div>`,
+  <div class="box warn">⚠️ <b>Lỗi trên slide:</b> slide xếp "aminoacyl-tRNA → <b>eIF2</b>" vào giai đoạn <b>kéo dài</b>. Đúng là <b>eIF2</b>-GTP mang <b>Met-tRNA khởi đầu</b> vào 40S ở giai đoạn <b>khởi đầu</b>. Trong kéo dài, <b>eEF1A</b>-GTP (tương đương EF-Tu) mới đưa aminoacyl-tRNA vào vị trí A. Chữ "i" = initiation, "e" trong eEF = elongation.<br><b>Đi thi:</b> trắc nghiệm có eEF1A (hoặc EF-Tu) thì chọn nó. Nếu đề viết theo slide và chỉ có eIF2 cho ý "kéo dài", thì đó là ý của slide. Tự luận: viết theo slide, rồi ghi chú thêm "chính xác là eEF1A; eIF2 thuộc khởi đầu".</div>`,
 
   traps: [
     { trap: '"eIF2 đưa aminoacyl-tRNA vào vị trí A trong giai đoạn kéo dài."', truth: 'Sai (đây là lỗi slide). eIF2 thuộc <b>khởi đầu</b>: mang Met-tRNAi vào vị trí P của 40S. Kéo dài dùng <b>eEF1A</b> (EF-Tu ở vi khuẩn).' },
