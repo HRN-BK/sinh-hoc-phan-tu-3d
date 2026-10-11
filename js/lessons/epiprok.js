@@ -65,7 +65,8 @@ export default {
   <tr><td>Chuyện gì xảy ra</td><td>GATC được methyl hóa trước</td><td>Repressor bám trước, che GATC</td></tr>
   <tr><td>Hệ quả</td><td>Repressor <b>không bám được</b>, gene <b>BẬT</b></td><td>Dam không với tới, gene <b>TẮT</b></td></tr>
   </table></div>
-  <div class="box info">ℹ️ Mô hình "Dam vs repressor" là bản rút gọn của bài giảng. Ở operon <b>pap</b> thật có <b>2 vị trí GATC</b>, và protein Lrp cùng PapI quyết định vị trí nào được che, vị trí nào được methyl hóa. Ý chính để đi thi vẫn đúng: <b>ai đến trước</b> quyết định BẬT hay TẮT, và trạng thái được giữ qua thế hệ. Chủng dam⁻ bị khóa ở pha TẮT.</div>`,
+  <div class="box info">ℹ️ Mô hình "Dam vs repressor" là bản rút gọn của bài giảng. Ở operon <b>pap</b> thật có <b>2 vị trí GATC</b>, và protein Lrp cùng PapI quyết định vị trí nào được che, vị trí nào được methyl hóa. Ý chính để đi thi vẫn đúng: <b>ai đến trước</b> quyết định BẬT hay TẮT, và trạng thái được giữ qua thế hệ. Chủng dam⁻ bị khóa ở pha TẮT.</div>
+  <div class="box warn">⚠️ Đừng nhầm các enzyme cùng nhận <b>GATC</b>: <b>DpnI</b> chỉ cắt GATC <b>đã</b> methyl hóa (ngược với REase của hệ R-M). <b>MboI</b> bị methyl hóa Dam <b>chặn</b>. <b>Sau3AI</b> cắt được cả hai. Và Dam methyl hóa <b>A</b> (m⁶A), còn Dcm methyl hóa <b>C</b> ở CCWGG.</div>`,
 
   traps: [
     { trap: '"Methyl hóa DNA lúc nào cũng làm TẮT gene."', truth: 'Đúng phần lớn ở promoter nhân thực, nhưng ở nhân sơ, khi <b>Dam thắng</b> repressor ở GATC thì repressor không bám được, gene <b>BẬT</b>. Phải xem nhóm methyl cản protein nào.' },
@@ -80,12 +81,12 @@ export default {
 
   quiz: [
     { q: 'Trong hệ R-M, REase cắt:', ops: ['DNA vi khuẩn đã methyl hóa', 'DNA lạ chưa methyl hóa tại vị trí nhận biết', 'Mọi DNA', 'Chỉ RNA'], a: 1, e: 'REase cắt vị trí nhận biết chưa có dấu methyl, tức DNA phage. DNA vi khuẩn đã được MTase cùng hệ methyl hóa nên an toàn. "Mọi DNA" thì vi khuẩn tự sát.' },
-    { q: 'Khi Dam methyl hóa vị trí GATC ở vùng điều hòa trước repressor, gene sẽ:', ops: ['Tắt', 'Bật', 'Bị đột biến', 'Bị cắt bỏ'], a: 1, e: 'Nhóm methyl cản repressor bám, nên gene BẬT. Đây là bẫy kinh điển vì sinh viên quen "methyl hóa = tắt" từ nhân thực.' },
-    { q: 'Một vi khuẩn bị mất gene MTase nhưng vẫn còn gene REase của cùng hệ R-M. Hậu quả:', ops: ['Kháng phage tốt hơn', 'REase cắt luôn DNA của chính nó, tế bào chết', 'Không có gì thay đổi', 'DNA được methyl hóa gấp đôi'], a: 1, e: 'Không có MTase thì DNA của vi khuẩn không có dấu, REase coi nó là DNA lạ và cắt. Không phải "kháng phage tốt hơn": REase cắt cả DNA mình.' },
-    { q: 'Hệ sửa bắt cặp sai ở E. coli biết mạch nào là mạch mới nhờ:', ops: ['Mạch mới dài hơn', 'Mạch mới chưa được Dam methyl hóa ở GATC', 'Mạch mới có uracil', 'Mạch mới có histone'], a: 1, e: 'Ngay sau sao chép, chỉ mạch cũ có methyl ở GATC. MutH rạch mạch chưa methyl hóa. Vi khuẩn không có histone; uracil là dấu hiệu khác (sửa cắt base).' },
-    { q: 'EcoRI nhận GAATTC và cắt G↓AATTC. Đầu tạo ra là:', ops: ['Đầu bằng', 'Đầu dính 5′-AATT', 'Đầu dính 3′-TTAA', 'Không cắt'], a: 1, e: 'Cắt so le giữa G và A trên cả 2 mạch, mỗi đầu thò ra đoạn 5′-AATT. Đầu bằng là của enzyme cắt thẳng như SmaI.' },
-    { q: 'Vai trò của SeqA tại oriC là:', ops: ['Mở xoắn DNA', 'Bám oriC bán methyl hóa, ngăn khởi đầu sao chép lại ngay', 'Tổng hợp primer', 'Cắt DNA phage'], a: 1, e: 'SeqA nhận ra GATC bán methyl hóa vừa sao chép, "giam" oriC để mỗi chu kỳ chỉ khởi đầu 1 lần. Mở xoắn là việc của DnaB helicase.' },
-    { q: 'Một phage vừa nhân lên trong vi khuẩn chủng A (có hệ R-M X) rồi lây sang vi khuẩn chủng B cũng có hệ R-M X. Khả năng cao nhất:', ops: ['Phage bị cắt vụn', 'Phage thoát vì DNA đã mang dấu methyl của hệ X', 'Phage biến thành plasmid', 'Vi khuẩn B tự cắt DNA mình'], a: 1, e: 'Trong chủng A, MTase X đã methyl hóa luôn DNA phage. Sang chủng B cùng hệ X, REase thấy dấu "ta" nên không cắt. Nếu B có hệ R-M khác, phage mới bị cắt.' },
+    { q: 'Khi Dam methyl hóa vị trí GATC ở vùng điều hòa trước repressor, gene sẽ:', ops: ['Bật', 'Tắt', 'Bị đột biến', 'Bị cắt bỏ'], a: 0, e: 'Nhóm methyl cản repressor bám, nên gene BẬT. Đây là bẫy kinh điển vì sinh viên quen "methyl hóa = tắt" từ nhân thực.' },
+    { q: 'Một vi khuẩn bị mất gene MTase nhưng vẫn còn gene REase của cùng hệ R-M. Hậu quả:', ops: ['Kháng phage tốt hơn', 'Không có gì thay đổi', 'REase cắt luôn DNA của chính nó, tế bào chết', 'DNA được methyl hóa gấp đôi'], a: 2, e: 'Không có MTase thì DNA của vi khuẩn không có dấu, REase coi nó là DNA lạ và cắt. Không phải "kháng phage tốt hơn": REase cắt cả DNA mình.' },
+    { q: 'Hệ sửa bắt cặp sai ở E. coli biết mạch nào là mạch mới nhờ:', ops: ['Mạch mới dài hơn', 'Mạch mới có uracil', 'Mạch mới có histone', 'Mạch mới chưa được Dam methyl hóa ở GATC'], a: 3, e: 'Ngay sau sao chép, chỉ mạch cũ có methyl ở GATC. MutH rạch mạch chưa methyl hóa. Vi khuẩn không có histone; uracil là dấu hiệu khác (sửa cắt base).' },
+    { q: 'EcoRI nhận GAATTC và cắt G↓AATTC. Đầu tạo ra là:', ops: ['Đầu bằng', 'Đầu dính 3′-TTAA', 'Đầu dính 5′-AATT', 'Không cắt'], a: 2, e: 'Cắt so le giữa G và A trên cả 2 mạch, mỗi đầu thò ra đoạn 5′-AATT. Đầu bằng là của enzyme cắt thẳng như SmaI.' },
+    { q: 'Vai trò của SeqA tại oriC là:', ops: ['Bám oriC bán methyl hóa, ngăn khởi đầu sao chép lại ngay', 'Mở xoắn DNA', 'Tổng hợp primer', 'Cắt DNA phage'], a: 0, e: 'SeqA nhận ra GATC bán methyl hóa vừa sao chép, "giam" oriC để mỗi chu kỳ chỉ khởi đầu 1 lần. Mở xoắn là việc của DnaB helicase.' },
+    { q: 'Một phage vừa nhân lên trong vi khuẩn chủng A (có hệ R-M X) rồi lây sang vi khuẩn chủng B cũng có hệ R-M X. Khả năng cao nhất:', ops: ['Phage bị cắt vụn', 'Phage biến thành plasmid', 'Vi khuẩn B tự cắt DNA mình', 'Phage thoát vì DNA đã mang dấu methyl của hệ X'], a: 3, e: 'Trong chủng A, MTase X đã methyl hóa luôn DNA phage. Sang chủng B cùng hệ X, REase thấy dấu "ta" nên không cắt. Nếu B có hệ R-M khác, phage mới bị cắt.' },
   ],
 
   recall: [
@@ -157,10 +158,10 @@ export default {
     const progeny = []; for (let k = 0; k < 7; k++) { const m = new THREE.Mesh(icoG, api.mat(0xb8c2cc, { flatShading: true })); m.scale.setScalar(0.001); m.position.set(-6 + k * 2.1, -0.4 + (k % 2 ? 1.6 : -1.6) * 0.0 + (k % 3 - 1) * 1.2, 1.5); gRM.add(m); progeny.push(m); }
     const mtase = api.blob(0.65, C.enzyme, gRM, { mat: { opacity: 0.95 }, seed: 3 });
     const rease = scissors(gRM);
-    L.add('mt', 'MTase: gắn methyl', [0, 0, 0], mtase, 'good');
+    L.add('mt', 'MTase: gắn methyl', [0, 1.0, 0], mtase, 'good');
     L.add('re', 'REase: cắt chỗ chưa methyl', [0, 1.0, 0], rease, 'warn');
-    L.add('siteL', 'GAATTC', [hostX[2], HOST_Y + 1.1, 0], gRM, 'big');
-    L.add('hostL', 'DNA vi khuẩn', [-7, HOST_Y + 1.1, 0], gRM, 'dim');
+    L.add('siteL', 'GAATTC', [hostX[2], HOST_Y - 1.0, 0], gRM, 'big');
+    L.add('hostL', 'DNA vi khuẩn', [-6.7, HOST_Y - 1.0, 0], gRM, 'dim');
     L.add('phL', 'DNA phage (chưa methyl)', [3.5, PH_Y - 1.2, 0], gRM, 'dim');
     L.add('phMe', 'DNA phage (đã methyl sẵn)', [3.5, PH_Y - 1.2, 0], gRM, 'warn');
     L.add('phage', 'phage tiêm DNA', [8.6, 7.6, 0], gRM, 'tag');
@@ -173,14 +174,14 @@ export default {
     const TOP = 'ATGAATTCAT', BOT = { A: 'T', T: 'A', G: 'C', C: 'G' };
     const NB = TOP.length, dx = 0.9, xb = (i) => (i - (NB - 1) / 2) * dx;
     const baseG = new THREE.BoxGeometry(0.62, 0.46, 0.4), bbG = new THREE.BoxGeometry(dx, 0.16, 0.16), hbG = new THREE.BoxGeometry(0.07, 0.2, 0.07);
-    const ecoLabels = [];
     // a half-molecule: list of top indices + bottom indices, own backbone colour
     const half = (topIdx, botIdx, bbTop, bbBot) => {
-      const g = api.group(gEco); const bm1 = api.mat(bbTop), bm2 = api.mat(bbBot);
+      const g = api.group(gEco); const bm1 = api.mat(bbTop), bm2 = api.mat(bbBot); const ecoLabels = g.userData.labels = [];
       topIdx.forEach(i => { const b = new THREE.Mesh(baseG, api.mat(C[TOP[i]])); b.position.set(xb(i), 0.35, 0); g.add(b); const bb = new THREE.Mesh(bbG, bm1); bb.position.set(xb(i), 0.8, 0); g.add(bb); if (i >= 2 && i <= 7) ecoLabels.push(api.label(TOP[i], [0, 0.55, 0.25], b, 'plain')); });
       botIdx.forEach(i => { const c = BOT[TOP[i]]; const b = new THREE.Mesh(baseG, api.mat(C[c])); b.position.set(xb(i), -0.35, 0); g.add(b); const bb = new THREE.Mesh(bbG, bm2); bb.position.set(xb(i), -0.8, 0); g.add(bb); if (i >= 2 && i <= 7) ecoLabels.push(api.label(c, [0, -0.55, 0.25], b, 'plain')); });
       return g;
     };
+    const showEco = (h, on) => h.userData.labels.forEach(l => api.showLabel(l, on));
     const range = (a, b) => Array.from({ length: b - a + 1 }, (_, k) => a + k);
     const leftH = half(range(0, 2), range(0, 6), C.dna1, C.dna2);
     const rightH = half(range(3, 9), range(7, 9), C.dna1, C.dna2);
@@ -219,10 +220,10 @@ export default {
     const mutL = api.blob(0.55, 0x64d2a0, gMMR, { mat: { opacity: 0.92 }, seed: 22 });
     const mutH = api.blob(0.42, 0xe08cff, gMMR, { mat: { opacity: 0.95 }, seed: 23 });
     const nick = api.sphere(0.22, 0xffffff, gMMR, { emissive: 0xffffff, emissiveIntensity: 1 });
-    L.add('old', 'mạch cũ (có methyl ở GATC)', [-8, 1.5, 0], gMMR, 'dim');
-    L.add('new', 'mạch mới (chưa methyl)', [-8, -1.5, 0], gMMR, 'dim');
-    L.add('misL', 'bắt cặp sai', [1, -1.6, 0], gMMR, 'warn');
-    L.add('mS', 'MutS', [0, 0.85, 0], mutS, 'tag'); L.add('mL', 'MutL', [0, 0.8, 0], mutL, 'tag'); L.add('mH', 'MutH: rạch ở GATC', [0.6, -0.8, 0], mutH, 'tag');
+    L.add('old', 'mạch cũ (có methyl ở GATC)', [-6.3, 1.5, 0], gMMR, 'dim');
+    L.add('new', 'mạch mới (chưa methyl)', [-6.3, -1.5, 0], gMMR, 'dim');
+    L.add('misL', 'bắt cặp sai', [2.2, -1.6, 0], gMMR, 'warn');
+    L.add('mS', 'MutS', [0.9, 0.6, 0], mutS, 'tag'); L.add('mL', 'MutL', [-0.7, 0.8, 0], mutL, 'tag'); L.add('mH', 'MutH: rạch ở GATC', [0.6, -1.4, 0], mutH, 'tag');
     L.add('fixed', '✅ sửa đúng mạch mới', [0, 3.2, 0], gMMR, 'good');
     L.add('wrong', '❌ dam⁻: không biết mạch nào mới → có thể sửa nhầm mạch cũ', [0, 3.2, 0], gMMR, 'warn');
 
@@ -257,7 +258,7 @@ export default {
       return { g, gene, st, rep, pol, rna, pili };
     };
     const cellL = mkCell(-7), cellR = mkCell(7);
-    L.add('phOn', 'Dam thắng → methyl GATC → BẬT (có pili)', [-7, 4.6, 0], gPh, 'good');
+    L.add('phOn', 'Dam thắng → methyl GATC → BẬT (có pili)', [-6, 4.6, 0], gPh, 'good');
     L.add('phOff', 'repressor thắng → che GATC → TẮT', [7, 4.6, 0], gPh, 'warn');
     L.add('phLock', '❌ dam⁻: cả hai bị khóa TẮT', [-7, 4.6, 0], gPh, 'warn');
     L.add('gatcL', 'GATC', [-8.3, 0.7, 0], gPh, 'dim');
@@ -288,9 +289,9 @@ export default {
       api.readout(t);
     };
 
-    api.toggle('💥 Không có MTase (R-M)', false, (x) => { noMT = x; ctl.setStep(cur); });
-    api.toggle('Phage đã methyl hóa sẵn', false, (x) => { preMe = x; ctl.setStep(cur); });
-    api.toggle('💥 dam⁻ (không có Dam)', false, (x) => { damM = x; ctl.setStep(cur); });
+    api.toggle('💥 Không có MTase (R-M)', false, (x) => { noMT = x; ctl.setStep(cur, true); });
+    api.toggle('Phage đã methyl hóa sẵn', false, (x) => { preMe = x; ctl.setStep(cur, true); });
+    api.toggle('💥 dam⁻ (không có Dam)', false, (x) => { damM = x; ctl.setStep(cur, true); });
 
     const CAMS = [
       [[0, 1.5, 25], [0, 0.6, 0]], [[0, 2.5, 19], [0, 1.2, 0]], [[3, 2, 23], [2, 0.8, 0]], [[1, 0.5, 24], [1, 0, 0]],
@@ -298,7 +299,7 @@ export default {
     ];
 
     const ctl = {
-      setStep(s) {
+      setStep(s, fromToggle) {
         cur = s; tt = 0;
         const G = groupOf(s);
         groups.forEach(g => { g.visible = g === G; });
@@ -310,8 +311,8 @@ export default {
         phage.visible = s >= 2;
         progeny.forEach(m => m.scale.setScalar(0.001));
         mtase.visible = s <= 1 && !noMT || (s === 0);
-        mtase.position.set(s === 1 ? -7 : -3, HOST_Y + 1.4, 0.8);
-        rease.position.set(s === 0 ? 3 : 0, s === 0 ? HOST_Y + 1.6 : -0.2, 1.0);
+        mtase.position.set(s === 1 ? -7 : -4.5, HOST_Y + 1.4, 0.8);
+        rease.position.set(s === 0 ? 4.5 : 0, s === 0 ? HOST_Y + 1.6 : -0.2, 1.0);
         // ---- EcoRI snap ----
         leftH.position.set(0, 0, 0); rightH.position.set(0, 0, 0); rightH.visible = s === 4;
         insH.visible = s === 5; insH.position.set(5, -2.5, 0);
@@ -320,7 +321,7 @@ export default {
         cutLine.visible = s === 4;
         ecoEnz.position.set(0, 4, 1); ecoEnz.visible = s === 4;
         ligase.visible = false; spark.visible = false;
-        ecoLabels.forEach(l => api.showLabel(l, s === 4 || s === 5));
+        showEco(leftH, s === 4 || s === 5); showEco(rightH, s === 4); showEco(insH, s === 5);
         // ---- MMR snap ----
         mTop.forEach(b => { b.material.color.set(C.dna1); api.setOpacity(b, 1); });
         mBot.forEach(b => { b.material.color.set(NEW); api.setOpacity(b, 1); });
@@ -354,7 +355,7 @@ export default {
         if (s === 8) k.push(damM ? 'phLock' : 'phOn', 'phOff', 'gatcL', 'repL', 'gen');
         ctl._base = k;
         L.only(k);
-        api.camera(...CAMS[s]);
+        if (!fromToggle) api.camera(...CAMS[s]);
         readout();
       },
       _base: [],
