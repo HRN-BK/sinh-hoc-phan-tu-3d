@@ -257,6 +257,7 @@ async function renderTraps(main) {
   const mods = await Promise.all(LESSONS.map(l => l.load().then(m => [l, m.default]).catch(() => [l, null])));
   if (location.hash !== '#/traps') return;
   main.innerHTML = `<div class="lesson-head"><h1>⚠️ Tổng hợp bẫy dễ nhầm</h1><p class="sub">Đọc nhanh trước giờ thi. Che dòng xanh lại, tự nói "thật ra là…" rồi mới mở ra xem.</p></div>
+  <div class="box warn">⭐ <b>Bẫy số 1: AUG ≠ promoter.</b> <b>Promoter</b> (hộp −35 TTGACA, −10 TATAAT ở vi khuẩn; TATA box ở nhân thực) là trình tự <b>DNA</b> nằm <b>trước +1</b>, nơi RNA polymerase bám để <b>bắt đầu PHIÊN MÃ</b>. Nó không được phiên mã nên <b>không có trong mRNA</b>.<br><b>AUG</b> là <b>codon mở đầu trên mRNA</b>, nằm <b>sau</b> +1 (sau 5′UTR/SD), nơi ribosome <b>bắt đầu DỊCH MÃ</b>.<br>Hỏng promoter thì không có mRNA. Hỏng AUG thì vẫn có mRNA nhưng không dịch đúng. Xem <a href="#/l/dogma">Bài 1</a> và <a href="#/l/txprok">Bài 10</a>.</div>
   <div class="tabs"><button id="hideAll">🙈 Che hết đáp án</button><button id="showAll">👀 Hiện hết</button></div>
   ${mods.filter(([, L]) => L?.traps?.length).map(([meta, L]) => `<div class="sec trap"><h2><a href="#/l/${meta.id}">Bài ${meta.num}. ${L.title}</a></h2>${L.traps.map(t => `<div class="trap-item"><div class="t">${t.trap}</div><div class="f">${t.truth}</div></div>`).join('')}</div>`).join('')}`;
   const setHide = (on) => main.querySelectorAll('.trap-item .f').forEach(f => { f.style.filter = on ? 'blur(6px)' : ''; f.style.cursor = 'pointer'; f.onclick = () => f.style.filter = ''; });
