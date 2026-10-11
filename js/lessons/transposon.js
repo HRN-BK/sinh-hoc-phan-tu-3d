@@ -160,13 +160,13 @@ export default {
     L.add('el', 'DNA transposon (Tn5)', [0, -1.9, 0], gEl, 'big');
     L.add('me', '↓ đầu ME', [-2.6, 1.5, 0], gEl, 'dim');
     L.add('me2', 'đầu ME ↓', [2.6, 1.5, 0], gEl, 'dim');
-    L.add('host', 'DNA vật chủ (cho)', [-8, 4.6, 0], null, 'dim');
+    L.add('host', 'DNA vật chủ (cho)', [-8, 5.5, 0], null, 'dim');
     L.add('tgt', 'DNA đích', [-1.6, -1.9, 0], gTL, 'dim');
     L.add('tnp', 'Transposase', [0, 0, 0], null);
     L.add('syn', 'Phức hợp synapse', [-3, 7.7, 0], null, 'good');
     L.add('cut', 'Cắt 2 đầu → nhấc ra', [-9, 5.6, 0], null);
     L.add('gap', 'DNA cho bị ĐỨT → vật chủ phải sửa', [-3, 1.3, 0], null, 'warn');
-    L.add('cap', 'Bắt giữ đích → chuyển mạch', [1, 0.6, 0], null);
+    L.add('cap', 'Bắt giữ đích → chuyển mạch', [1, -0.2, 0], null);
     L.add('tsd', 'TSD', [1.75, 1.6, 0], gTL, 'good');
     L.add('tsd2', 'TSD', [-1.75, 1.6, 0], gTR, 'good');
     L.add('rna', 'RNA trung gian', [3.6, 0.2, 0], gR);
@@ -176,8 +176,8 @@ export default {
     L.add('krab', 'KRAB-ZFP nhận diện', [0, 0, 0], null);
     L.add('kap1', 'KAP1 → H3K9me3 + methyl DNA', [0, 0, 0], null);
     L.add('silent', 'dị nhiễm sắc: IM LẶNG', [0.6, -3.3, 0], gEl, 'good');
-    L.add('rna2', 'RNA transposon (khuôn)', [-4.6, 1.3, 0], gM, 'dim');
-    L.add('cdna', 'cDNA đang tạo', [-4.3, -0.9, 0], gM, 'dim');
+    L.add('rna2', 'RNA transposon (khuôn)', [-3.9, 1.3, 0], gM, 'dim');
+    L.add('cdna', 'cDNA đang tạo', [-4.0, -0.9, 0], gM, 'dim');
     L.add('apo', 'APOBEC: C → U', [0, 0, 0], null);
     L.add('piwi', 'PIWI + piRNA', [0, 0, 0], null);
     L.add('cutR', 'RNA bị cắt ✂', [-3, 2.4, 0], null, 'good');
@@ -192,7 +192,7 @@ export default {
     const ph = progress(0.17);
     const vis = (o, on, op = 0.7) => { if (o.userData.on !== on) { o.userData.on = on; api.fadeTo(o, on ? op : 0, 6); } };
     const CAMS = [[[-1, 1, 19], [-1.5, 0, 0]], [[-3, 4.5, 13], [-3, 3.6, 0]], [[-3, 4.5, 13], [-3, 4, 0]], [[-2, 4.5, 17], [-2.5, 4.5, 0]], [[0, 1.5, 24], [-0.5, 0.5, 0]],
-      [[-3, 4.5, 14], [-3, 4.2, 0]], [[0, 1.5, 24], [-0.5, 0.5, 0]], [[-2, 2.5, 21], [-1.5, 1.5, 0]], [[-3, 0.6, 10], [-3.2, 0.2, 0]], [[-3, 0.8, 11], [-3, 0.6, 0]]];
+      [[-3, 4.5, 14], [-3, 4.2, 0]], [[0, 1.5, 24], [-0.5, 0.5, 0]], [[-2, 2.5, 21], [-1.5, 1.5, 0]], [[-3.5, 0.6, 12], [-3.7, 0.2, 0]], [[-3.5, 0.8, 12], [-3.6, 0.6, 0]]];
     const tg = {};
     const refresh = () => { ctl.setStep(cur); readout(); };
     tg.tnp = api.toggle('💥 Hỏng transposase', false, (x) => { tnpBad = x; refresh(); });
@@ -218,7 +218,7 @@ export default {
       const retro = cur >= 5;
       const insert = (g) => { tlx = lerp(-1.5, -4.5, g); trx = lerp(3.5, 6.5, g); };
       if (cur === 0) keys.push('el', 'me', 'me2', 'host', 'tgt');
-      else if (cur <= 4 && tnpBad) { keys.push('el', 'tgt'); msg = '❌ Transposase hỏng → transposon không nhảy được'; }
+      else if (cur <= 4 && tnpBad) { keys.push('el'); if (cur === 4) keys.push('tgt'); msg = '❌ Transposase hỏng → transposon không nhảy được'; }
       else if (cur === 1) { const g = ease(clamp(f / 0.5)); aOn = true; A = v.set(lerp(-9, -5.9, g), lerp(7, 4.5, g), 0.3).clone(); B = new THREE.Vector3(lerp(3, -0.1, g), lerp(7, 4.5, g), 0.3); keys.push('el', 'me', 'me2', 'tnp'); }
       else if (cur === 2) { const g = ease(clamp(f / 0.6)); aOn = true; ely = 3 + 0.5 * g; A = new THREE.Vector3(lerp(-5.9, -3.75, g), lerp(4.5, 5.6, g), 0.3); B = new THREE.Vector3(lerp(-0.1, -2.25, g), lerp(4.5, 5.6, g), 0.3); keys.push('el', 'tnp'); if (f > 0.5) keys.push('syn'); }
       else if (cur === 3) {
@@ -231,7 +231,7 @@ export default {
         elx = lerp(-3, 1, g1); ely = lerp(5.6, -0.5, g1); insert(g2); ely = lerp(ely, -3.5, g3);
         aOn = f < 0.9; A = new THREE.Vector3(elx - 0.75, ely + 2.1, 0.3); B = new THREE.Vector3(elx + 0.75, ely + 2.1, 0.3);
         if (f > 0.38 && f < 0.52) { spk = [0.75, -3.5]; spk2 = [1.25, -3.5]; }
-        tsdOn = f > 0.85; keys.push('el', 'gap', 'tgt'); if (f > 0.1 && f < 0.8) keys.push('cap'); if (tsdOn) keys.push('tsd', 'tsd2');
+        tsdOn = f > 0.85; keys.push('el', 'gap', 'tgt'); if (f > 0.33 && f < 0.8) keys.push('cap'); if (tsdOn) keys.push('tsd', 'tsd2');
       } else if (cur === 5) {
         rnaOn = true; rnaK = 12 * clamp((f - 0.1) / 0.5); ry = 3 + 2.1 * ease(clamp((f - 0.1) / 0.3)) + 0.8 * ease(clamp((f - 0.65) / 0.3));
         keys.push('el'); if (f > 0.25) keys.push('rna');
@@ -268,6 +268,8 @@ export default {
       if (tsg && keys.includes('tgt')) { const hit = (cur === 4 && f > 0.4 && !tnpBad) || (cur === 6 && f > 0.4 && !rtBad) || (cur === 7 && defOff && f > 0.6); setT('tgt', hit ? 'Gene APC bị cắt đôi ✗' : 'Gene APC (ức chế khối u)'); setC('tgt', hit ? 'warn' : 'dim'); }
       else { setT('tgt', 'DNA đích'); setC('tgt', 'dim'); }
       L.get('el').position.y = retro ? 1.7 : -1.9;
+      L.get('rna').position.y = cur === 6 ? -0.9 : 0.2;
+      L.get('tgt').position.x = tsg ? -2.6 : -1.6;
       setT('el', !retro ? 'DNA transposon (Tn5)' : cur <= 6 ? 'L1: bản gốc vẫn ở lại' : 'Retrotransposon (L1)');
       if (msg) { L.get('msg').position.set(cur >= 8 ? -3 : -1, cur >= 8 ? -2.3 : 6.3, 0); setT('msg', msg); keys.push('msg'); }
       // ---- apply ----
@@ -284,8 +286,8 @@ export default {
       tethA.visible = tethB.visible = aOn && tnA.position.distanceTo(A) < 3;
       if (tethA.visible) { e1.set(gEl.position.x - 2.6, gEl.position.y + 0.4, 0); e2.set(gEl.position.x + 2.6, gEl.position.y + 0.4, 0); api.setStick(tethA, e1, tnA.position); api.setStick(tethB, e2, tnB.position); }
       vis(rt, rtOn && !rtBad); rt.position.lerp(rtOn && !rtBad ? v.set(1, -1.6, 1.2) : OFF, k); follow('rt', rt, 1.3);
-      vis(krab, kOn); krab.position.lerp(kOn ? v.set(-6.0, 2.3, 1.2) : OFF, k); follow('krab', krab, -1.2);
-      vis(kap1, k1On); kap1.position.lerp(k1On ? v.set(-1.0, 4.7, 0.8) : OFF, k); follow('kap1', kap1, 1.2);
+      vis(krab, kOn); krab.position.lerp(kOn ? v.set(-6.0, 2.3, 1.2) : OFF, k); L.get('krab').position.set(-6.0, 1.1, 1.2);
+      vis(kap1, k1On); kap1.position.lerp(k1On ? v.set(-1.0, 4.7, 0.8) : OFF, k); L.get('kap1').position.set(-1.0, 5.9, 0.8);
       gM.visible = midOn; gDL.visible = gEl.visible = gDR.visible = gTL.visible = gTR.visible = !midOn;
       cdna.items.forEach((it, i) => { const isC = CD[i] === 'C'; const ci = CD.slice(0, i + 1).split('C').length - 1; it.base.material.color.setHex(isC && ci <= apoK ? C.U : C[CD[i]]); });
       vis(apo, apOn); const ai = Math.min(11, Math.max(0, [...CD].reduce((a, c, i) => (c === 'C' && CD.slice(0, i + 1).split('C').length - 1 <= apoK ? i : a), 0)));

@@ -43,7 +43,8 @@ export default {
   <p><b>Thí nghiệm DHFR + methotrexate</b> (Eilers & Schatz, 1986): nối enzyme DHFR vào sau trình tự định hướng. Thêm methotrexate (gắn chặt vào DHFR) làm DHFR gấp cứng lại, và protein <b>kẹt ở lỗ nhập</b>. Đây là bằng chứng protein phải được <b>duỗi</b> mới qua màng.</p>
   <p><b>Chất khử ghép</b> (CCCP, FCCP) phá Δψ, nên được dùng trong phòng thí nghiệm để chứng minh bước qua Tim23 cần điện thế màng.</p>
   <div class="box info">Thêm (ngoài slide): nhiều protein sau khi vào chất nền còn được chaperonin <b>Hsp60/Hsp10</b> (một "buồng" kín hình thùng) giúp gấp nếp, giống GroEL/GroES ở vi khuẩn.</div>
-  <div class="box warn">Slide rút gọn đường đi. Thực tế còn <b>Tim50</b> (thụ thể của Tim23 ở khoảng gian màng), <b>Tom70</b> (thụ thể cho protein có tín hiệu nằm bên trong chuỗi), và các đường khác: <b>TIM22</b> cho protein mang của màng trong, <b>SAM</b> cho protein β-barrel màng ngoài. Bài này chỉ theo đường của protein có trình tự định hướng ở đầu N, đi vào chất nền.</div>`,
+  <div class="box warn">Slide rút gọn đường đi. Thực tế còn <b>Tim50</b> (thụ thể của Tim23 ở khoảng gian màng), <b>Tom70</b> (thụ thể cho protein có tín hiệu nằm bên trong chuỗi), và các đường khác: <b>TIM22</b> cho protein mang của màng trong, <b>SAM</b> cho protein β-barrel màng ngoài. Bài này chỉ theo đường của protein có trình tự định hướng ở đầu N, đi vào chất nền.</div>
+  <div class="box info">Thêm (ngoài slide): (1) Khi có CCCP, tiền chất thực ra thường kẹt ngay ở phức hợp <b>TOM</b>, đầu N cùng lắm chỉ ló vào khoảng gian màng. Slide và mô hình 3D vẽ gọn là "dừng ở khoảng gian màng". (2) "Sau dịch mã" là cách nói rút gọn: một số protein ty thể được nhập <b>đồng dịch mã</b>, khi ribosome nằm sát màng ngoài ty thể. Đi thi vẫn trả lời theo slide.</div>`,
 
   distinguish: `<div class="tbl-wrap"><table class="cmp">
   <tr><th></th><th>Nhập vào ER</th><th>Nhập vào ty thể (chất nền)</th></tr>
@@ -188,7 +189,7 @@ export default {
     const ph = progress(0.17);
     const vis = (o, on, op = 0.85) => { if (o.userData.on !== on) { o.userData.on = on; api.fadeTo(o, on ? op : 0, 6); } };
     const CAMS = [[[-8, 1.5, 13], [-9, 0.5, 0]], [[-7.5, 1, 13], [-8.5, 0.5, 0]], [[-4.5, 1, 10], [-5, 0, 0]], [[-2.5, 0.5, 11], [-3.2, 0, 0]],
-      [[1.5, 0.5, 13], [1, 0, 0]], [[5, 0, 15], [4.5, -0.5, 0]], [[8, -1, 13], [7.5, -1.5, 0]], [[1, 0.5, 21], [0, 0, 0]]];
+      [[1.5, 0.5, 13], [1, 0, 0]], [[5, 0, 15], [4.5, -0.5, 0]], [[8, -1, 13], [7.5, -1.5, 0]], [[2.3, 0.5, 24], [1.8, 0, 0]]];
     const tg = {};
     const refresh = () => { ctl.setStep(cur); };
     tg.sig = api.toggle('💥 Xóa trình tự định hướng', false, (x) => { noSig = x; refresh(); });
@@ -318,7 +319,9 @@ export default {
       at('mthsp', mt[0].userData.on ? mt[0].position : mt[1].position, 0, 1.0);
       at('mpp', mpp.position, 0.4, 1.0);
       at('deg', beads[2].position, -0.6, -0.8);
-      at('fold', FOLD_C, 0, -1.9);
+      at('fold', FOLD_C, -0.6, -1.9);
+      L.get('cyto').position.x = cur === 7 ? -6 : -10.5;
+      L.get('ims').position.set(cur === 3 ? -0.4 : 0, cur === 3 ? -3.5 : -4.3, 0.6);
       if (msg) { for (const k of ['om', 'im', 'psi']) { const j = keys.indexOf(k); if (j >= 0) keys.splice(j, 1); } const [, lk] = CAMS[cur]; L.get('msg').position.set(lk[0], lk[1] + 0.33 * CAMS[cur][0][2], 0); setT('msg', msg); keys.push('msg'); }
       show(keys);
     }

@@ -188,7 +188,7 @@ export default {
     const peps = [0, 1, 2, 3, 4].map(() => { const s = api.box(0.35, 0.12, 0.12, C.protein); s.visible = false; return s; });
 
     // ---- labels ----
-    L.add('lumen', 'Lòng ER: môi trường OXY HÓA', [-10, 5.4, 0], null, 'good');
+    L.add('lumen', 'Lòng ER: môi trường OXY HÓA', [-10, 4.8, 0], null, 'good');
     L.add('cyto', 'Tế bào chất: môi trường KHỬ', [-3, -7.3, 0], null, 'dim');
     L.add('ribo', 'Ribosome', [-11.3, -5.6, 0], null);
     L.add('sec', 'Sec61', [-10.4, -2.3, 0], null, 'dim');
@@ -353,9 +353,13 @@ export default {
         sugarOn[GLC1] = sugarOn[GLC2] = sugarOn[GLC3] = false;
         const nCut = Math.min(4, Math.floor(clamp((f - 0.05) / 0.6) * 5));
         MAN_TRIM.forEach((j, n) => { sugarOn[j] = n >= nCut; });
-        if (nCut < 4) { place(mns, true, sugarWorld(MAN_TRIM[Math.min(3, nCut)], tmp).add(V(0.7, 0.1, 0.5))); keys.push('mns'); }
-        setT('clock', ['Man₉', 'Man₈', 'Man₇', 'Man₆', 'Man₅'][nCut]); keys.push('clock', 'hyd'); at('clock', beads[ASN].position, -2.4, -1.5);
-        if (f > 0.72) { place(os9, true, sugarWorld(12, tmp).add(V(0.5, -0.7, 0.5))); keys.push('os9'); }
+        keys.push('hyd');
+        if (tuni) msg = '❌ Không có glycan → không có “đồng hồ” mannose';
+        else {
+          if (nCut < 4) { place(mns, true, sugarWorld(MAN_TRIM[Math.min(3, nCut)], tmp).add(V(0.7, 0.1, 0.5))); keys.push('mns'); }
+          setT('clock', ['Man₉', 'Man₈', 'Man₇', 'Man₆', 'Man₅'][nCut]); keys.push('clock'); at('clock', beads[ASN].position, -2.4, -1.5);
+          if (f > 0.72) { place(os9, true, sugarWorld(12, tmp).add(V(0.5, -0.7, 0.5))); keys.push('os9'); }
+        }
       } else if (cur === 8) {
         // ERAD
         glyRot = Math.PI; sugarOn = sugarOn.map(() => false); [0, 1, 2, 3, 9, 10, 12].forEach(j => { sugarOn[j] = true; });
@@ -430,12 +434,13 @@ export default {
       const kk = snap ? 1 : 1 - Math.exp(-dt * 6);
       for (const b of BLOBS) { const on = want.has(b); vis(b, on); b.position.lerp(on ? want.get(b) : OFF, kk); }
       // label anchors
-      at('ost', ost.position, -2.2, -0.2); at('bip', bip.position, 0, 1.1); at('glu1', gluI.position, -0.3, 0.9); at('glu2', gluII.position, -0.3, 0.9);
-      at('cnx', cnx.position, -1.9, -0.2); at('pdi', pdi.position, 0.5, -1.2); at('ero1', ero1.position, 0.4, 1.1); at('uggt', uggt.position, -0.6, -1.0);
-      at('mns', mns.position, 0.6, 1); at('os9', os9.position, 1.3, -0.6); at('asn', beads[ASN].position, -1.6, 0); at('man8', beads[ASN].position, -1.8, -1.2);
-      at('cys', beads[6].position, 1.2, -0.3); at('hyd', beads[9].position, 0, -0.75);
-      L.get('cyto').position.x = cur === 8 ? 1.8 : -3;
-      if (msg) { L.get('msg').position.set(cur === 8 ? 5 : cur <= 1 ? -6 : 0.5, cur === 8 ? 1.4 : cur <= 1 ? 3.8 : 5.4, 0); setT('msg', msg); keys.push('msg'); }
+      const tp = (b) => want.get(b) || b.position;   // anchor to where the blob is going, so labels don't fly in with it
+      at('ost', tp(ost), -2.2, -0.2); at('bip', tp(bip), -2.4, 0.3); at('glu1', tp(gluI), -0.3, 0.9); at('glu2', tp(gluII), -0.3, 0.9);
+      at('cnx', tp(cnx), -1.9, -0.2); at('pdi', tp(pdi), 0.5, -1.2); at('ero1', tp(ero1), 0.4, 1.1); at('uggt', tp(uggt), -0.6, -1.0);
+      at('mns', tp(mns), 0.6, 1); at('os9', tp(os9), 1.3, -0.6); at('asn', beads[ASN].position, -1.6, 0.4); at('man8', beads[ASN].position, -1.8, -1.2);
+      at('cys', beads[6].position, 1.2, -0.3); at('hyd', beads[9].position, 0, cur <= 1 ? -1.1 : -0.75);
+      L.get('cyto').position.set(cur === 8 ? 1.8 : -3, cur === 8 ? -9.4 : -7.3, 0);
+      if (msg) { L.get('msg').position.set(cur === 8 ? 5 : cur <= 1 ? -6 : cur === 6 ? 2.5 : 0.5, cur === 8 ? 1.4 : cur <= 1 ? 3.8 : cur === 6 ? -2.6 : 5.4, 0); setT('msg', msg); keys.push('msg'); }
       show(keys);
     }
 

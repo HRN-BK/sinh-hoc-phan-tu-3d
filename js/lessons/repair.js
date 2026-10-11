@@ -14,7 +14,7 @@ export default {
     <li><b>NHEJ</b> (Non-Homologous End Joining, nối đầu không tương đồng): nhanh nhưng dễ sai.</li></ul></li></ul>`,
 
   without: `<ul>
-  <li><b>Không có BER:</b> các base hỏng tích lũy. Ví dụ T đối diện G (do 5-methylcytosine bị khử amin) không được sửa. Sau một lần sao chép, một tế bào con mang cặp <b>T–A</b> thay cho C–G, tức đột biến điểm C→T. Đột biến gene glycosylase <b>MUTYH</b> (sửa lỗi do 8-oxoG) gây <b>bệnh đa polyp đại tràng</b> và tăng nguy cơ ung thư đại trực tràng.</li>
+  <li><b>Không có BER:</b> các base hỏng tích lũy. Ví dụ T đối diện G (do 5-methylcytosine bị khử amin) không được sửa. Sau một lần sao chép, một tế bào con mang cặp <b>T–A</b> thay cho C–G, tức đột biến điểm C→T. Đột biến gene glycosylase <b>MUTYH</b> (gỡ A bắt cặp sai đối diện 8-oxoG) gây <b>bệnh đa polyp đại tràng</b> và tăng nguy cơ ung thư đại trực tràng.</li>
   <li><b>Không có HR</b> (ví dụ đột biến <b>BRCA1/BRCA2</b>): tế bào phải dựa vào NHEJ/SSA dễ sai, nên hệ gene mất ổn định. Người mang đột biến BRCA có nguy cơ cao <b>ung thư vú và buồng trứng</b>.</li>
   <li><b>Không có NHEJ</b> (ví dụ hỏng DNA-PKcs, Artemis, Ligase IV): tế bào <b>rất nhạy với tia xạ</b>. Ngoài ra, tế bào lympho không nối được các đoạn gene kháng thể và thụ thể T (tái tổ hợp V(D)J dùng NHEJ), gây <b>suy giảm miễn dịch kết hợp nặng (SCID)</b>.</li>
   <li><b>DSB không được sửa:</b> mất cả đoạn nhiễm sắc thể, chuyển đoạn, hoặc tế bào tự chết theo chương trình (qua p53).</li></ul>
@@ -64,7 +64,7 @@ export default {
   <tr><th>Sửa DSB bằng HR</th><th>Nhân sơ (<i>E. coli</i>)</th><th>Nhân thực</th></tr>
   <tr><td>Cắt gọt đầu gãy</td><td><b>RecBCD</b>, đổi kiểu cắt khi gặp trình tự <b>Chi</b></td><td>MRN + CtIP, rồi Exo1 / DNA2</td></tr>
   <tr><td>Phủ đuôi 3′, xâm nhập</td><td><b>RecA</b></td><td><b>Rad51</b> (họ hàng RecA), nạp nhờ BRCA2</td></tr>
-  <tr><td>NHEJ</td><td>Hầu như không có ở <i>E. coli</i> (chỉ một số vi khuẩn có Ku + LigD)</td><td>Rất quan trọng (Ku70/80, Ligase IV)</td></tr>
+  <tr><td>NHEJ</td><td>Không có ở <i>E. coli</i> (chỉ một số vi khuẩn, như <i>Mycobacterium</i>, có Ku + LigD)</td><td>Rất quan trọng (Ku70/80, Ligase IV)</td></tr>
   </table></div>`,
 
   traps: [
@@ -209,7 +209,7 @@ export default {
     const ph = progress(0.18);
     const vis = (o, on, op = 0.85) => { if (o.userData.on !== on) { o.userData.on = on; api.fadeTo(o, on ? op : 0, 6); } };
     const ENZ_OP = 0.6;
-    const CAMS = [[[0, 2.5, 12], [0.25, 0, 0]], [[2.5, 3, 9.5], [0.25, 0.8, 0]], [[2.5, 3, 9.5], [0.25, 0.6, 0]], [[2.5, 3, 9.5], [0.25, 0.6, 0]], [[1.5, 2.5, 10.5], [0.25, 0.4, 0]],
+    const CAMS = [[[0, 2.5, 12], [0.25, 0, 0]], [[2.0, 3, 11], [0.25, 0.8, 0]], [[2.0, 3, 11], [0.25, 0.6, 0]], [[2.0, 3, 11], [0.25, 0.6, 0]], [[1.0, 2.5, 11.6], [0.25, 0.4, 0]],
       [[0, 2.5, 20], [0, 1, 0]], [[0, 3.2, 19.5], [0, 2.6, 0]], [[0, 2.8, 20], [0, 1.4, 0]], [[-1, 2, 19], [-1.5, 0, 0]], [[5, 3.5, 13], [0, 0.4, 0]]];
     const tg = {};
     const refresh = () => { ctl.setStep(cur); readout(); };
