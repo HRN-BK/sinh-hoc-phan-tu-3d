@@ -1,0 +1,1061 @@
+[
+ {
+  "title": "ĐỀ 1: CƠ BẢN (nhớ và hiểu)",
+  "mc": [
+   {
+    "q": "Liên kết tạo nên khung (backbone) của mỗi mạch DNA là",
+    "ops": [
+     "Hydrogen",
+     "Phosphodiester",
+     "Peptide",
+     "Glycosidic giữa 2 base"
+    ],
+    "a": 1,
+    "e": "Phosphodiester nối 3'-OH đường này với 5'-phosphate đường kế tiếp. Hydrogen nối 2 mạch với nhau."
+   },
+   {
+    "q": "Cặp base G–C có bao nhiêu liên kết hydrogen?",
+    "ops": [
+     "1",
+     "2",
+     "3",
+     "4"
+    ],
+    "a": 2,
+    "e": "G≡C có 3 liên kết H, A=T có 2."
+   },
+   {
+    "q": "Theo phân tích tinh thể (X-ray diffraction), mỗi vòng xoắn DNA dài 34 Å và chứa khoảng",
+    "ops": [
+     "3,4 bp",
+     "10 bp",
+     "20 bp",
+     "34 bp"
+    ],
+    "a": 1,
+    "e": "34 Å/10 bp, nên mỗi cặp base cách nhau 3,4 Å."
+   },
+   {
+    "q": "RNA kém bền hơn DNA chủ yếu vì",
+    "ops": [
+     "RNA có base U",
+     "Ribose có nhóm 2'-OH dễ tấn công liên kết phosphodiester",
+     "RNA nằm trong tế bào chất",
+     "RNA nhạy UV hơn"
+    ],
+    "a": 1,
+    "e": "Nhóm 2'-OH làm RNA dễ tự thủy phân, nhất là trong môi trường kiềm."
+   },
+   {
+    "q": "hnRNA là",
+    "ops": [
+     "RNA nhỏ trong nhân tham gia splicing",
+     "pre-mRNA chưa xử lý trong nhân",
+     "RNA của ribosome",
+     "RNA can thiệp nhỏ"
+    ],
+    "a": 1,
+    "e": "Heterogeneous nuclear RNA chính là pre-mRNA. snRNA mới là RNA tham gia splicing."
+   },
+   {
+    "q": "Liên kết chủ yếu giữ cấu trúc bậc 2 (xoắn α, phiến β) của protein là",
+    "ops": [
+     "Peptide",
+     "Di-sulfide",
+     "Hydrogen",
+     "Ion"
+    ],
+    "a": 2,
+    "e": "Liên kết H giữa nhóm C=O và N–H của khung peptide."
+   },
+   {
+    "q": "Điện di carbohydrate cần xử lý borate vì",
+    "ops": [
+     "Borate làm đường phát huỳnh quang",
+     "Borate tạo phức với cis-diol làm đường mang điện âm",
+     "Borate cắt polysaccharide",
+     "Borate làm biến tính protein lẫn trong mẫu"
+    ],
+    "a": 1,
+    "e": "Đường trung tính không di chuyển trong điện trường; phức với borate mang điện âm."
+   },
+   {
+    "q": "Lipid raft giàu",
+    "ops": [
+     "Acid béo không bão hòa",
+     "Cholesterol và sphingolipid",
+     "Triglyceride",
+     "Phospholipid chuỗi ngắn"
+    ],
+    "a": 1,
+    "e": "Raft gồm cholesterol, glycosphingolipid và protein xuyên màng."
+   },
+   {
+    "q": "Thế hệ thứ nhất trong thí nghiệm Meselson–Stahl cho 1 vạch lai, điều này loại bỏ giả thuyết",
+    "ops": [
+     "Bán bảo toàn",
+     "Bảo toàn",
+     "Phân tán",
+     "Cả bảo toàn và phân tán"
+    ],
+    "a": 1,
+    "e": "Giả thuyết bảo toàn sẽ cho 2 vạch (nặng và nhẹ). Giả thuyết phân tán chỉ bị loại ở thế hệ 2."
+   },
+   {
+    "q": "Enzyme tháo xoắn 2 mạch DNA ở chạc sao chép là",
+    "ops": [
+     "Topoisomerase",
+     "Helicase",
+     "Primase",
+     "Ligase"
+    ],
+    "a": 1,
+    "e": "Helicase tách 2 mạch. Topoisomerase giải siêu xoắn phía trước chạc."
+   },
+   {
+    "q": "Protein giữ cho DNA sợi đơn không bắt cặp lại là",
+    "ops": [
+     "SSB",
+     "DnaA",
+     "Rho",
+     "TBP"
+    ],
+    "a": 0,
+    "e": "Single-strand binding protein."
+   },
+   {
+    "q": "Đoạn Okazaki được tổng hợp trên",
+    "ops": [
+     "Mạch dẫn",
+     "Mạch chậm",
+     "Cả 2 mạch",
+     "mRNA"
+    ],
+    "a": 1,
+    "e": "Mạch chậm được tổng hợp gián đoạn."
+   },
+   {
+    "q": "Enzyme nối các đoạn Okazaki là",
+    "ops": [
+     "DNA polymerase III",
+     "Primase",
+     "DNA ligase",
+     "Helicase"
+    ],
+    "a": 2,
+    "e": ""
+   },
+   {
+    "q": "DNA polymerase gắn nucleotide mới vào",
+    "ops": [
+     "đầu 5'-phosphate",
+     "đầu 3'-OH",
+     "bất kỳ đầu nào",
+     "base"
+    ],
+    "a": 1,
+    "e": "Vì vậy chuỗi chỉ kéo dài theo chiều 5'→3'."
+   },
+   {
+    "q": "Hoạt tính đọc sửa của DNA polymerase là",
+    "ops": [
+     "Exonuclease 5'→3'",
+     "Exonuclease 3'→5'",
+     "Endonuclease",
+     "Ligase"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Ở eukaryote, primase đi kèm với",
+    "ops": [
+     "Pol α",
+     "Pol δ",
+     "Pol ε",
+     "Pol β"
+    ],
+    "a": 0,
+    "e": "Phức hợp primase–Pol α tổng hợp mồi."
+   },
+   {
+    "q": "T<sub>m</sub> là nhiệt độ mà",
+    "ops": [
+     "DNA bắt đầu tách mạch",
+     "50% DNA đã tách mạch",
+     "100% DNA đã tách mạch",
+     "DNA hồi tính"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Enzyme đầu tiên tác động trong BER là",
+    "ops": [
+     "APE1",
+     "DNA glycosylase",
+     "Pol β",
+     "Ligase"
+    ],
+    "a": 1,
+    "e": "Glycosylase cắt bỏ base sai, tạo vị trí AP."
+   },
+   {
+    "q": "Retrotransposon di chuyển qua",
+    "ops": [
+     "DNA trung gian bị cắt ra",
+     "RNA trung gian và phiên mã ngược",
+     "Protein trung gian",
+     "Tái tổ hợp tương đồng"
+    ],
+    "a": 1,
+    "e": "Cơ chế copy-paste."
+   },
+   {
+    "q": "Trình tự vùng −35 của promoter nhân sơ là",
+    "ops": [
+     "TATAAT",
+     "TTGACA",
+     "TATAAA",
+     "AAUAAA"
+    ],
+    "a": 1,
+    "e": "TATAAT là vùng −10 (Pribnow)."
+   },
+   {
+    "q": "Yếu tố giúp RNA polymerase nhân sơ nhận diện promoter là",
+    "ops": [
+     "σ",
+     "ρ",
+     "TBP",
+     "TFIIH"
+    ],
+    "a": 0,
+    "e": ""
+   },
+   {
+    "q": "Codon mở đầu AUG nằm trên",
+    "ops": [
+     "Promoter của DNA",
+     "mRNA",
+     "tRNA",
+     "rRNA"
+    ],
+    "a": 1,
+    "e": "Promoter nằm trên DNA và không được phiên mã; AUG nằm trên mRNA, sau 5'UTR."
+   },
+   {
+    "q": "Trong operon trp, tryptophan đóng vai trò",
+    "ops": [
+     "Chất cảm ứng",
+     "Chất đồng ức chế (corepressor)",
+     "Activator",
+     "Yếu tố σ"
+    ],
+    "a": 1,
+    "e": "Trp gắn vào repressor giúp repressor bám operator, làm TẮT operon."
+   },
+   {
+    "q": "RNA polymerase II tổng hợp",
+    "ops": [
+     "rRNA 28S",
+     "tRNA",
+     "pre-mRNA",
+     "5S rRNA"
+    ],
+    "a": 2,
+    "e": ""
+   },
+   {
+    "q": "Enzyme duy trì kiểu methyl hóa DNA qua phân bào là",
+    "ops": [
+     "DNMT1",
+     "DNMT3a",
+     "DNMT3b",
+     "DNMT3L"
+    ],
+    "a": 0,
+    "e": "DNMT1 methyl hóa DNA bán methyl hóa sau sao chép."
+   },
+   {
+    "q": "Nucleosome gồm",
+    "ops": [
+     "147 bp quấn 1,67 vòng quanh bát phân histone",
+     "200 bp quấn 2 vòng quanh H1",
+     "147 bp quấn quanh tứ phân histone",
+     "10 bp mỗi vòng"
+    ],
+    "a": 0,
+    "e": "Bát phân = 2×(H2A, H2B, H3, H4)."
+   },
+   {
+    "q": "Heterochromatin",
+    "ops": [
+     "mở, phiên mã mạnh",
+     "đặc, phiên mã ngừng",
+     "chỉ có ở nhân sơ",
+     "không chứa histone"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Ribosome nhân sơ là",
+    "ops": [
+     "80S = 40S + 60S",
+     "70S = 30S + 50S",
+     "70S = 40S + 30S",
+     "80S = 30S + 50S"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "tRNA khởi đầu ở vi khuẩn mang",
+    "ops": [
+     "Met",
+     "fMet",
+     "Trp",
+     "Ser"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Chaperone BiP hoạt động ở",
+    "ops": [
+     "Tế bào chất",
+     "Lưới nội chất",
+     "Ty thể",
+     "Nhân"
+    ],
+    "a": 1,
+    "e": "BiP là Hsp70 của ER."
+   }
+  ],
+  "tl": [
+   {
+    "q": "So sánh DNA và RNA (ít nhất 6 tiêu chí). Giải thích vì sao DNA phù hợp để lưu trữ thông tin lâu dài.",
+    "a": "Đường deoxyribose/ribose; base T/U; sợi kép/đơn; dài/ngắn; nhân + ty thể / nhân + tế bào chất; bền/kém bền; nhạy UV / ít nhạy hơn. DNA bền vì không có 2'-OH, cấu trúc sợi kép bảo vệ base và có mạch bổ sung để sửa sai. Dùng T thay U nên nhận ra C bị khử amin."
+   },
+   {
+    "q": "Trình bày 5 sự kiện ở chạc sao chép. Vì sao có mạch dẫn và mạch chậm?",
+    "a": "Helicase (và topoisomerase) → SSB → mạch dẫn liên tục → primase tạo mồi, Pol kéo dài Okazaki → thay mồi, ligase nối. Pol chỉ tổng hợp 5'→3' từ 3'-OH và cần mồi; 2 mạch ngược chiều nên 1 mạch cùng hướng mở chạc (liên tục), mạch kia ngược hướng (gián đoạn)."
+   },
+   {
+    "q": "Trình bày điều hòa operon lac theo 4 tổ hợp glucose/lactose.",
+    "a": "Lập bảng: G+L− không phiên mã (repressor bám); G+L+ ít (repressor rời, cAMP thấp, CAP không bám); G−L− không (repressor bám); G−L+ mạnh (repressor rời + cAMP–CAP bám)."
+   },
+   {
+    "q": "Phân biệt promoter, operator, terminator, codon mở đầu và codon kết thúc (vị trí, phân tử chứa, chức năng).",
+    "a": "Promoter: DNA, trước +1, RNA pol bám. Operator: DNA, cạnh promoter, repressor bám. Terminator: DNA, cuối gene, dừng phiên mã. AUG: mRNA, sau 5'UTR, bắt đầu dịch mã. Codon STOP (UAA/UAG/UGA): mRNA, trước 3'UTR, dừng dịch mã."
+   }
+  ]
+ },
+ {
+  "title": "ĐỀ 2: VẬN DỤNG",
+  "mc": [
+   {
+    "q": "Mạch mã hóa DNA có đoạn 5'-ATGGCT-3'. Đoạn mRNA tương ứng là",
+    "ops": [
+     "5'-UACCGA-3'",
+     "5'-AUGGCU-3'",
+     "3'-AUGGCU-5'",
+     "5'-AGCCAU-3'"
+    ],
+    "a": 1,
+    "e": "mRNA giống mạch mã hóa, chỉ thay T bằng U."
+   },
+   {
+    "q": "Mạch khuôn có đoạn 3'-TAC-5' (tương ứng codon mở đầu). Anticodon của tRNA khởi đầu (viết 5'→3') là",
+    "ops": [
+     "5'-UAC-3'",
+     "5'-CAU-3'",
+     "5'-AUG-3'",
+     "5'-GUA-3'"
+    ],
+    "a": 1,
+    "e": "Mạch khuôn 3'-TAC-5' → mRNA 5'-AUG-3' → anticodon 3'-UAC-5', viết lại là 5'-CAU-3'. Đây là bẫy chiều."
+   },
+   {
+    "q": "DNA X có 30% A, DNA Y có 20% A. Kết luận đúng là",
+    "ops": [
+     "Tm(X) > Tm(Y)",
+     "Tm(Y) > Tm(X)",
+     "Tm bằng nhau",
+     "Không đủ dữ kiện"
+    ],
+    "a": 1,
+    "e": "Y có 60% GC, X có 40% GC, nên Y có Tm cao hơn."
+   },
+   {
+    "q": "Khi biến tính DNA mạch kép, độ hấp thụ ở 260 nm",
+    "ops": [
+     "giảm",
+     "tăng khoảng 40%",
+     "không đổi",
+     "về 0"
+    ],
+    "a": 1,
+    "e": "Hiệu ứng tăng sắc: base hết xếp chồng nên hấp thụ nhiều hơn."
+   },
+   {
+    "q": "Một chủng E. coli đột biến mất hoạt tính exonuclease 3'→5' của Pol III sẽ",
+    "ops": [
+     "không sao chép được",
+     "sao chép nhưng tần số đột biến tăng mạnh",
+     "không tạo được mồi",
+     "không nối được Okazaki"
+    ],
+    "a": 1,
+    "e": "Mất đọc sửa thì vẫn tổng hợp được nhưng sai nhiều (kiểu hình mutator)."
+   },
+   {
+    "q": "Vì sao DNA polymerase không tổng hợp theo chiều 3'→5'?",
+    "ops": [
+     "Không có dNTP phù hợp",
+     "Nếu cắt bỏ nucleotide sai thì đầu chuỗi mất triphosphate, không kéo dài tiếp được",
+     "Vì RNA mồi chặn lại",
+     "Vì helicase chỉ đi một chiều"
+    ],
+    "a": 1,
+    "e": "Năng lượng lấy từ dNTP đến sau, nên đọc sửa không làm mất năng lượng."
+   },
+   {
+    "q": "Ở E. coli, RecD là",
+    "ops": [
+     "Động cơ 3'→5' có nuclease",
+     "Động cơ 5'→3'",
+     "Tiểu đơn vị nhận diện Chi",
+     "Protein gắn mạch đơn"
+    ],
+    "a": 1,
+    "e": "RecB: 3'→5' + nuclease; RecC: nhận diện Chi."
+   },
+   {
+    "q": "Trong khởi đầu sao chép phage λ, DnaJ/DnaK/GrpE có vai trò",
+    "ops": [
+     "Bám vào oriλ",
+     "Gỡ P protein để giải phóng DnaB",
+     "Tổng hợp mồi",
+     "Nối Okazaki"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Kiểm soát khởi đầu sao chép ở nhân sơ chủ yếu bằng",
+    "ops": [
+     "Phức hợp ORC",
+     "Methyl hóa ori",
+     "Telomerase",
+     "Histone"
+    ],
+    "a": 1,
+    "e": "Dam methyl hóa GATC ở oriC; SeqA giữ ori bán methyl hóa."
+   },
+   {
+    "q": "Cặp sai T–G thường bắt nguồn từ",
+    "ops": [
+     "Khử amin 5-methylcytosine",
+     "Dimer thymine do UV",
+     "Đứt gãy sợi đôi",
+     "Transposon"
+    ],
+    "a": 0,
+    "e": "5-mC khử amin thành T, nên cặp C–G thành T–G."
+   },
+   {
+    "q": "APE1 trong BER có chức năng",
+    "ops": [
+     "Cắt bỏ base sai",
+     "Tạo nick trên khung phosphodiester tại vị trí AP",
+     "Lắp nucleotide mới",
+     "Nối mạch"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Đứt gãy sợi đôi ở pha G1 (chưa có chromatid chị em) chủ yếu được sửa bằng",
+    "ops": [
+     "HR",
+     "NHEJ",
+     "BER",
+     "Mismatch repair"
+    ],
+    "a": 1,
+    "e": "HR cần khuôn tương đồng, chỉ có ở pha S/G2."
+   },
+   {
+    "q": "Cơ chế bảo vệ dùng cytidine deaminase để phá yếu tố di động là",
+    "ops": [
+     "KRAB/KAP1",
+     "APOBEC",
+     "PIWI/piRNA",
+     "DNMT1"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Vùng −10 là nơi DNA tách mạch vì",
+    "ops": [
+     "Giàu G–C",
+     "Giàu A–T, ít liên kết H",
+     "Có σ bám chặt",
+     "Có Rho"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Kết thúc phiên mã kiểu không phụ thuộc Rho cần",
+    "ops": [
+     "Vùng rut giàu C",
+     "Hairpin giàu GC và dãy U phía sau",
+     "TTF-1",
+     "AAUAAA"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Môi trường có cả glucose và lactose. Operon lac",
+    "ops": [
+     "Không phiên mã",
+     "Phiên mã một ít",
+     "Phiên mã mạnh",
+     "Chỉ phiên mã lacI"
+    ],
+    "a": 1,
+    "e": "Repressor đã rời nhưng cAMP thấp nên CAP không bám."
+   },
+   {
+    "q": "Đột biến lac repressor mất khả năng bám operator (gặp môi trường không glucose, không lactose) sẽ làm",
+    "ops": [
+     "Operon tắt hẳn",
+     "Operon phiên mã liên tục (constitutive)",
+     "Operon chỉ bật khi có lactose",
+     "Mất CAP"
+    ],
+    "a": 1,
+    "e": "Không còn gì chặn, đồng thời cAMP–CAP vẫn hoạt hóa."
+   },
+   {
+    "q": "cAMP trong tế bào vi khuẩn cao khi",
+    "ops": [
+     "glucose cao",
+     "glucose thấp",
+     "lactose cao",
+     "tryptophan cao"
+    ],
+    "a": 1,
+    "e": "Glucose và cAMP biến đổi ngược chiều nhau."
+   },
+   {
+    "q": "Yếu tố có hoạt tính helicase và kinase (phosphoryl hóa CTD Pol II) là",
+    "ops": [
+     "TFIID",
+     "TFIIB",
+     "TFIIH",
+     "TBP"
+    ],
+    "a": 2,
+    "e": ""
+   },
+   {
+    "q": "5S rRNA do enzyme nào tổng hợp?",
+    "ops": [
+     "Pol I",
+     "Pol II",
+     "Pol III",
+     "Primase"
+    ],
+    "a": 2,
+    "e": "Bẫy: rRNA thường do Pol I, nhưng riêng 5S do Pol III."
+   },
+   {
+    "q": "Pol II kết thúc phiên mã gắn với tín hiệu",
+    "ops": [
+     "Poly T",
+     "TTF-1",
+     "AAUAAA và vùng giàu GU",
+     "Hairpin + dãy U"
+    ],
+    "a": 2,
+    "e": ""
+   },
+   {
+    "q": "Ở nhân thực, FACT cần cho kéo dài phiên mã vì",
+    "ops": [
+     "Gắn cap",
+     "Tháo histone khỏi nucleosome để Pol II đi qua",
+     "Nhận diện TATA",
+     "Cắt intron"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Một gene có 4 exon có thể tạo ra mRNA 1-2-3 hoặc 1-3-4. Hiện tượng này là",
+    "ops": [
+     "Cắt nối thay thế",
+     "Đột biến",
+     "RNA editing",
+     "Dịch mã không phụ thuộc cap"
+    ],
+    "a": 0,
+    "e": ""
+   },
+   {
+    "q": "Trong con đường miRNA, enzyme cắt pre-miRNA trong tế bào chất là",
+    "ops": [
+     "Drosha",
+     "Dicer",
+     "AGO2",
+     "Exportin 5"
+    ],
+    "a": 1,
+    "e": "Drosha cắt pri-miRNA ở trong nhân."
+   },
+   {
+    "q": "DNMT3L",
+    "ops": [
+     "Methyl hóa duy trì",
+     "Methyl hóa de novo độc lập",
+     "Hỗ trợ DNMT3a/3b, ức chế transposon",
+     "Gỡ methyl"
+    ],
+    "a": 2,
+    "e": ""
+   },
+   {
+    "q": "Acetyl hóa histone thường",
+    "ops": [
+     "Làm chromatin đặc lại, tắt gene",
+     "Làm chromatin mở, bật gene",
+     "Không ảnh hưởng",
+     "Cắt DNA"
+    ],
+    "a": 1,
+    "e": "Acetyl trung hòa điện tích dương của lysine nên histone bám DNA lỏng hơn."
+   },
+   {
+    "q": "Trong hệ R-M, DNA vi khuẩn không bị REase của chính nó cắt vì",
+    "ops": [
+     "Không có vị trí nhận biết",
+     "Vị trí nhận biết đã bị MTase methyl hóa",
+     "REase chỉ cắt RNA",
+     "Có histone bảo vệ"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Shine-Dalgarno bắt cặp với",
+    "ops": [
+     "rRNA 18S",
+     "rRNA 16S",
+     "rRNA 23S",
+     "tRNA-fMet"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Trong dịch mã nhân thực, yếu tố đưa Met-tRNA khởi đầu vào ribosome là",
+    "ops": [
+     "eIF4E",
+     "eIF2",
+     "eRF1",
+     "EF-Tu"
+    ],
+    "a": 1,
+    "e": "Bẫy slide: eIF2 thuộc giai đoạn KHỞI ĐẦU. Khi kéo dài thì eEF1A đưa aa-tRNA vào."
+   },
+   {
+    "q": "Cầu nối di-S hình thành ở ER mà không ở tế bào chất vì",
+    "ops": [
+     "ER có PDI và môi trường oxy hóa",
+     "Tế bào chất không có cysteine",
+     "ER có ribosome",
+     "Tế bào chất quá acid"
+    ],
+    "a": 0,
+    "e": ""
+   }
+  ],
+  "tl": [
+   {
+    "q": "Giải thích cơ chế đọc sửa của DNA polymerase và vì sao cơ chế này đòi hỏi tổng hợp theo chiều 5'→3'.",
+    "a": "Nucleotide sai làm đầu 3' không bắt cặp → mạch chuyển từ vị trí P sang E → exonuclease 3'→5' cắt bỏ → quay lại P. Năng lượng từ dNTP đến sau; nếu tổng hợp 3'→5' thì việc cắt bỏ sẽ làm mất triphosphate ở đầu chuỗi."
+   },
+   {
+    "q": "So sánh 3 cơ chế sửa đứt gãy sợi đôi. Vì sao tế bào ở pha G1 dễ mắc lỗi hơn khi sửa DSB?",
+    "a": "HR (khuôn tương đồng, chính xác, S/G2); SSA (đoạn lặp, mất đoạn); NHEJ (nối thẳng, dễ thêm/mất). G1 chưa có chromatid chị em nên phải dùng NHEJ."
+   },
+   {
+    "q": "Trình bày các bước tạo và hoạt động của miRNA. Phân biệt 2 kết cục với mRNA đích.",
+    "a": "Pol II → pri-miRNA → Drosha/DGCR8 → pre-miRNA → Exportin 5 → Dicer/TRBP → sợi đôi → AGO2 (miRISC). Bắt cặp hoàn toàn: cắt mRNA; bắt cặp một phần (thường ở 3'UTR): ức chế dịch mã."
+   },
+   {
+    "q": "Trình bày các cơ chế epigenetic ở nhân sơ. Mô tả cạnh tranh giữa Dam và repressor.",
+    "a": "Hệ R-M (REase + MTase); orphan MTase (Dam, CcrM); methyl hóa A/C. Dam thắng → methyl hóa GATC → repressor không bám → BẬT; repressor thắng → che GATC → TẮT (biến đổi pha)."
+   }
+  ]
+ },
+ {
+  "title": "ĐỀ 3: NÂNG CAO (tình huống, thí nghiệm, đột biến)",
+  "mc": [
+   {
+    "q": "Nuôi E. coli trong <sup>15</sup>N rồi chuyển sang <sup>14</sup>N 3 thế hệ. Tỷ lệ DNA lai : DNA nhẹ là",
+    "ops": [
+     "1:1",
+     "1:3",
+     "1:7",
+     "1:4"
+    ],
+    "a": 1,
+    "e": "Sau 3 thế hệ có 8 phân tử; 2 phân tử lai, 6 phân tử nhẹ, tức 1:3."
+   },
+   {
+    "q": "Nếu sao chép theo kiểu bảo toàn, thế hệ 1 sau khi chuyển sang <sup>14</sup>N sẽ cho",
+    "ops": [
+     "1 vạch lai",
+     "1 vạch nặng + 1 vạch nhẹ",
+     "1 vạch nhẹ",
+     "3 vạch"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Một đoạn DNA có Tm = 90 °C. Cũng đoạn đó trong dung dịch muối loãng hơn sẽ có Tm",
+    "ops": [
+     "cao hơn",
+     "thấp hơn",
+     "bằng nhau",
+     "không xác định"
+    ],
+    "a": 1,
+    "e": "Ít ion dương che điện tích phosphate, lực đẩy giữa 2 mạch mạnh hơn nên Tm giảm."
+   },
+   {
+    "q": "Mạch mã hóa: 5'-…ATG AAA TGA…-3'. Chuỗi peptide (vi khuẩn) tạo ra là",
+    "ops": [
+     "fMet-Lys",
+     "Met-Lys-Stop-…",
+     "fMet-Lys-Trp",
+     "Không có peptide"
+    ],
+    "a": 0,
+    "e": "mRNA AUG AAA UGA; UGA là STOP, nên peptide là fMet-Lys."
+   },
+   {
+    "q": "Promoter bị đột biến làm mất vùng −10 nhưng codon AUG vẫn bình thường. Hậu quả chính là",
+    "ops": [
+     "Dịch mã sai khung",
+     "Phiên mã giảm mạnh hoặc mất nên không có mRNA",
+     "Protein ngắn lại",
+     "Không ảnh hưởng vì AUG vẫn còn"
+    ],
+    "a": 1,
+    "e": "Bẫy promoter/AUG: không có mRNA thì AUG cũng vô dụng."
+   },
+   {
+    "q": "Đột biến làm mất trình tự Shine-Dalgarno của 1 gene trong operon sẽ ảnh hưởng",
+    "ops": [
+     "Phiên mã toàn operon",
+     "Dịch mã riêng gene đó",
+     "Dịch mã mọi gene",
+     "Không ảnh hưởng gì"
+    ],
+    "a": 1,
+    "e": "SD là điểm bám ribosome cho từng cistron trên mRNA đa cistron."
+   },
+   {
+    "q": "Đột biến CAP không gắn được cAMP. Trong môi trường chỉ có lactose, operon lac sẽ",
+    "ops": [
+     "Phiên mã mạnh",
+     "Phiên mã thấp",
+     "Không phiên mã",
+     "Phiên mã liên tục"
+    ],
+    "a": 1,
+    "e": "Repressor đã rời nhưng không có hoạt hóa của CAP."
+   },
+   {
+    "q": "Đột biến operator (Oᶜ) làm repressor không bám được. Môi trường có glucose, không lactose, operon lac sẽ",
+    "ops": [
+     "Tắt",
+     "Phiên mã mức thấp",
+     "Phiên mã mạnh",
+     "Chỉ có lacZ"
+    ],
+    "a": 1,
+    "e": "Không bị chặn, nhưng glucose cao nên CAP không giúp, chỉ phiên mã mức cơ bản."
+   },
+   {
+    "q": "Trong operon trp, đột biến làm repressor không gắn được tryptophan sẽ làm operon",
+    "ops": [
+     "Luôn tắt",
+     "Luôn bật, kể cả khi dư Trp",
+     "Chỉ bật khi dư Trp",
+     "Bị cắt nối"
+    ],
+    "a": 1,
+    "e": "Repressor cần Trp mới bám operator được."
+   },
+   {
+    "q": "Thuốc ức chế Rho sẽ ảnh hưởng",
+    "ops": [
+     "Mọi gene vi khuẩn",
+     "Chỉ các gene kết thúc kiểu phụ thuộc Rho",
+     "Chỉ gene nhân thực",
+     "Dịch mã"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Tế bào thiếu FACT sẽ gặp khó khăn chủ yếu ở",
+    "ops": [
+     "Khởi đầu dịch mã",
+     "Kéo dài phiên mã qua chromatin",
+     "Splicing",
+     "Tạo poly-A"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Đột biến AAUAAA thành AACAAA trên pre-mRNA dẫn tới",
+    "ops": [
+     "Không gắn cap",
+     "Cắt và thêm poly-A bị lỗi, mRNA kém bền",
+     "Mất intron",
+     "Codon mở đầu thay đổi"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "siRNA tổng hợp nhân tạo bổ sung hoàn toàn với mRNA gene X sẽ",
+    "ops": [
+     "Tăng biểu hiện X",
+     "Gây cắt mRNA X nên giảm protein X",
+     "Methyl hóa DNA gene X",
+     "Làm X phiên mã mạnh"
+    ],
+    "a": 1,
+    "e": "Đây là cơ sở của kỹ thuật RNAi."
+   },
+   {
+    "q": "Thuốc ức chế DNMT1 (ví dụ 5-azacytidine) dùng lâu dài làm",
+    "ops": [
+     "Tăng methyl hóa",
+     "Mất dần methyl hóa sau các lần phân bào, gene bị im lặng có thể bật lại",
+     "Mất histone",
+     "Đứt DNA"
+    ],
+    "a": 1,
+    "e": "Không có duy trì thì mạch mới không được methyl hóa, methyl hóa bị pha loãng dần."
+   },
+   {
+    "q": "Thuốc ức chế HDAC sẽ",
+    "ops": [
+     "Làm chromatin đặc hơn",
+     "Làm chromatin mở hơn, tăng phiên mã một số gene",
+     "Cắt histone",
+     "Ngăn methyl hóa DNA"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Phage có DNA được methyl hóa đúng tại vị trí nhận biết của vi khuẩn chủ (do lây từ một chủng cùng hệ R-M) sẽ",
+    "ops": [
+     "Bị REase cắt",
+     "Thoát khỏi REase",
+     "Gây methyl hóa DNA vật chủ",
+     "Bị Dam phá hủy"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Trong hệ Dam/repressor, nếu tế bào thiếu Dam thì gene X",
+    "ops": [
+     "Luôn bật",
+     "Có xu hướng TẮT vì repressor luôn thắng",
+     "Không ảnh hưởng",
+     "Bị đột biến"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Ribosome 70S nhưng 30S + 50S ≠ 70 vì",
+    "ops": [
+     "Đo sai",
+     "S đo tốc độ lắng, phụ thuộc cả hình dạng",
+     "Mất protein khi ghép",
+     "Có thêm tRNA"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Kháng sinh nhắm vào ribosome 70S ít hại tế bào người chủ yếu vì",
+    "ops": [
+     "Người không có ribosome",
+     "Ribosome người là 80S, khác cấu trúc",
+     "Kháng sinh không vào được tế bào người",
+     "Người không dùng fMet"
+    ],
+    "a": 1,
+    "e": "Lưu ý: ty thể người có ribosome giống 70S, nên vẫn có tác dụng phụ."
+   },
+   {
+    "q": "mRNA nhân thực không có cap nhưng có IRES vẫn được dịch mã vì",
+    "ops": [
+     "Ribosome bám trực tiếp qua IRES",
+     "Có Shine-Dalgarno",
+     "eIF4E bám poly-A",
+     "Không thể dịch mã"
+    ],
+    "a": 0,
+    "e": ""
+   },
+   {
+    "q": "Ngay khi nucleotide sai được gắn, DNA polymerase chuyển mạch từ vị trí",
+    "ops": [
+     "E sang P",
+     "P sang E",
+     "A sang P",
+     "P sang A"
+    ],
+    "a": 1,
+    "e": "P = polymerizing, E = editing (bẫy dễ nhầm với vị trí A/P/E của ribosome)."
+   },
+   {
+    "q": "Protein trong ER gấp sai kéo dài sẽ được nhận diện để phân hủy khi glycan bị cắt còn",
+    "ops": [
+     "Glc₃Man₉",
+     "Glc₁Man₉",
+     "Man₅₋₆ và được OS-9 nhận diện",
+     "Man₉ gắn calnexin"
+    ],
+    "a": 2,
+    "e": ""
+   },
+   {
+    "q": "Đột biến mất Ero1 làm",
+    "ops": [
+     "PDI không được oxy hóa lại, tạo cầu nối di-S chậm",
+     "Mất glycosyl hóa",
+     "Mất ubiquitin",
+     "Tăng tạo cầu nối di-S"
+    ],
+    "a": 0,
+    "e": ""
+   },
+   {
+    "q": "Protein ty thể bị mất trình tự định hướng (đầu N) sẽ",
+    "ops": [
+     "Vẫn vào chất nền",
+     "Ở lại tế bào chất",
+     "Vào ER",
+     "Vào nhân"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Thứ tự đúng khi nhập protein vào chất nền ty thể là",
+    "ops": [
+     "Tim23 → Tom40 → Tom20",
+     "Tom20/22 → Tom40 → Tim23/17 → Hsp70 chất nền",
+     "Hsp70 chất nền → Tom40 → Tim23",
+     "Tom40 → Tom20 → protease"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Tế bào bị đói năng lượng (AMP cao). Kết luận đúng là",
+    "ops": [
+     "mTORC1 bật, tăng tổng hợp protein",
+     "AMPK hoạt hóa TSC2, Rheb-GDP, mTORC1 tắt, autophagy tăng",
+     "Rheb-GTP tăng",
+     "4E-BP bị phosphoryl hóa nhiều hơn"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Rapamycin dùng chống thải ghép vì",
+    "ops": [
+     "Ức chế mTORC1, giảm tăng sinh tế bào miễn dịch",
+     "Hoạt hóa mTORC1",
+     "Phá hủy DNA",
+     "Ức chế proteasome"
+    ],
+    "a": 0,
+    "e": ""
+   },
+   {
+    "q": "Đột biến mất TSC2 (thường gặp trong một số khối u) sẽ làm",
+    "ops": [
+     "mTORC1 luôn tắt",
+     "Rheb giữ GTP, mTORC1 hoạt động quá mức, tăng sinh",
+     "Mất autophagy hoàn toàn và tế bào chết",
+     "Không ảnh hưởng"
+    ],
+    "a": 1,
+    "e": ""
+   },
+   {
+    "q": "Retrotransposon có thể tăng số bản sao trong hệ gene còn DNA transposon chủ yếu không, vì",
+    "ops": [
+     "Retro dùng cơ chế copy-paste qua RNA",
+     "DNA transposon không có transposase",
+     "Retro không cần enzyme",
+     "DNA transposon chỉ có ở vi khuẩn"
+    ],
+    "a": 0,
+    "e": ""
+   },
+   {
+    "q": "Ứng dụng nào dựa trực tiếp trên nguyên lý biến tính – hồi tính DNA?",
+    "ops": [
+     "Western blot",
+     "PCR",
+     "MALDI-TOF",
+     "Sắc ký giấy"
+    ],
+    "a": 1,
+    "e": "PCR gồm biến tính (95 °C), gắn mồi (hồi tính), kéo dài."
+   }
+  ],
+  "tl": [
+   {
+    "q": "Thiết kế lại thí nghiệm Meselson–Stahl: nêu dự đoán kết quả thế hệ 1 và 2 cho cả 3 giả thuyết, và giải thích vì sao cần đến thế hệ 2.",
+    "a": "Bảo toàn: F1 nặng + nhẹ; F2 nặng + nhẹ (1:3). Bán bảo toàn: F1 lai; F2 lai + nhẹ. Phân tán: F1 lai; F2 1 vạch giữa lai và nhẹ. F1 chỉ loại được bảo toàn; F2 mới phân biệt được bán bảo toàn với phân tán."
+   },
+   {
+    "q": "Một bệnh nhân có đột biến điểm làm mất vùng TATA box của gene X; bệnh nhân khác có đột biến AUG → AUA của gene X. Phân tích hậu quả ở mức phiên mã, mRNA và protein của từng trường hợp.",
+    "a": "TATA: TBP/TFIID không bám → PIC kém → phiên mã giảm hoặc mất; không có mRNA → không có protein (dù AUG vẫn nguyên). AUA: phiên mã bình thường, có mRNA, nhưng ribosome dò qua AUG mất → khởi đầu ở AUG phía sau (protein ngắn đầu N / lệch khung) hoặc không có protein. Đây là cách phân biệt tầng DNA và tầng mRNA."
+   },
+   {
+    "q": "Trình bày cơ chế kiểm soát chất lượng gấp nếp protein trong ER (glycan, CNX/CRT, mannosidase, OS-9, ubiquitin–proteasome). Vì sao tế bào cần cơ chế này?",
+    "a": "Glc₃Man₉ → glucosidase I,II → Glc₁Man₉ gắn CNX/CRT để gấp; glucosidase II; gấp sai lâu → ER α-mannosidase → Man₅₋₆ → OS-9 → ERAD → ubiquitin hóa (E1/E2/E3, Lys) → proteasome. Ý nghĩa: tránh protein sai vón cục, gây độc (stress ER), tránh tiết protein hỏng."
+   },
+   {
+    "q": "Mô tả con đường mTORC1 (đầu vào và đầu ra). Dự đoán điều gì xảy ra với tế bào khi: (a) dùng rapamycin; (b) mất TSC2; (c) bị đói amino acid.",
+    "a": "Yếu tố tăng trưởng ⊣ TSC1/2 (GAP) → Rheb-GTP → mTORC1 → S6K, 4E-BP → tổng hợp protein, tạo ribosome, Pol III; ức chế autophagy. (a) mTORC1 tắt → giảm tăng trưởng, tăng autophagy; (b) mTORC1 luôn bật → tăng sinh, khối u; (c) mTORC1 tắt → autophagy."
+   }
+  ]
+ }
+]
