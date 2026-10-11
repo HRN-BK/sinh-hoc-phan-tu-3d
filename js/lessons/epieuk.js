@@ -151,22 +151,23 @@ export default {
     const markG = new THREE.SphereGeometry(0.2, 12, 8);
     const duplex = (x, y, oldTop, oldBot) => {
       const g = api.group(pG); g.position.set(x, y, 0);
-      const top = api.box(6, 0.12, 0.12, oldTop ? C.dna1 : 0x9fd3ff, g); top.position.y = 0.35;
-      const bot = api.box(6, 0.12, 0.12, oldBot ? C.dna2 : 0xffc2d0, g); bot.position.y = -0.35;
-      const mk = (yy, isOld) => [-2.25, -0.75, 0.75, 2.25].map(xx => { const m = new THREE.Mesh(markG, api.mat(isOld ? ME_OFF : 0xffffff)); m.position.set(xx, yy, 0); g.add(m); return { m, isOld }; });
+      const top = api.box(5, 0.12, 0.12, oldTop ? C.dna1 : 0x9fd3ff, g); top.position.y = 0.35;
+      const bot = api.box(5, 0.12, 0.12, oldBot ? C.dna2 : 0xffc2d0, g); bot.position.y = -0.35;
+      const mk = (yy, isOld) => [-1.8, -0.6, 0.6, 1.8].map(xx => { const m = new THREE.Mesh(markG, api.mat(isOld ? ME_OFF : 0xffffff)); m.position.set(xx, yy, 0); g.add(m); return { m, isOld }; });
       return { g, top: mk(0.62, oldTop), bot: mk(-0.62, oldBot) };
     };
-    const parent = duplex(-8, 0, true, true);
-    const dA = duplex(1.5, 1.4, true, false), dB = duplex(1.5, -1.4, false, true);
-    const gen2 = duplex(9.5, 0, false, false); // grand-daughter from new strand without DNMT1
+    const DX = 1.2; // daughter duplex x
+    const parent = duplex(-7, 0, true, true);
+    const dA = duplex(DX, 1.4, true, false), dB = duplex(DX, -1.4, false, true);
+    const gen2 = duplex(8, 0, false, false); // grand-daughter from new strand without DNMT1
     const dnmt1 = api.blob(0.45, C.enzyme, pG, { mat: { opacity: 0.95 }, seed: 12 });
-    const arrowA = api.stick(new THREE.Vector3(-4.6, 0, 0), new THREE.Vector3(-2, 1.1, 0), 0.05, 0xffffff, pG);
-    const arrowB = api.stick(new THREE.Vector3(-4.6, 0, 0), new THREE.Vector3(-2, -1.1, 0), 0.05, 0xffffff, pG);
-    L.add('par', 'DNA mẹ: 5mC cả 2 mạch', [-8, 1.6, 0], pG, 'dim');
-    L.add('hemi', 'sau sao chép: bán methyl hóa', [1.5, 3.1, 0], pG, 'dim');
-    L.add('d1', 'DNMT1 chép dấu sang mạch mới', [1.5, -3.1, 0], pG, 'good');
-    L.add('noD1', '❌ không DNMT1: 100% → 50% → 25%', [6, -3.1, 0], pG, 'warn');
-    L.add('g2', 'thế hệ sau: mất hết ở mạch này', [9.5, 1.6, 0], pG, 'warn');
+    const arrowA = api.stick(new THREE.Vector3(-4.2, 0, 0), new THREE.Vector3(-1.6, 1.1, 0), 0.05, 0xffffff, pG);
+    const arrowB = api.stick(new THREE.Vector3(-4.2, 0, 0), new THREE.Vector3(-1.6, -1.1, 0), 0.05, 0xffffff, pG);
+    L.add('par', 'DNA mẹ: 5mC cả 2 mạch', [-7, 1.6, 0], pG, 'dim');
+    L.add('hemi', 'sau sao chép: bán methyl hóa', [DX, 3.1, 0], pG, 'dim');
+    L.add('d1', 'DNMT1 chép dấu sang mạch mới', [DX, -3.1, 0], pG, 'good');
+    L.add('noD1', '❌ không DNMT1: 100% → 50% → 25%', [DX + 1.5, -3.1, 0], pG, 'warn');
+    L.add('g2', 'thế hệ sau: mất hết ở mạch này', [8, 1.6, 0], pG, 'warn');
 
     // ---- state ----
     let cur = 0, noD1 = false, hdi = false, xistOn = true, rp = 0;
@@ -201,17 +202,17 @@ export default {
       else t = 'Chromatin quyết định gene có được đọc hay không. Thử các công tắc ở bước 4, 6, 7, 8, 9.';
       api.readout(t);
     };
-    api.toggle('💥 Không có DNMT1', false, (x) => { noD1 = x; ctl.setStep(cur); });
-    api.toggle('💊 Chất ức chế HDAC', false, (x) => { hdi = x; ctl.setStep(cur); });
-    api.toggle('Xist được biểu hiện', true, (x) => { xistOn = x; ctl.setStep(cur); });
+    api.toggle('💥 Không có DNMT1', false, (x) => { noD1 = x; ctl.setStep(cur, true); });
+    api.toggle('💊 Chất ức chế HDAC', false, (x) => { hdi = x; ctl.setStep(cur, true); });
+    api.toggle('Xist được biểu hiện', true, (x) => { xistOn = x; ctl.setStep(cur, true); });
 
     const CAMS = [
       [[0, 2, 24], [0, 1, 0]], [[3.2, 3.8, 4.6], [0, 1.2, 0]], [[0, 3, 22], [0, 1, 0]], [[0, 3, 20], [0, 1, 0]],
-      [[0, 3, 22], [0, 1, 0]], [[-5, 3, 15], [-5, 0.5, 0]], [[1, -3, 20], [1, -5.6, 0]], [[0, 3, 18], [0, 1, 0]], [[-2, 2, 20], [-2, 0, 0]],
+      [[0, 3, 22], [0, 1, 0]], [[-5, 3, 15], [-5, 0.5, 0]], [[0.5, -3, 21], [0.5, -5.6, 0]], [[0, 3, 18], [0, 1, 0]], [[-2, 2, 20], [-2, 0, 0]],
     ];
 
     const ctl = {
-      setStep(s) {
+      setStep(s, fromToggle) {
         cur = s;
         const p = plan(s);
         // layout targets
@@ -249,8 +250,9 @@ export default {
         if (s === 7) keys.push('xistL');
         if (s === 8) { keys.push('cancer', 'prom'); if (hdi) keys.push('hdi'); }
         if (on === true) keys.push('geneOn'); else if (on === false) keys.push('geneOff');
+        L.get('hdi').position.y = s === 8 ? 4.6 : 3.9;
         L.only(keys); h1.visible = s === 1; api.showLabel(h1Lab, s === 1);
-        api.camera(...CAMS[s]);
+        if (!fromToggle) api.camera(...CAMS[s]);
         readout();
       },
       update(dt, t) {
@@ -275,12 +277,12 @@ export default {
         if (cur === 6 && !noD1) {
           rp = Math.min(1, rp + dt * 0.25);
           const pass = rp < 0.5 ? 0 : 1, row = pass ? dB.top : dA.bot;
-          const xx = rp >= 1 ? 3 : -3 + ((rp % 0.5) / 0.5) * 6;
-          dnmt1.position.set(1.5 + xx, pass ? -1.4 + 0.62 : 1.4 - 0.62, 0.4);
+          const xx = rp >= 1 ? 2.5 : -2.5 + ((rp % 0.5) / 0.5) * 5;
+          dnmt1.position.set(DX + xx, pass ? -1.4 + 0.62 : 1.4 - 0.62, 0.4);
           row.forEach(o => { if (!o.isOld && o.m.position.x < xx) o.m.material.color.set(ME_OFF); });
           if (rp >= 1) { dA.bot.forEach(o => o.m.material.color.set(ME_OFF)); dB.top.forEach(o => o.m.material.color.set(ME_OFF)); }
         }
-        nucs.forEach((n, i) => { n.g.rotation.z += dt * (cur === 1 ? 0.35 : 0.08); });
+        nucs.forEach((n, i) => { if (cur === 1) { n.g.rotation.z = 0; n.g.rotation.y = Math.sin(t * 0.6) * 0.35; } else { n.g.rotation.z += dt * 0.08; n.g.rotation.y *= 1 - k; } });
       },
     };
     ctl.setStep(0);
