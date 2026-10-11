@@ -150,7 +150,8 @@ export function makeApi(viewer, ui) {
     setOpacity(obj, op) { obj.traverse(o => { if (o.isCSS2DObject) { o.element.style.opacity = op; o.visible = op > 0.02; } else if (o.material) [].concat(o.material).forEach(m => { m.transparent = true; m.opacity = op; }); }); },
     camera(pos, look = [0, 0, 0]) {
       const P = new THREE.Vector3(...pos), L = new THREE.Vector3(...look), a = viewer.camera.aspect;
-      if (a < 1.3) P.sub(L).multiplyScalar(Math.min(2.2, 1.3 / a)).add(L); // portrait/phone: back off so the scene fits
+      const fit = (viewer.host.clientWidth || 600) < 520 ? 1.5 : 1.3; // narrow phone canvas: labels take relatively more room, so frame a bit wider
+      if (a < fit) P.sub(L).multiplyScalar(Math.min(2.6, fit / a)).add(L); // portrait/phone: back off so the scene fits
       viewer.camTarget = { pos: P, look: L };
     },
     onFrame(cb) { viewer.frameCbs.add(cb); return () => viewer.frameCbs.delete(cb); },

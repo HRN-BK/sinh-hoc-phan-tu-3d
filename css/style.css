@@ -88,7 +88,7 @@ code,.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92em;bac
 .lbl.warn{background:rgba(214,69,69,.9);border-color:#ff9a9a}
 .lbl.good{background:rgba(31,157,85,.9)}
 .lbl.dim{background:rgba(10,14,28,.5);color:#cfd6e6;font-weight:500}
-@media (max-width:640px){ .lbl{font-size:10px;padding:2px 5px} .lbl.big{font-size:11px;padding:3px 7px} }
+@media (max-width:640px){ .lbl{font-size:10px;padding:2px 5px;white-space:normal;max-width:200px;text-align:center} .lbl.big{font-size:11px;padding:3px 7px} }
 .lbl.plain{background:none;border:none;text-shadow:0 1px 3px #000}
 .stage-hint{position:absolute;left:10px;bottom:8px;color:#aab4cc;font-size:.75rem;pointer-events:none}
 .stage-fs{position:absolute;right:10px;top:10px;z-index:3;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:4px 9px;cursor:pointer;font-size:.85rem}
