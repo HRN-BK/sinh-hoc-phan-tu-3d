@@ -204,12 +204,23 @@ function renderSection(k, v, L) {
   if (k === 'foundation') return v.map(x => `<details class="qa"><summary>${x.q}</summary><div class="ans">${x.a}</div></details>`).join('') + '<p class="kbd">Tự trả lời trong đầu trước khi bấm mở.</p>';
   if (k === 'steps') return `<ol class="steps-list">${v.map(s => `<li><b>${s.title}</b>${s.text}</li>`).join('')}</ol><p class="kbd">Bấm một bước để xem nó trong 3D (hoặc dùng phím ← →).</p>`;
   if (k === 'traps') return v.map(t => `<div class="trap-item"><div class="t">${t.trap}</div><div class="f">${t.truth}</div></div>`).join('');
-  if (k === 'quiz') return v.map((q, i) => mcqHTML(q, i)).join('');
+  if (k === 'quiz') return v.map((q, i) => mcqHTML(shuffleQ(q), i)).join('');
   if (k === 'recall') return `<div class="recall"><p><b>Đóng mắt hoặc cuộn lên che 3D lại.</b> Trả lời bằng cách viết ra (gõ vào ô hoặc viết giấy):</p><ol>${v.map(x => `<li>${x}</li>`).join('')}</ol>
     <textarea placeholder="Viết lại từ trí nhớ… (không lưu lên mạng, chỉ để bạn tự luyện)"></textarea>
     <p class="kbd">Xong rồi bấm ▶ xem lại 3D để so. Chỗ nào viết sai là chỗ cần ôn. ✍️ Vẽ tay lại mô hình 3D này lên giấy.</p></div>`;
   return typeof v === 'string' ? v : '';
 }
+// Xáo thứ tự lựa chọn của quiz trong bài (cố định theo nội dung câu hỏi) để đáp án không dồn vào một chữ cái.
+// Lựa chọn kiểu "Tất cả … trên" luôn để cuối.
+const shuffleQ = (q) => {
+  let h = 2166136261; for (const ch of q.q) h = Math.imul(h ^ ch.charCodeAt(0), 16777619) >>> 0;
+  const rnd = () => (h = Math.imul(h ^ (h >>> 15), 2246822507) >>> 0, h / 4294967296);
+  const idx = q.ops.map((_, j) => j), pin = idx.filter(j => /tất cả|các .* trên/i.test(q.ops[j]));
+  const free = idx.filter(j => !pin.includes(j));
+  for (let i = free.length - 1; i > 0; i--) { const r = Math.floor(rnd() * (i + 1)); [free[i], free[r]] = [free[r], free[i]]; }
+  const order = [...free, ...pin];
+  return { ...q, ops: order.map(j => q.ops[j]), a: order.indexOf(q.a) };
+};
 const mcqHTML = (q, i, name = '') => `<div class="mcq" data-a="${q.a}"><div class="q">${name}${i + 1}. ${q.q}</div>${q.ops.map((o, j) => `<button class="op" data-j="${j}">${'ABCD'[j]}. ${o}</button>`).join('')}<div class="ex box info">${q.e || ''}</div></div>`;
 function wireQuiz(root, onAnswer) {
   root.querySelectorAll('.mcq').forEach(m => m.querySelectorAll('button.op').forEach(b => b.onclick = () => {

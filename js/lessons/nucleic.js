@@ -80,7 +80,7 @@ export default {
 
   quiz: [
     { q: 'Liên kết nào giữ 2 mạch của chuỗi xoắn kép DNA với nhau?', ops: ['Phosphodiester', 'Hydrogen giữa các base bổ sung', 'Peptide', 'Disulfide'], a: 1, e: 'Hai mạch nối với nhau bằng liên kết H (yếu, dễ tách). Phosphodiester nằm trong mỗi mạch, không nối 2 mạch.' },
-    { q: 'Một mạch DNA có trình tự 5′-AGCT-3′. Mạch bổ sung (viết 5′→3′) là:', ops: ['5′-TCGA-3′', '5′-AGCT-3′', '5′-UCGA-3′', '3′-AGCT-5′'], a: 1, e: 'Mạch bổ sung là 3′-TCGA-5′, viết lại theo chiều 5′→3′ thành 5′-AGCT-3′ (trình tự palindrome). Đáp án A quên đảo chiều; đáp án C dùng U là của RNA.' },
+    { q: 'Một mạch DNA có trình tự 5′-AGCT-3′. Mạch bổ sung (viết 5′→3′) là:', ops: ['5′-TCGA-3′', '5′-AGCT-3′', '5′-UCGA-3′', '3′-AGCT-5′'], a: 1, e: 'Mạch bổ sung là 3′-TCGA-5′, viết lại theo chiều 5′→3′ thành 5′-AGCT-3′ (trình tự palindrome). Chọn 5′-TCGA-3′ là quên đảo chiều; đáp án có U là của RNA.' },
     { q: 'DNA có 30% A. Phần trăm G là bao nhiêu?', ops: ['30%', '20%', '40%', '70%'], a: 1, e: 'Chargaff: A = T = 30% nên A+T = 60%, G+C = 40%, G = C = 20%.' },
     { q: 'Điểm khác biệt hóa học khiến RNA dễ bị thủy phân hơn DNA là:', ops: ['RNA có U thay T', 'Ribose có nhóm 2′-OH', 'RNA ngắn hơn', 'RNA nằm ở tế bào chất'], a: 1, e: '2′-OH tấn công liên kết phosphodiester kế bên, làm RNA tự cắt. U/T không ảnh hưởng độ bền khung.' },
     { q: 'Một vòng xoắn B-DNA dài khoảng bao nhiêu và chứa bao nhiêu cặp base?', ops: ['3,4 Å; 1 bp', '34 Å; ~10 bp', '20 Å; ~10 bp', '34 Å; ~20 bp'], a: 1, e: '34 Å/vòng, khoảng 10 bp, nên 3,4 Å giữa 2 bp. 20 Å là đường kính.' },
