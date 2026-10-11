@@ -38,6 +38,7 @@ export class Viewer {
     this.frameCbs = new Set();
     this.root = new THREE.Group(); this.scene.add(this.root);
     this.camTarget = null;
+    window.__viewer = this;
     this.ro = new ResizeObserver(() => this.resize()); this.ro.observe(host);
     this.resize();
     this.running = true;
@@ -52,6 +53,8 @@ export class Viewer {
     };
     loop();
   }
+  // test hook: simulate `sec` seconds instantly (used for automated checks)
+  advance(sec = 1) { for (let i = 0; i < sec * 30; i++) { this._step(1 / 30, (this._t = (this._t || 0) + 1 / 30)); this.controls.update(); } this.renderer.render(this.scene, this.camera); this.labels.render(this.scene, this.camera); }
   resize() {
     const w = this.host.clientWidth || 600, h = this.host.clientHeight || 400;
     this.camera.aspect = w / h; this.camera.updateProjectionMatrix();
@@ -175,7 +178,8 @@ function makeDNA(api, opts = {}) {
   const sphereG = new THREE.SphereGeometry(0.17, 14, 10), baseG = new THREE.BoxGeometry(1, 0.16, 0.26);
   const m1 = api.mat(opts.c1 ?? C.dna1), m2 = api.mat(opts.c2 ?? C.dna2);
   const center = (n - 1) * rise / 2;
-  const geo = (i) => { const a = (i / bpt) * Math.PI * 2; const x = i * rise - center; return { x, a }; };
+  let twist = opts.twist ?? 1;
+  const geo = (i) => { const a = (i / bpt) * Math.PI * 2 * twist + (opts.phase || 0); const x = i * rise - center; return { x, a }; };
   for (let i = 0; i < n; i++) {
     const b1 = seq[i], b2 = BASE_PAIR[b1] || 'N';
     const s1 = new THREE.Mesh(sphereG, m1.clone()), s2 = new THREE.Mesh(sphereG, m2.clone());
@@ -193,7 +197,7 @@ function makeDNA(api, opts = {}) {
       const sep = p.open; // 0 = paired, 1 = fully apart
       const r = R + sep * (opts.openR ?? 1.6);
       const y1 = Math.cos(a) * r, z1 = Math.sin(a) * r;
-      const y2 = Math.cos(a + Math.PI) * r, z2 = Math.sin(a + Math.PI) * r;
+      const off = opts.offset ?? Math.PI; const y2 = Math.cos(a + off) * r, z2 = Math.sin(a + off) * r;
       const dy = opts.splitY ? sep * opts.splitY : 0;
       p.s1.position.set(0, 0, 0); p.s2.position.set(0, 0, 0);
       p.half1.position.set(x, y1 + dy, z1); p.half2.position.set(x, y2 - dy, z2);
@@ -207,7 +211,7 @@ function makeDNA(api, opts = {}) {
       }
       const e1 = new THREE.Vector3(x, (y1 + dy) * (1 - L / r), z1 * (1 - L / r));
       const e2 = new THREE.Vector3(x, (y2 - dy) * (1 - L / r), z2 * (1 - L / r));
-      api.setStick(p.hb, e1, e2); p.hb.visible = sep < 0.15;
+      api.setStick(p.hb, e1, e2); p.hb.visible = sep < 0.15 && !p.hbHide;
       // backbone sticks are drawn below
     }
     for (let i = 0; i < pairs.length - 1; i++) {
@@ -227,6 +231,17 @@ function makeDNA(api, opts = {}) {
     openRange(a, b, amt = 1) { for (const p of pairs) p.target = (p.i >= a && p.i < b) ? amt : 0; },
     tick(dt) { let ch = false; for (const p of pairs) { const t = p.target ?? p.open; if (Math.abs(t - p.open) > 1e-3) { p.open += (t - p.open) * (1 - Math.exp(-dt * 5)); ch = true; } } if (ch) layout(); },
     relayout: layout,
+    setTwist(v) { twist = v; layout(); },
+    get twist() { return twist; },
+    // opacity of one strand (1 or 2), incl. its backbone sticks
+    strandOpacity(which, op, range) {
+      for (const p of pairs) {
+        if (range && (p.i < range[0] || p.i >= range[1])) continue;
+        const objs = which === 1 ? [p.half1, p.bb1] : [p.half2, p.bb2];
+        for (const o of objs) if (o) api.fadeTo(o, op);
+        p.hbHide = op < 0.5; p.hb.visible = !p.hbHide && p.open < 0.15;
+      }
+    },
   };
   api.onFrame((dt) => api2.tick(dt));
   if (axisY(opts)) g.rotation.z = Math.PI / 2;
