@@ -75,6 +75,7 @@ export default {
   <tr><td>Đầu vào</td><td>Amino acid, insulin (qua TSC/Rheb), năng lượng, oxy</td><td>Yếu tố tăng trưởng (PI3K)</td></tr>
   <tr><td>Đích chính</td><td>S6K, 4E-BP1, ULK1</td><td>Akt (Ser473), SGK, PKC</td></tr>
   </table></div>
+  <div class="box warn">⚠️ <b>Rag và Rheb</b> đều là GTPase nhỏ trên lysosome nhưng không thay thế nhau: <b>Rag</b> (do amino acid) lo <b>vị trí</b>, kéo mTORC1 về lysosome; <b>Rheb</b> (do insulin qua TSC) lo <b>kích hoạt</b> kinase. Đột biến TSC làm Rheb luôn mang GTP nhưng <b>không</b> thay được Rag: thiếu amino acid thì mTORC1 vẫn tắt. Còn rapamycin dùng <b>dài hạn</b> có thể ức chế cả mTORC2 ở một số loại tế bào.</div>
   <div class="box info">ℹ️ <b>Đọc mũi tên cho đúng:</b> trên slide, "thụ thể yếu tố tăng trưởng ⊣ TSC1/TSC2" là cách viết gọn. Đúng ra chuỗi là thụ thể → IRS → PI3K → Akt, và chính <b>Akt</b> phosphoryl hóa TSC2. Hai lần ức chế liên tiếp (Akt ⊣ TSC ⊣ Rheb) cho ra hiệu ứng <b>bật</b>.</div>`,
 
   traps: [
@@ -91,7 +92,7 @@ export default {
   quiz: [
     { q: 'TSC1/TSC2 tác động lên Rheb như thế nào?', ops: ['Là GEF, chuyển Rheb-GDP thành Rheb-GTP', 'Là GAP, làm Rheb thủy phân GTP thành GDP', 'Phosphoryl hóa Rheb', 'Kéo Rheb về lysosome'], a: 1, e: 'TSC2 có vùng GAP: kích thích Rheb thủy phân GTP, nên Rheb tắt, mTORC1 tắt. Phương án "GEF" là cái bẫy: GEF làm ngược lại (bật).' },
     { q: 'Tế bào có đủ insulin nhưng bị bỏ đói amino acid. mTORC1:', ops: ['Tắt, vì Rag không kéo mTORC1 về lysosome nên nó không gặp Rheb-GTP', 'Bật, vì Akt đã ức chế TSC', 'Bật một nửa', 'Tắt, vì AMPK luôn bật khi thiếu amino acid'], a: 0, e: 'Rheb-GTP có thể sẵn sàng nhưng mTORC1 cần Rag (do amino acid hoạt hóa) để đến lysosome. Thiếu một điều kiện của cổng VÀ thì tắt. Thiếu amino acid tác động qua Rag, không phải chủ yếu qua AMPK.' },
-    { q: 'Khi tỉ lệ AMP/ATP tăng cao, chuỗi nào đúng?', ops: ['AMPK ⊣ TSC2 → Rheb-GTP → mTORC1 bật', 'AMPK → Akt → mTORC1 bật', 'AMPK → Rag → mTORC1 tắt', 'AMPK → TSC2 → Rheb-GDP → mTORC1 tắt → autophagy tăng'], a: 3, e: 'AMPK hoạt hóa TSC2 (và phosphoryl hóa Raptor), Rheb chuyển sang GDP, mTORC1 tắt, ULK1 được giải phóng nên autophagy tăng. Phương án đầu nhầm AMPK với Akt (Akt mới là kẻ ức chế TSC2).' },
+    { q: 'Khi tỉ lệ AMP/ATP tăng cao, chuỗi nào đúng?', ops: ['AMPK ⊣ TSC2 → Rheb-GTP → mTORC1 bật', 'AMPK → Akt → mTORC1 bật', 'AMPK → Rag → mTORC1 tắt', 'AMPK → TSC2 → Rheb-GDP → mTORC1 tắt → autophagy tăng'], a: 3, e: 'AMPK hoạt hóa TSC2 (và phosphoryl hóa Raptor), Rheb chuyển sang GDP, mTORC1 tắt, ULK1 được giải phóng nên autophagy tăng. Phương án "AMPK ⊣ TSC2" nhầm AMPK với Akt (Akt mới là kẻ ức chế TSC2).' },
     { q: 'mTORC1 thúc đẩy dịch mã phụ thuộc cap chủ yếu bằng cách:', ops: ['Phosphoryl hóa eIF4E trực tiếp để nó gắn cap', 'Phosphoryl hóa 4E-BP1, làm 4E-BP1 nhả eIF4E', 'Phân hủy mRNA', 'Hoạt hóa ULK1'], a: 1, e: '4E-BP1 bị phosphoryl hóa thì nhả eIF4E, eIF4E gắn cap 5′ và tuyển eIF4G. ULK1 là đích autophagy và bị mTORC1 tắt, không phải bật.' },
     { q: 'Bệnh nhân xơ cứng củ mất chức năng TSC2. Thuốc hợp lý nhất là:', ops: ['Insulin', 'Chất hoạt hóa Akt', 'Everolimus (ức chế mTORC1)', 'Leucine liều cao'], a: 2, e: 'Mất TSC2 làm Rheb luôn mang GTP và mTORC1 luôn bật, nên cần chặn ở hạ nguồn bằng everolimus/sirolimus. Insulin, chất hoạt hóa Akt và leucine đều bật mTORC1 thêm.' },
     { q: 'Rapamycin ức chế mTORC1 bằng cách:', ops: ['Gắn FKBP12; phức hợp FKBP12–rapamycin gắn vùng FRB của mTOR', 'Gắn trực tiếp vị trí ATP của mTOR', 'Hoạt hóa TSC2', 'Ức chế Rag'], a: 0, e: 'Cơ chế dị lập thể qua FKBP12 và FRB. Chất cạnh tranh ATP (Torin) là nhóm khác; rapamycin không cần TSC.' },
@@ -126,8 +127,8 @@ export default {
     const pmG = api.group();
     const pm = api.box(26, 0.7, 4, 0xd8b26e, pmG, { opacity: 0.55 }); pm.position.set(0, 6.4, -2);
     api.box(26, 0.08, 4.02, 0xf2e2b8, pmG, { opacity: 0.7 }).position.set(0, 6.05, -2);
-    L.add('pmL', 'màng sinh chất', [-9.6, 6.4, 0], pmG, 'dim');
-    L.add('outL', 'ngoài tế bào', [-8.6, 8.2, 0], pmG, 'dim');
+    L.add('pmL', 'màng sinh chất', [-8.2, 6.4, 0], pmG, 'dim');
+    L.add('outL', 'ngoài tế bào', [-9.0, 8.0, 0], pmG, 'dim');
     L.add('cytL', 'tế bào chất', [-8.6, 3.2, 0], pmG, 'dim');
     const LYS = V(3, -3.7, -0.6), LR = 3.0;
     const lys = api.sphere(LR, 0xd8b26e, undefined, { opacity: 0.32, depthWrite: false }); lys.position.copy(LYS);
@@ -144,8 +145,8 @@ export default {
     const pi3k = api.blob(0.5, 0xbf5af2, insG, { seed: 22, scale: [1.2, 0.85, 0.9] }); pi3k.position.set(-4.1, 5.2, 0.4);
     const pip3 = [0, 1, 2, 3].map(i => { const m = api.sphere(0.12, 0xfff3b0, insG, { emissive: 0xffd60a, emissiveIntensity: 0.9 }); m.position.set(-3.6 + i * 0.45, 6.02, 0.55); return m; });
     const akt = api.blob(0.45, 0x0a84ff, insG, { seed: 23 }); akt.position.set(-2.6, 4.9, 0.4);
-    L.add('insL', 'insulin', [-6, 8.6, 0], insG, 'tag');
-    L.add('rcL', 'thụ thể insulin (RTK)', [-8.2, 7.7, 0.3], insG, 'tag');
+    L.add('insL', 'insulin', [-4.7, 8.1, 0], insG, 'tag');
+    L.add('rcL', 'thụ thể insulin (RTK)', [-8.3, 7.2, 0.3], insG, 'tag');
     L.add('irsL', 'IRS-1', [-6.9, 3.9, 0], insG, 'tag');
     L.add('pi3kL', 'PI3K', [-4.1, 4.4, 0.4], insG, 'tag');
     L.add('pipL', 'PIP2 → PIP3', [-2.9, 7.0, 0.5], insG, 'dim');
@@ -161,8 +162,8 @@ export default {
     api.box(1.6, 0.12, 0.12, INH, crack).rotation.z = 0.8; api.box(1.6, 0.12, 0.12, INH, crack).rotation.z = -0.8; crack.position.set(0.5, -0.1, 0.75);
     L.add('tscL', 'TSC1–TSC2 (GAP của Rheb)', [0, 1.05, 0], tscG, 'tag');
     L.add('tscS', '', [0, -1.0, 0], tscG, 'dim');
-    L.add('tscX', '💥 TSC mất chức năng', [0.2, -1.6, 0], tscG, 'warn');
-    L.add('reddL', 'thiếu O₂ (REDD1), tổn thương DNA (p53) → TSC', [-1.2, -2.2, 0], tscG, 'dim');
+    L.add('tscX', '💥 TSC mất chức năng', [0.2, -1.75, 0], tscG, 'warn');
+    L.add('reddL', 'thiếu O₂ (REDD1), tổn thương DNA (p53) → TSC', [-3.2, -4.7, 0], undefined, 'dim');
 
     // ---- AMPK ----
     const ampkG = api.group(); ampkG.position.set(-5.4, -1.8, 0.4);
@@ -204,18 +205,18 @@ export default {
     const lst8 = api.blob(0.28, 0x5ac8a8, mG, { seed: 73 }); lst8.position.set(0.95, 0.65, 0.2);
     const frb = api.sphere(0.2, 0x1e8c80, mG); frb.position.set(1.1, -0.1, 0.75);
     const rapP = api.sphere(0.14, 0xff3b30, mG); rapP.position.set(-1.3, -0.4, 0.75);
-    const DOCK = V(LYS.x + 0.2, LYS.y + LR + 1.25, 0.5), FREE = V(7.4, 4.2, 0.5);
+    const DOCK = V(LYS.x + 0.2, LYS.y + LR + 1.25, 0.5), FREE = V(6.2, 3.6, 0.5);
     mG.position.copy(DOCK);
-    L.add('mL', 'mTORC1', [0, 1.25, 0.3], mG, 'big');
-    L.add('rapL', 'Raptor', [-1.9, -1.0, 0.4], mG, 'dim');
+    L.add('mL', 'mTORC1', [1.5, 1.3, 0.3], mG, 'big');
+    L.add('rapL', 'Raptor', [-0.95, -1.45, 0.4], mG, 'dim');
     L.add('frbL', 'vùng FRB', [1.9, -0.45, 0.6], mG, 'dim');
-    L.add('rapPL', 'P (AMPK)', [-2.05, -0.25, 0.6], mG, 'warn');
+    L.add('rapPL', 'P (AMPK)', [-0.95, -2.1, 0.6], mG, 'warn');
     // rapamycin + FKBP12
     const fkG = api.group();
     const fk = api.blob(0.36, 0xff9fdb, fkG, { seed: 81 });
     const pill = api.group(fkG); pill.position.set(0.35, 0.25, 0.25);
     api.sphere(0.14, 0xffffff, pill).position.x = -0.1; api.sphere(0.14, 0xff375f, pill).position.x = 0.1; api.cylinder(0.14, 0.14, 0.2, 0xff375f, pill).rotation.z = Math.PI / 2;
-    L.add('fkL', '💊 FKBP12–rapamycin', [0.5, 0.75, 0.2], fkG, 'warn');
+    L.add('fkL', '💊 FKBP12–rapamycin', [1.4, 0.9, 0.2], fkG, 'warn');
 
     // ---- outputs ----
     const oG = api.group();
@@ -246,7 +247,7 @@ export default {
     L.add('riboL', 'ribosome (protein S6)', [11.6, 3.55, 0.3], oG, 'dim');
     L.add('bpL', '4E-BP1', [0, 0.6, 0], bp1, 'tag');
     L.add('e4eL', 'eIF4E', [0, -0.62, 0], e4e, 'tag');
-    L.add('capL', 'cap 5′ mRNA', [9.0, -2.15, 0.3], oG, 'dim');
+    L.add('capL', 'cap 5′ mRNA', [7.8, -1.5, 0.3], oG, 'dim');
     L.add('ulkL', 'ULK1', [9.2, -3.4, 0.4], oG, 'tag');
     L.add('phagL', 'autophagosome', [11.6, -3.5, 0.3], oG, 'tag');
     L.add('pol3L', 'Pol III: tRNA, 5S rRNA', [12.6, 1.35, 0.3], oG, 'dim');
@@ -286,11 +287,11 @@ export default {
     lk.ulkPhag.set(V(9.2, -4.2, 0.4), V(11.6, -4.9, 0.2), 0.5, 1.1);
 
     // ---- toggles ----
-    api.toggle('Amino acid', true, (x) => { aa = x; ctl.setStep(cur); });
-    api.toggle('Insulin', true, (x) => { ins = x; ctl.setStep(cur); });
-    api.toggle('Năng lượng thấp (AMP cao)', false, (x) => { lowE = x; ctl.setStep(cur); });
-    api.toggle('💥 Đột biến TSC', false, (x) => { tscMut = x; ctl.setStep(cur); });
-    api.toggle('💊 Rapamycin', false, (x) => { rapa = x; ctl.setStep(cur); });
+    api.toggle('Amino acid', true, (x) => { aa = x; ctl.setStep(cur, true); });
+    api.toggle('Insulin', true, (x) => { ins = x; ctl.setStep(cur, true); });
+    api.toggle('Năng lượng thấp (AMP cao)', false, (x) => { lowE = x; ctl.setStep(cur, true); });
+    api.toggle('💥 Đột biến TSC', false, (x) => { tscMut = x; ctl.setStep(cur, true); });
+    api.toggle('💊 Rapamycin', false, (x) => { rapa = x; ctl.setStep(cur, true); });
 
     const yn = (b) => (b ? '<b style="color:#34c759">✓</b>' : '<b style="color:#ff453a">✗</b>');
     function readout() {
@@ -314,10 +315,10 @@ export default {
       [[1.2, 0.4, 14], [1.5, 0, 0]],
       [[-4, 3.6, 13], [-3.6, 3.3, 0]],
       [[3, -0.8, 13], [3, -1.4, 0]],
-      [[-2.4, 0, 15], [-2.2, -0.2, 0]],
+      [[-1.4, 0, 17], [-1.2, -0.2, 0]],
       [[9.5, 0.6, 12], [10.2, 0.4, 0]],
       [[10, -0.9, 13.5], [10.4, -1.0, 0]],
-      [[4.4, 0.8, 10], [3.6, 0.4, 0]],
+      [[4.6, 1.2, 11.5], [4.0, 0.8, 0]],
       [[2, 0.6, 24], [2, 0.3, 0]],
     ];
 
@@ -349,7 +350,7 @@ export default {
       tsc2.material.emissive.setHex(TSCC); tsc2.material.emissiveIntensity = 0.5 * live.tsc;
       tscP.visible = ins && !lowE && !tscMut; tscA.visible = lowE && !tscMut; tscA.material.color.setHex(0xff9f0a);
       crack.visible = tscMut;
-      tscG.position.set(-1.4 + 2.2 * live.tsc * (tscMut ? 0 : 1), 1.6 - 1.2 * live.tsc * (tscMut ? 0 : 1), 0.4);
+      tscG.position.set(-1.4 + 1.6 * live.tsc * (tscMut ? 0 : 1), 1.6 - 0.6 * live.tsc * (tscMut ? 0 : 1), 0.4);
       // AMPK
       ampk.material.color.copy(cD).lerp(cR.setHex(0xff9f0a), live.low);
       ampk.material.emissive.setHex(0xff9f0a); ampk.material.emissiveIntensity = 0.4 * live.low;
@@ -366,6 +367,8 @@ export default {
       // mTORC1 position + activity
       mG.position.lerpVectors(FREE, DOCK, live.dock);
       mG.position.y += Math.sin(t * 1.3) * 0.08 * (1 - live.dock);
+      L.get('mL').position.x = 1.5 * live.dock;
+      L.get('fkL').position.set(1.4 * live.dock - 0.4 * (1 - live.dock), 0.9 - 0.3 * (1 - live.dock), 0.2);
       mtor.material.emissiveIntensity = 0.9 * live.lvl * (0.75 + 0.25 * Math.sin(t * 4));
       rapP.visible = lowE;
       L.set('mL', 'mTORC1 · ' + (s.lvl >= 1 ? 'BẬT' : s.lvl > 0 ? 'YẾU' : 'TẮT'));
@@ -422,16 +425,19 @@ export default {
       L.set('rhebS', s.rheb ? 'Rheb-GTP (BẬT)' : 'Rheb-GDP (TẮT)');
       L.set('ampS', lowE ? 'AMP cao → BẬT' : 'ATP đủ → tắt');
       const extra = [];
-      if (tscMut && base.includes('tscL')) extra.push('tscX');
-      if (lowE && base.includes('mL')) extra.push('rapPL');
-      if (rapa && base.includes('mL')) extra.push('fkL');
+      if (base.includes('ampkL') && base.includes('s6kL')) L.set('tscL', tscMut ? '💥 TSC hỏng' : 'TSC1–TSC2'); // overview: short
+      else L.set('tscL', 'TSC1–TSC2 (GAP của Rheb)');
+      if (tscMut && base.includes('tscS')) extra.push('tscX');
+      if (lowE && base.includes('rapL')) extra.push('rapPL');
+      if (rapa && base.includes('frbL')) extra.push('fkL');
       L.only(base.concat(extra).filter(k => (aa || k !== 'aaL') && (ins || k !== 'insL')));
     }
 
     const ctl = {
-      setStep(i) {
+      setStep(i, fromToggle) {
         cur = i; tt = 0;
-        const k = ['mL', 'lysL'];
+        const k = [2, 5, 6].includes(i) ? [] : ['mL'];
+        if ([0, 3, 4, 7, 8].includes(i)) k.push('lysL');
         if (i === 0 || i === 8) k.push('insL', 'aktL', 'tscL', 'ampkL', 'ragL', 'rhebL', 's6kL', 'bpL', 'ulkL', 'aaL', 'pmL');
         if (i === 1) k.push('tscL', 'tscS', 'rhebL', 'rhebS', 'aktL', 'ragL');
         if (i === 2) k.push('insL', 'rcL', 'irsL', 'pi3kL', 'pipL', 'aktL', 'tscL', 'tscS', 'pmL', 'outL', 'cytL');
@@ -441,7 +447,7 @@ export default {
         if (i === 6) k.push('ulkL', 'phagL', 'pol3L', 'maf1L', 'bioL', 'bpL');
         if (i === 7) k.push('frbL', 'rapL', 'rhebL', 'rhebS', 'ragL');
         base = k;
-        api.camera(...CAMS[i]);
+        if (!fromToggle) api.camera(...CAMS[i]);
         readout();
         frame(0, 0);
       },
