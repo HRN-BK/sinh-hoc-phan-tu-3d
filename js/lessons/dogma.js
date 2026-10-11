@@ -162,7 +162,7 @@ export default {
     // ---- messages ----
     const msg = api.label('', [0, -4.6, 0], null, 'warn');
     const cmpP = api.label('<b>PROMOTER</b>: trên DNA<br>RNA polymerase bám<br>→ mở đầu PHIÊN MÃ<br>không có trong mRNA', [X(6.5), 7.6, 0], null, 'big');
-    const cmpA = api.label('<b>AUG</b>: trên mRNA<br>ribosome + tRNA đọc<br>→ mở đầu DỊCH MÃ', [X(21), -3.3, 0], mG, 'good');
+    const cmpA = api.label('<b>AUG</b>: trên mRNA<br>ribosome + tRNA đọc<br>→ mở đầu DỊCH MÃ', [X(21), -4.2, 0], mG, 'good');
 
     // ---- state ----
     let cur = 0, p = 0, pT = 0, c = CS, cT = CS, polMode = 'off', polVis = false, ribVis = false, mY = 0.9;
@@ -198,7 +198,7 @@ export default {
     function setVis() {
       const hasRNA = !promBad && cur >= 4;
       codonLbls.forEach(l => api.showLabel(l, hasRNA && (cur < 7 || l === augL || l === stopL)));
-      api.showLabel(noProm, hasRNA && (cur === 4 || cur === 7));
+      api.showLabel(noProm, hasRNA && cur === 4);
       api.showLabel(mrnaName, !promBad && cur >= 3);
       eukG.visible = euk && hasRNA; eukG.traverse(o => { if (o.isCSS2DObject) api.showLabel(o, euk && hasRNA); });
       api.showLabel(cmpP, cur === 7); api.showLabel(cmpA, cur === 7 && !promBad);
@@ -209,7 +209,7 @@ export default {
       for (const [k, s] of Object.entries(shells)) {
         const dim = cur >= 4 && cur <= 6;
         s.m.material.opacity = dim ? 0.04 : (k === 'prom' && cur === 1 ? 0.38 : 0.14);
-        api.showLabel(s.l, !dim);
+        api.showLabel(s.l, !dim && !(cur === 7 && (k === 'prom' || k === 'utr5')));
       }
       const dim = cur >= 4 && cur <= 6;
       smallLbls.forEach((l, k) => api.showLabel(l, cur <= 3 ? !(l === l35 && euk) : (cur === 7 && k === 2)));
