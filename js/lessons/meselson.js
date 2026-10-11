@@ -297,6 +297,7 @@ export default {
     const ctl = {
       setStep(s) {
         cur = s; pr.snap(0, 1);
+        if (heat && s !== 6) { heat = false; tHeat.set(false); }
         for (const [k, g] of Object.entries(groups)) { const on = VIS[s].includes(k); g.visible = true; api.scaleTo(g, on ? 1 : 0.001, 6); }
         api.camera(...CAM[s]);
         const L0 = [];

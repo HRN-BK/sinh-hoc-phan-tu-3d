@@ -435,6 +435,11 @@ export default {
     const ctl = {
       setStep(s) {
         cur = s;
+        // switches reset to default when their step is left, so hidden state never leaks into other steps
+        if (den && ![2, 3, 4].includes(s)) { den = false; tDen.set(false); }
+        if (!cis && s !== 5) { cis = true; tCis.set(true); }
+        if (cholDep && s !== 6) { cholDep = false; tChol.set(false); }
+        if (bor && s !== 9) { bor = false; tBor.set(false); }
         for (const [k, g] of Object.entries(groups)) { if (k === 'protG') continue; const on = VIS[s].includes(k); g.visible = true; api.scaleTo(g, on ? 1 : 0.001, 6); }
         protTarget.pos.set(...(s === 1 ? [0, -4.1, 0] : s === 4 ? [-1.4, 1.0, 0] : [0, 0, 0]));
         protTarget.s = s === 1 ? 0.7 : (s === 2 || s === 3) ? 1 : s === 4 ? 0.55 : 0.001;

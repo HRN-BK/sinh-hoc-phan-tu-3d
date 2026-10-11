@@ -304,6 +304,10 @@ export default {
     const ctl = {
       setStep(s) {
         cur = s; ph.snap(0, 1); sig = '';
+        if (tnpBad && !(s >= 1 && s <= 4)) { tnpBad = false; tg.tnp.set(false); }
+        if (rtBad && s !== 6) { rtBad = false; tg.rt.set(false); }
+        if (tsg && ![4, 6, 7].includes(s)) { tsg = false; tg.tsg.set(false); }
+        if (defOff && s < 7) { defOff = false; tg.def.set(false); }
         recolor(el, s >= 5 ? COL.re1 : COL.tn1, s >= 5 ? COL.re2 : COL.tn2); frameM.material.color.setHex(s >= 5 ? COL.re1 : COL.tn1);
         tg.tnp.el.style.display = s >= 1 && s <= 4 ? '' : 'none';
         tg.rt.el.style.display = s === 6 ? '' : 'none';

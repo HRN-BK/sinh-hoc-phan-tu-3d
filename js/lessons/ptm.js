@@ -447,6 +447,10 @@ export default {
     const ctl = {
       setStep(s) {
         cur = s; ph.snap(0, 1); sig = '';
+        if (tuni && !(s >= 1 && s <= 3)) { tuni = false; tg.tuni.set(false); }
+        if (noEro && s !== 4) { noEro = false; tg.ero.set(false); }
+        if (misf && s !== 6) { misf = false; tg.misf.set(false); }
+        if (bort && s !== 8) { bort = false; tg.bort.set(false); }
         tg.tuni.el.style.display = s >= 1 && s <= 3 ? '' : 'none';
         tg.ero.el.style.display = s === 4 ? '' : 'none';
         tg.misf.el.style.display = s === 6 ? '' : 'none';
