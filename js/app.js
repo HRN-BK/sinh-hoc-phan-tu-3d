@@ -227,13 +227,13 @@ function makeUI(box) {
     toggle(label, init, onChange) {
       const el = h('label', { class: 'switch' + (init ? ' on' : '') }, `<span class="dot"></span>${label}`); let v = !!init;
       el.onclick = (e) => { e.preventDefault(); v = !v; el.classList.toggle('on', v); onChange(v); };
-      box.appendChild(el); return { set(x) { v = !!x; el.classList.toggle('on', v); }, get: () => v };
+      box.appendChild(el); return { set(x) { v = !!x; el.classList.toggle('on', v); }, get: () => v, el };
     },
     slider(label, min, max, step, init, onChange, fmt = (x) => x) {
       const el = h('div', { class: 'ctl' }, `<span>${label}</span><input type="range" min="${min}" max="${max}" step="${step}" value="${init}"><b>${fmt(init)}</b>`);
       const inp = el.querySelector('input'), out = el.querySelector('b');
       inp.oninput = () => { out.textContent = fmt(+inp.value); onChange(+inp.value); };
-      box.appendChild(el); return { set(x) { inp.value = x; out.textContent = fmt(x); }, get: () => +inp.value };
+      box.appendChild(el); return { set(x) { inp.value = x; out.textContent = fmt(x); }, get: () => +inp.value, el };
     },
     buttons(items) { const w = h('div', { class: 'ctl' }); items.forEach(([t, fn]) => w.appendChild(h('button', { class: 'btn', onclick: fn }, t))); box.appendChild(w); return w; },
     readout(html) { let el = box.querySelector('.readout'); if (!el) { el = h('div', { class: 'readout' }); box.appendChild(el); } el.innerHTML = html; return el; },

@@ -163,7 +163,7 @@ export default {
     const allo = api.sphere(0.22, 0xf5a623, null, { mat: { opacity: 1 } });
     const cap = api.blob(0.7, 0x66d9ef, null, { mat: { opacity: 0.95 }, seed: 9 });
     const rnap = api.blob(0.95, C.enzyme, null, { mat: { opacity: 0.9 }, seed: 2, scale: [1.2, 1, 1] });
-    const rnapIcon = api.label('RNA polymerase', [0, 1.5, 0], rnap, 'dim');
+    const rnapIcon = api.label('RNA polymerase', [0, -1.6, 0], rnap, 'dim');
     const capMod = api.label('CAP', [0, 1.1, 0], cap, 'dim');
     const beads = [];
     for (let k = 0; k < 6; k++) { const b = api.box(0.36, 0.36, 0.36, C.rna, null); b.visible = false; beads.push(b); }
