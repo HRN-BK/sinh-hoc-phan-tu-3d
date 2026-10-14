@@ -30,6 +30,7 @@ function renderSidebar() {
     }
   }
   html += `<h4>Ôn tập</h4>
+    <a href="#/notes" class="${cur === '#/notes' ? 'active' : ''}"><span class="num">🎯</span>Câu cô hỏi trên lớp</a>
     <a href="#/traps" class="${cur === '#/traps' ? 'active' : ''}"><span class="num">⚠️</span>Tổng hợp bẫy dễ nhầm</a>
     <a href="#/exams" class="${cur.startsWith('#/exam') ? 'active' : ''}"><span class="num">📝</span>3 đề luyện (chấm điểm)</a>
     <a href="assets/Cheatsheet-SHPT-4mat-A4.pdf" target="_blank" rel="noopener"><span class="num">📄</span>Cheatsheet 4 mặt A4 (PDF)</a>
@@ -49,6 +50,7 @@ async function route() {
   const m = hash.match(/^#\/l\/([\w-]+)/);
   if (m) await renderLesson(main, m[1]);
   else if (hash.startsWith('#/traps')) await renderTraps(main);
+  else if (hash.startsWith('#/notes')) { try { const m = await import('./notes.js'); if (location.hash.startsWith('#/notes')) m.renderNotes(main); } catch (e) { main.innerHTML = '<div class="box bad">Không tải được trang.</div>'; } }
   else if (hash.match(/^#\/exam\/(\d)/)) await renderExam(main, +hash.match(/^#\/exam\/(\d)/)[1]);
   else if (hash.startsWith('#/exams')) renderExams(main);
   else renderHome(main);
@@ -65,6 +67,7 @@ function renderHome(main) {
     <p>Mỗi bài có một mô hình 3D bạn xoay, phóng to và bấm từng bước để xem phân tử <b>chuyển động thật</b>. Mỗi bài trả lời đủ: <b>để làm gì</b> · <b>thiếu nó thì tế bào sao</b> · <b>nền tảng cần nhớ lại</b> · <b>cơ chế</b> · <b>ứng dụng</b> · <b>phân biệt</b> · <b>bẫy</b> · <b>tự kiểm tra</b>.</p>
     <div class="row">
       <a class="btn" href="#/l/${LESSONS[0].id}">▶ Bắt đầu bài 1</a>
+      <a class="btn" href="#/notes">🎯 Câu cô hỏi</a>
       <a class="btn" href="#/traps">⚠️ Xem tất cả bẫy</a>
       <a class="btn" href="#/exams">📝 Làm đề</a>
     </div>
