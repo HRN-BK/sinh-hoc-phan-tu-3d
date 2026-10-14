@@ -150,7 +150,7 @@ export const NOTES = [
           'Làm thí nghiệm nucleic acid là làm với <b>phân tử</b>, không nuôi tế bào sống. Vi khuẩn trong không khí ít ảnh hưởng: chúng không mọc được trong phản ứng, và PCR có nhiệt cao.',
           'Kẻ thù thật là <b>DNase và RNase</b> dính trong ống hay đầu tip, vì chúng phân hủy sản phẩm. Vì vậy cần hấp (121 °C) dụng cụ.',
         ],
-        fix: 'RNase cực bền: nó có thể gấp lại sau khi hấp (thí nghiệm Anfinsen). Làm với RNA thì phải dùng đồ "RNase-free" hoặc nước xử lý DEPC.',
+        fix: 'RNase là ngoại lệ: bị biến tính xong nó <b>tự gấp lại</b> và hoạt động lại (Anfinsen, RNase A). Vì vậy chỉ hấp thôi là chưa đủ; làm với RNA phải dùng đồ "RNase-free" hoặc nước xử lý DEPC.',
         base: 'Tm phụ thuộc %GC. Khi DNA biến tính, độ hấp thụ ở 260 nm tăng (hiệu ứng tăng sắc).',
         link: [['denature', 4]],
       },
@@ -185,7 +185,7 @@ export const NOTES = [
           '<b>Lớp I (retrotransposon)</b> "chép–dán": DNA → RNA → DNA (nhờ phiên mã ngược) → chèn vào chỗ mới. <b>Bản gốc vẫn còn nguyên</b>, nên phù hợp khi muốn giữ nguyên "bên cho". Nhược điểm là số bản sao tăng dần, nên càng nhiều chỗ chèn có thể gây hại.',
           '<b>Lớp II (DNA transposon)</b> "cắt–dán" nhờ transposase: chỗ cũ để lại <b>vết đứt mạch đôi</b> phải sửa, nên nguy cho bên cho. Bù lại, nó ít bước (không có phiên mã hay phiên mã ngược dễ sai), nên đoạn gene di chuyển <b>ít đột biến</b> hơn.',
         ],
-        fix: 'Ghi chú gốc viết "class 1 (DNA retrotransposon)" là <b>sai</b>. Lớp I là retrotransposon (đi qua RNA); lớp II mới là DNA transposon.',
+        fix: 'Ghi chú gốc viết "class 1 (DNA retrotransposon)": chữ "DNA" là thừa. Lớp I đúng là <b>retrotransposon</b> (đi qua RNA); "DNA transposon" là tên của lớp II.',
         base: 'Khoảng 45% hệ gene người là trình tự gốc gene nhảy, chủ yếu lớp I (LINE, Alu).',
         link: [['transposon', 9]],
       },
@@ -246,12 +246,13 @@ export const NOTES = [
         a: [
           '<b>Nhân sơ</b> có 1 loại RNA pol. Enzyme lõi + <b>σ</b> thành holoenzyme; σ <b>tự nhận ra</b> hộp −35 (TTGACA) và −10 (TATAAT), mở DNA ở −10 rồi bắt đầu phiên mã.',
           '<b>Nhân thực</b> có 3 loại RNA pol (I: rRNA, II: mRNA, III: tRNA/5S). Pol II <b>không tự nhận ra promoter</b>: TFIID (có <b>TBP</b>) bám hộp TATA, rồi các TFII khác và Pol II lắp vào thành phức hợp tiền khởi đầu (<b>PIC</b>). TFIIH mở DNA và phosphoryl hóa <b>CTD</b> để Pol II rời promoter.',
-          'Nhân thực còn cần enhancer, Mediator và tháo nucleosome. Nhân sơ không có chromatin, và phiên mã đi cùng lúc với dịch mã.',
+          'Nhân thực còn cần enhancer, Mediator và tháo nucleosome. Nhân sơ không có nucleosome, và phiên mã đi cùng lúc với dịch mã.',
         ],
         base: 'Cả hai đều cần protein nhận ra promoter trước khi RNA pol bám vào: σ ở nhân sơ, TBP/TFIID ở nhân thực.',
         link: [['txprok', 10], ['txeuk', 12]],
       },
       {
+        n: '6–7',
         en: 'Most important feature of transcription elongation? How is the transcription bubble formed?',
         vi: 'Đặc điểm quan trọng nhất của kéo dài và cách tạo bong bóng phiên mã',
         a: [
@@ -265,7 +266,7 @@ export const NOTES = [
         en: 'Why does eukaryotic initiation need so many factors compared with prokaryotes?',
         vi: 'Sao khởi đầu ở nhân thực cần nhiều yếu tố vậy?',
         a: [
-          'Ý cô: protein phức hợp ở nhân thực có nhiều tiểu đơn vị hơn, nhiều gene và khâu hơn, nên cần nhiều yếu tố để kiểm soát cho chính xác.',
+          'Ý trong ghi chú: protein phức hợp ở nhân thực có nhiều tiểu đơn vị hơn, nhiều gene và khâu hơn, nên cần nhiều yếu tố để kiểm soát cho chính xác.',
           'Nên viết thêm 3 lý do chuẩn: (1) DNA quấn quanh <b>nucleosome</b> nên promoter bị che, cần tháo ra; (2) Pol II <b>không có σ</b>, nên cần TBP/TFII để tìm promoter; (3) sinh vật đa bào có cùng một hệ gene mà mỗi loại tế bào bật gene khác nhau, nên cần <b>tổ hợp</b> nhiều yếu tố phiên mã và enhancer.',
         ],
         base: 'Nhiều yếu tố hơn đồng nghĩa với nhiều điểm điều hòa hơn.',
@@ -363,19 +364,18 @@ export const NOTES = [
 const links = (arr) => arr.map(([id, n]) => L(id, n)).join(' · ');
 
 export function renderNotes(main) {
-  let qn = 0;
   main.innerHTML = `<div class="lesson-head"><h1>🎯 Câu cô hỏi trên lớp</h1>
     <p class="sub">Các câu cô đã giảng kỹ (Chương 1–6). Mỗi câu gồm: trả lời ngắn, <b>nền tảng</b> cần nhớ, và link sang bài 3D liên quan. Tự trả lời trong đầu trước, rồi mới bấm mở đáp án.</p></div>
   <div class="box info">📌 Dòng <b>⚠️ Chính xác hơn</b> đánh dấu chỗ ghi chú gốc bị nhầm hoặc thiếu. Đi thi viết theo bản đã sửa, nhưng vẫn giữ ý cô.</div>
   <div class="tabs"><button id="openAll">📖 Mở hết</button><button id="closeAll">🙈 Đóng hết</button></div>
-  ${NOTES.map(c => `<div class="sec found note-ch"><h2>${c.ch}</h2>
+  ${NOTES.map(c => { let k = 0; return `<div class="sec found note-ch"><h2>${c.ch}</h2>
     <div class="box good"><div class="note-h">🧱 Nền tảng chương</div>${c.base}<div class="note-link">🔗 Xem 3D: ${links(c.link)}</div></div>
-    ${c.qs.map(q => `<details class="qa"><summary><span><b>${++qn}.</b> ${q.en}<br><i class="note-vi">${q.vi}</i></span></summary><div class="ans">
+    ${c.qs.map(q => `<details class="qa"><summary><span><b>${q.n ? (k = parseInt(q.n.split('–')[1]), q.n) : ++k}.</b> ${q.en}<br><i class="note-vi">${q.vi}</i></span></summary><div class="ans">
       <ul>${q.a.map(x => `<li>${x}</li>`).join('')}</ul>
       ${q.fix ? `<div class="box warn">⚠️ <b>Chính xác hơn:</b> ${q.fix}</div>` : ''}
       <p class="note-base">🧱 <b>Nền tảng:</b> ${q.base}</p>
       <div class="note-link">🔗 Xem 3D: ${links(q.link)}</div></div></details>`).join('')}
-  </div>`).join('')}
+  </div>`; }).join('')}
   <div class="navline"><a class="btn" href="#/traps">⚠️ Ôn bẫy</a><a class="btn primary" href="#/exams">📝 Làm đề →</a></div>`;
   const all = (on) => main.querySelectorAll('details.qa').forEach(d => d.open = on);
   main.querySelector('#openAll').onclick = () => all(true);
